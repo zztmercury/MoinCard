@@ -1,0 +1,26 @@
+<resources>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<item name="android:actionBarStyle">@style/AppActionBarStyle</item>
+		<item name="android:editTextStyle">@style/AppEditTextStyle</item>
+		<!-- Customize your theme here. -->
+	</style>
+
+	<style name="AppActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+		<item name="android:displayOptions">showTitle</item>
+		<!--<item name="android:titleTextStyle"></item>-->
+	</style>
+
+	<style name="NavigationBarText">
+		<item name="android:textSize">14sp</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:textColor">@color/gray</item>
+	</style>
+
+	<style name="AppEditTextStyle" parent="Widget.AppCompat.EditText">
+		<item name="android:background">@android:drawable/edit_text</item>
+		<item name="android:textCursorDrawable">@null</item>
+	</style>
+
+</resources>

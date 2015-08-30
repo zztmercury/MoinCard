@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+	<android.support.v4.view.ViewPager
+			xmlns:tools="http://schemas.android.com/tools"
+			android:id="@+id/pager"
+			android:layout_width="match_parent"
+			android:layout_height="fill_parent"
+			tools:context="com.lovemoin.card.app.activity.HomeActivity" />
+
+	<RadioGroup
+			android:id="@+id/navigationGroup"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:background="@color/white"
+			android:paddingTop="5dp"
+			android:paddingBottom="2dp">
+
+
+		<RadioButton
+				android:id="@+id/navItemCard"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:button="@null"
+				android:gravity="center"
+				style="@style/NavigationBarText"
+				android:text="@string/point_card"
+				android:drawableTop="@drawable/selector_tab_home" />
+
+
+		<RadioButton
+				android:id="@+id/navItemActivity"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:button="@null"
+				style="@style/NavigationBarText"
+				android:text="@string/activity"
+				android:drawableTop="@drawable/selector_tab_act" />
+
+
+		<RadioButton
+				android:id="@+id/navItemMy"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:button="@null"
+				style="@style/NavigationBarText"
+				android:text="@string/my"
+				android:drawableTop="@drawable/selector_tab_my" />
+
+	</RadioGroup>
+</RelativeLayout>
