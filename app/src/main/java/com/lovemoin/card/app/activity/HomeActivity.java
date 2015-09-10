@@ -6,19 +6,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
 import java.util.Locale;
 
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
@@ -180,6 +181,8 @@ public class HomeActivity extends ActionBarActivity {
             switch (position) {
                 case 0:
                     return new CardListFragment();
+                case 1:
+                    return new ActivityListFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

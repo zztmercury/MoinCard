@@ -11,9 +11,16 @@ import java.util.Map;
 
 /**
  * Created by zzt on 15-8-24.
+ * 网络通讯基类
+ * @author zzt
  */
 public abstract class NetConnection {
-
+    /**
+     * 网络通讯
+     *
+     * @param url      通讯地址
+     * @param paramMap 参数对
+     */
     public NetConnection(final String url, final Map<String, String> paramMap) {
         new AsyncTask<Void, Void, String>() {
             @Override

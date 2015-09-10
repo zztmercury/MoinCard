@@ -2,7 +2,7 @@ package com.lovemoin.card.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +14,7 @@ import com.lovemoin.card.app.net.Login;
 /**
  * Created by zzt on 15-8-25.
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends AppCompatActivity {
     private EditText editUserTel;
     private EditText editPassword;
     private MoinCardApplication app;
@@ -63,7 +63,7 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     private void register() {
-
+        startActivity(new Intent(this, RegisterActivity.class));
     }
 
     private boolean checkValue() {

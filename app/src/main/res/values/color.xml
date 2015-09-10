@@ -6,6 +6,7 @@
 	<color name="gray">#A0A0A0</color>
 	<color name="white">#FFFFFF</color>
 	<color name="red">#FB3434</color>
+	<color name="light_orange">#FFF7AB49</color>
 
 	<color name="split_line">#ceced3</color>
 </resources>

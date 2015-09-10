@@ -22,4 +22,18 @@
 	<string name="user_tel_can_not_be_empty">账号不能为空</string>
 	<string name="password_can_not_be_empty">密码不能为空</string>
 	<string name="update_point_card_success">积点卡更新成功</string>
+
+	<string name="activity_min_img">活动小图</string>
+	<string name="activity_main_img">活动主图片</string>
+	<string name="activity_merchant">活动商户：</string>
+	<string name="activity_address">活动地点：</string>
+	<string name="activity_Duration">活动时间：</string>
+	<string name="activity_detail">活动详情</string>
+	<string name="activity_level_flag">活动级别标识</string>
+	<string name="attend_now">报名参加</string>
+	<string name="attended">已报名</string>
+	<string name="get_prize">领取奖品</string>
+	<string name="completed">已完成</string>
+	<string name="person_attended">人已参加</string>
+	<string name="see_in_merchant_detail">见商户详情</string>
 </resources>

@@ -13,11 +13,16 @@ import java.util.Map;
 /**
  * Created by zzt on 15-8-25.
  */
-public abstract class DownloadCardInfo {
-    public DownloadCardInfo(String userId) {
+public abstract class LoadCardList {
+    /**
+     * 获取卡片列表
+     *
+     * @param userId 用户Id
+     */
+    public LoadCardList(String userId) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_ID, userId);
-        String url = Config.SERVER_URL + Config.ACTION_DOWNLOAD_CARD_LIST;
+        String url = Config.SERVER_URL + Config.ACTION_LOAD_CARD_LIST;
         new NetConnection(url, paramMap) {
             @Override
             public void onSuccess(String result) {
@@ -27,16 +32,16 @@ public abstract class DownloadCardInfo {
                     for (int i = 0; i < array.length(); i++) {
                         cardInfoList.add(new CardInfo(array.getJSONObject(i)));
                     }
-                    DownloadCardInfo.this.onSuccess(cardInfoList);
+                    LoadCardList.this.onSuccess(cardInfoList);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    DownloadCardInfo.this.onFail("解析错误：" + result);
+                    LoadCardList.this.onFail("解析错误：" + e.getMessage());
                 }
             }
 
             @Override
             public void onFail(String message) {
-                DownloadCardInfo.this.onFail(message);
+                LoadCardList.this.onFail(message);
             }
         };
     }

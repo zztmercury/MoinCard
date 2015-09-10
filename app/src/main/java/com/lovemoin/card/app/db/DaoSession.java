@@ -12,14 +12,22 @@ import java.util.Map;
 
 /**
  * {@inheritDoc}
- *
+ * 
  * @see de.greenrobot.dao.AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig cardInfoDaoConfig;
+    private final DaoConfig merchantInfoDaoConfig;
+    private final DaoConfig imageInfoDaoConfig;
+    private final DaoConfig storeInfoDaoConfig;
+    private final DaoConfig activityInfoDaoConfig;
 
     private final CardInfoDao cardInfoDao;
+    private final MerchantInfoDao merchantInfoDao;
+    private final ImageInfoDao imageInfoDao;
+    private final StoreInfoDao storeInfoDao;
+    private final ActivityInfoDao activityInfoDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
@@ -28,17 +36,57 @@ public class DaoSession extends AbstractDaoSession {
         cardInfoDaoConfig = daoConfigMap.get(CardInfoDao.class).clone();
         cardInfoDaoConfig.initIdentityScope(type);
 
+        merchantInfoDaoConfig = daoConfigMap.get(MerchantInfoDao.class).clone();
+        merchantInfoDaoConfig.initIdentityScope(type);
+
+        imageInfoDaoConfig = daoConfigMap.get(ImageInfoDao.class).clone();
+        imageInfoDaoConfig.initIdentityScope(type);
+
+        storeInfoDaoConfig = daoConfigMap.get(StoreInfoDao.class).clone();
+        storeInfoDaoConfig.initIdentityScope(type);
+
+        activityInfoDaoConfig = daoConfigMap.get(ActivityInfoDao.class).clone();
+        activityInfoDaoConfig.initIdentityScope(type);
+
         cardInfoDao = new CardInfoDao(cardInfoDaoConfig, this);
+        merchantInfoDao = new MerchantInfoDao(merchantInfoDaoConfig, this);
+        imageInfoDao = new ImageInfoDao(imageInfoDaoConfig, this);
+        storeInfoDao = new StoreInfoDao(storeInfoDaoConfig, this);
+        activityInfoDao = new ActivityInfoDao(activityInfoDaoConfig, this);
 
         registerDao(CardInfo.class, cardInfoDao);
+        registerDao(MerchantInfo.class, merchantInfoDao);
+        registerDao(ImageInfo.class, imageInfoDao);
+        registerDao(StoreInfo.class, storeInfoDao);
+        registerDao(ActivityInfo.class, activityInfoDao);
     }
 
     public void clear() {
         cardInfoDaoConfig.getIdentityScope().clear();
+        merchantInfoDaoConfig.getIdentityScope().clear();
+        imageInfoDaoConfig.getIdentityScope().clear();
+        storeInfoDaoConfig.getIdentityScope().clear();
+        activityInfoDaoConfig.getIdentityScope().clear();
     }
 
     public CardInfoDao getCardInfoDao() {
         return cardInfoDao;
+    }
+
+    public MerchantInfoDao getMerchantInfoDao() {
+        return merchantInfoDao;
+    }
+
+    public ImageInfoDao getImageInfoDao() {
+        return imageInfoDao;
+    }
+
+    public StoreInfoDao getStoreInfoDao() {
+        return storeInfoDao;
+    }
+
+    public ActivityInfoDao getActivityInfoDao() {
+        return activityInfoDao;
     }
 
 }

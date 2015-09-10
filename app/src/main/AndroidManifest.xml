@@ -28,6 +28,18 @@
 				android:windowSoftInputMode="adjustResize|stateHidden">
 
 		</activity>
+
+		<activity
+				android:name=".activity.ActivityDetailType3Activity"
+				android:label="活动详情">
+
+		</activity>
+
+		<activity
+				android:name=".activity.MerchantDetailActivity"
+				android:label="商户信息">
+
+		</activity>
 	</application>
 
 </manifest>

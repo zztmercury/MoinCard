@@ -12,6 +12,12 @@ import java.util.Map;
  * Created by zzt on 15-8-24.
  */
 public abstract class Login {
+    /**
+     * 登陆
+     *
+     * @param userTel  用户手机号
+     * @param password 用户密码
+     */
     public Login(String userTel, String password) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
@@ -24,10 +30,10 @@ public abstract class Login {
             public void onSuccess(String result) {
                 try {
                     JSONObject object = new JSONObject(result);
-                    Login.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString("id"));
+                    Login.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString(Config.KEY_ID));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Login.this.onFail("解析错误：" + result);
+                    Login.this.onFail("解析错误：" + e.getMessage());
                 }
             }
 

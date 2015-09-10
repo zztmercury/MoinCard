@@ -23,4 +23,14 @@
 		<item name="android:textCursorDrawable">@null</item>
 	</style>
 
+	<style name="TextStyleTitle">
+		<item name="android:textSize">18sp</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
+
+	<style name="TextStyleDetail">
+		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
+
 </resources>
