@@ -12,6 +12,8 @@ import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
 import com.lovemoin.card.app.entity.ActivityType3;
+import com.lovemoin.card.app.net.AttendActivity;
+import com.lovemoin.card.app.net.GetPrize;
 import com.lovemoin.card.app.net.LoadActivityDetail;
 import com.lovemoin.card.app.utils.DateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -96,7 +98,7 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
         };
     }
 
-    private void bindDataToViews(ActivityType3 activityInfo) {
+    private void bindDataToViews(final ActivityType3 activityInfo) {
         imageLoader.displayImage(Config.SERVER_URL + activityInfo.getImg(), imgMain, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -137,23 +139,71 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
             btnReact.setText(R.string.attend_now);
             btnReact.setEnabled(true);
             activityInfo.setCurrentStep(0);
-        } else if (activityInfo.getCurrentStep() < activityInfo.getTotalStep() - 1) {
-            btnReact.setText(R.string.attended);
-            btnReact.setEnabled(false);
-        } else if (activityInfo.getCurrentStep() == activityInfo.getCurrentStep() - 1) {
-            btnReact.setText(R.string.get_prize);
-            btnReact.setEnabled(true);
+            stepsView.setVisibility(View.GONE);
+            btnReact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum()) {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();
+                            btnReact.setText(R.string.attended);
+                            btnReact.setEnabled(false);
+                            stepsView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onFail(String message) {
+                            Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                        }
+                    };
+                }
+            });
         } else {
-            btnReact.setText(R.string.completed);
-            btnReact.setEnabled(false);
+            stepsView.setVisibility(View.VISIBLE);
+            if (activityInfo.getCurrentStep() < activityInfo.getTotalStep() - 2) {
+                btnReact.setText(R.string.attended);
+                btnReact.setEnabled(false);
+            } else if (activityInfo.getCurrentStep() == activityInfo.getTotalStep() - 2) {
+                btnReact.setText(R.string.get_prize);
+                btnReact.setEnabled(true);
+                btnReact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switch (activityInfo.getNum()) {
+                            case 1:
+
+                                break;
+                            default:
+                                new GetPrize(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), null, null) {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(ActivityDetailType3Activity.this, R.string.extrange_success, Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onFail(String message) {
+                                        Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                                    }
+                                };
+                                break;
+                        }
+                    }
+                });
+            } else {
+                btnReact.setText(R.string.completed);
+                btnReact.setEnabled(false);
+            }
         }
-        textAddress.setText(R.string.see_in_merchant_detail);
         stepsView.setLabels(activityInfo.getStepText().split("\\|"))
                 .setProgressColorIndicator(getResources().getColor(R.color.light_orange))
                 .setBarColorIndicator(getResources().getColor(R.color.light_gray))
                 .setLabelColorIndicator(getResources().getColor(R.color.gray))
                 .setCompletedPosition(activityInfo.getCurrentStep())
                 .drawView();
-        stepsView.setVisibility(View.VISIBLE);
+        textAddress.setText(R.string.see_in_merchant_detail);
     }
+
+
+//    private void show
 }

@@ -36,4 +36,6 @@
 	<string name="completed">已完成</string>
 	<string name="person_attended">人已参加</string>
 	<string name="see_in_merchant_detail">见商户详情</string>
+	<string name="attend_success">报名成功</string>
+	<string name="extrange_success">兑换成功</string>
 </resources>
