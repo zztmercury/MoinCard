@@ -201,28 +201,99 @@
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
 			android:background="#CC000000"
-			android:visibility="gone">
+			android:visibility="gone"
+			android:id="@+id/layoutCover">
 
 		<LinearLayout
-				android:layout_width="280dp"
-				android:layout_height="400dp"
+				android:layout_width="240dp"
+				android:layout_height="wrap_content"
 				android:orientation="vertical"
 				android:background="#FFFFFF"
 				android:layout_centerInParent="true"
-				android:id="@+id/successContainer">
+				android:id="@+id/successContainer"
+				android:gravity="center_horizontal">
 
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/TextStyleTitle"
+					android:text="@string/you_get_the_prize"
+					android:layout_gravity="left"
+					android:layout_marginTop="28dp"
+					android:layout_marginLeft="11dp" />
+
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/TextStyleTitle"
+					android:textColor="#cc3333"
+					android:id="@+id/textGiftName"
+					android:layout_marginTop="12dp"
+					android:text="ssss" />
+
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					style="@style/TextStyleDetailSecondary"
+					android:layout_marginTop="23dp"
+					android:text="@string/added_to_card"
+					android:layout_gravity="center"
+					android:gravity="center" />
+
+			<de.hdodenhof.circleimageview.CircleImageView
+					xmlns:app="http://schemas.android.com/apk/res-auto"
+					android:id="@+id/imgGift"
+					android:layout_width="120dp"
+					android:layout_height="120dp"
+					android:layout_marginTop="7dp"
+					app:border_width="2dp"
+					app:border_color="@color/light_gray" />
+
+			<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:minHeight="0dp"
+					android:minWidth="0dp"
+					android:paddingTop="8dp"
+					android:paddingBottom="8dp"
+					android:paddingLeft="20dp"
+					android:paddingRight="20dp"
+					android:text="@string/view_coupon"
+					android:background="@drawable/btn_red_corner_selector"
+					style="@style/TextStyleTitle"
+					android:textColor="@color/white"
+					android:layout_margin="10dp" />
 		</LinearLayout>
 
 		<Button
 				android:layout_width="40dp"
 				android:layout_height="40dp"
-				android:background="@drawable/gray_point"
+				android:background="@drawable/gray_cross"
+				android:id="@+id/btnCloseCover"
 				android:layout_alignRight="@id/successContainer"
 				android:layout_alignTop="@id/successContainer"
 				android:layout_marginTop="-20dp"
 				android:layout_marginRight="-20dp"
 				android:textSize="40sp"
 				android:textColor="#FFFFFF" />
+
+		<ImageView
+				android:layout_width="42dp"
+				android:layout_height="63dp"
+				android:src="@drawable/left_up_star"
+				android:layout_alignTop="@id/successContainer"
+				android:layout_alignLeft="@id/successContainer"
+				android:layout_marginLeft="-42dp"
+				android:layout_marginTop="-5dp" />
+
+		<ImageView
+				android:layout_width="54dp"
+				android:layout_height="36dp"
+				android:src="@drawable/right_button_star"
+				android:layout_alignRight="@id/successContainer"
+				android:layout_alignBottom="@id/successContainer"
+				android:layout_marginRight="-54dp"
+				android:layout_marginBottom="-5dp" />
 	</RelativeLayout>
 
 </FrameLayout>

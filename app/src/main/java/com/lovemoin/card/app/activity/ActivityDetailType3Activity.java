@@ -1,7 +1,10 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.view.View;
@@ -11,14 +14,17 @@ import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
+import com.lovemoin.card.app.dto.CouponDto;
 import com.lovemoin.card.app.entity.ActivityType3;
 import com.lovemoin.card.app.net.AttendActivity;
-import com.lovemoin.card.app.net.GetPrize;
+import com.lovemoin.card.app.net.GetGift;
+import com.lovemoin.card.app.net.GetRelateMerchantCoupon;
 import com.lovemoin.card.app.net.LoadActivityDetail;
 import com.lovemoin.card.app.utils.DateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
 
@@ -30,6 +36,7 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
     private ActivityInfo activityInfo;
     private String userId;
     private ImageLoader imageLoader;
+
     private LinearLayout container;
     private ImageView imgMain;
     private ImageView imgFlag;
@@ -41,6 +48,10 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
     private TextView textDetail;
     private Button btnReact;
     private StepsView stepsView;
+    private View cover;
+    private TextView textGiftName;
+    private CircleImageView imgGift;
+    private Button btnCloseCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +85,16 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
         textDetail = (TextView) findViewById(R.id.textDetail);
         btnReact = (Button) findViewById(R.id.btnReact);
         stepsView = (StepsView) findViewById(R.id.steps);
+        cover = findViewById(R.id.layoutCover);
+        textGiftName = (TextView) findViewById(R.id.textGiftName);
+        imgGift = (CircleImageView) findViewById(R.id.imgGift);
+        btnCloseCover = (Button) findViewById(R.id.btnCloseCover);
+        btnCloseCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cover.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void initData() {
@@ -172,20 +193,10 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
                     public void onClick(View v) {
                         switch (activityInfo.getNum()) {
                             case 1:
-
+                                showPrizeSelectDialog(activityInfo);
                                 break;
                             default:
-                                new GetPrize(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), null, null) {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(ActivityDetailType3Activity.this, R.string.extrange_success, Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onFail(String message) {
-                                        Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
-                                    }
-                                };
+                                getGift(activityInfo, null, null);
                                 break;
                         }
                     }
@@ -205,5 +216,53 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
     }
 
 
-//    private void show
+    private void showPrizeSelectDialog(final ActivityType3 activityInfo) {
+        new GetRelateMerchantCoupon(activityInfo.getActivityId()) {
+            private int selectedCouponIndex = 0;
+
+            @Override
+            public void onSuccess(final List<CouponDto> couponList) {
+                String[] couponNames = new String[couponList.size()];
+                for (int i = 0; i < couponList.size(); i++) {
+                    couponNames[i] = couponList.get(i).getCouponName();
+                }
+                new AlertDialog.Builder(ActivityDetailType3Activity.this)
+                        .setTitle(R.string.please_select_coupon)
+                        .setSingleChoiceItems(couponNames, selectedCouponIndex, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                selectedCouponIndex = which;
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getGift(activityInfo, couponList.get(selectedCouponIndex).getCouponId(), couponList.get(selectedCouponIndex).getMerchantId());
+                            }
+                        }).show();
+            }
+
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
+    private void getGift(final ActivityType3 activityInfo, @Nullable String couponId, @Nullable String merchantId) {
+        new GetGift(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), merchantId, couponId) {
+
+            @Override
+            public void onSuccess(String img, String giftName) {
+                cover.setVisibility(View.VISIBLE);
+                textGiftName.setText(giftName);
+                imageLoader.displayImage(Config.SERVER_URL + img, imgGift);
+            }
+
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+            }
+        };
+    }
 }

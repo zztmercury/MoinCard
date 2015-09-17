@@ -11,7 +11,7 @@ public class Config {
      * 生产服务器 <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
-    public static final String SERVER_URL = "http://182.92.3.209:8080/moinbox/";
+    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
 
     // 通信接口配置
@@ -22,8 +22,8 @@ public class Config {
     public static final String ACTION_ATTEND_ACTIVITY = "activityActionAjax/activityInfo!attend.action";
     public static final String ACTION_LOAD_MERCHANT_INFO = "merchantActionAjax/merchantInfo!findMerchant.action";
     public static final String ACTION_LOAD_ACTIVITY_DETAIL = "activityActionAjax/activityInfo!detail.action";
-    public static final String ACTION_GET_PRIZE = "activityActionAjax/activityInfo!getThePrize.action";
-    public static final String ACTION_GET_RELATE_MERCHANT_PRIZE = "activityActionAjax/activityInfo!getMerchantAndPointCard.action";
+    public static final String ACTION_GET_GIFT = "activityActionAjax/activityInfo!getThePrize.action";
+    public static final String ACTION_GET_RELATE_MERCHANT_COUPON = "activityActionAjax/activityInfo!getMerchantAndPointCard.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -38,7 +38,7 @@ public class Config {
     public static final String KEY_CARD_TYPE = "pointCardType";
     public static final String KEY_CARD_DESC = "comment";
     public static final String KEY_POINT_CARD_ID = "pointCardId";
-
+    public static final String KEY_COUPON_NAME = "pointName";
     // 商户相关key
     public static final String KEY_MERCHANT = "merchant";
     public static final String KEY_MERCHANT_NAME = "merchantName";
@@ -84,6 +84,9 @@ public class Config {
     public static final String KEY_ACTIVITY_MEMBER_COUNT = "memberCount";
 
     public static final String KEY_LAST_SEARCH_TIME = "lastSearchTime";
+
+    public static final String KEY_GIFT_IMG = "giftImg";
+    public static final String KEY_GIFT_NAME = "giftName";
 
     // 通用key
     public static final String KEY_ID = "id";

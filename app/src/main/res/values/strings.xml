@@ -38,4 +38,9 @@
 	<string name="see_in_merchant_detail">见商户详情</string>
 	<string name="attend_success">报名成功</string>
 	<string name="extrange_success">兑换成功</string>
+	<string name="you_get_the_prize">恭喜您获得：</string>
+	<string name="added_to_card">已帮您加入首页卡夹\n兑换该券可获得以下礼品</string>
+	<string name="view_coupon">查看兑换券</string>
+	<string name="please_select_coupon">请选择您想要的兑换券</string>
+	<string name="confirm">确认</string>
 </resources>
