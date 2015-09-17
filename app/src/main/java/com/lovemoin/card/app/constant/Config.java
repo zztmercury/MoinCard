@@ -11,7 +11,7 @@ public class Config {
      * 生产服务器 <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
-    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
+    public static final String SERVER_URL = "http://182.92.3.209:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
 
     // 通信接口配置
