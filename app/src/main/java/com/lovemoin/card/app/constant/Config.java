@@ -24,10 +24,15 @@ public class Config {
     public static final String ACTION_LOAD_ACTIVITY_DETAIL = "activityActionAjax/activityInfo!detail.action";
     public static final String ACTION_GET_GIFT = "activityActionAjax/activityInfo!getThePrize.action";
     public static final String ACTION_GET_RELATE_MERCHANT_COUPON = "activityActionAjax/activityInfo!getMerchantAndPointCard.action";
+    public static final String ACTION_LOAD_CARD_RECORD = "cardUserHisActionAjax/ajax!queryCardHisListByAjax.action";
+    public static final String ACTION_LOAD_STORE_LIST = "merchantStoreActionAjax/merchantStoreInfo!findStore.action";
+    public static final String ACTION_LOAD_MERCHANT_IMAGE_SET = "merchantActionAjax/merchantInfo!findImgList.action";
+    public static final String ACTION_CREATE_CARD = "cardUserActionAjax/allMethod!createCard2CardUser.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
     public static final String KEY_CARD_CODE = "cardId";
+    public static final String KEY_CARD_NUMBER = "cardNumber";
     public static final String KEY_CARD_IMG = "imgFlag";
     public static final String KEY_CONVERT_OBJ = "convertName";
     public static final String KEY_CREATE_DATE = "createDate";
@@ -47,6 +52,21 @@ public class Config {
     public static final String KEY_MERCHANT_MAIN_IMAGE = "mainImg";
     public static final String KEY_MERCHANT_BRIEF = "brief";
     public static final String KEY_MERCHANT_DESCRIPTION = "desc";
+
+
+    // 门店相关key
+    public static final String KEY_STORE_ID = "id";
+    public static final String KEY_STORE_NAME = "name";
+    public static final String KEY_STORE_ADDR = "addr";
+    public static final String KEY_STORE_TEL = "tel";
+
+    // 商户图片相关key
+    public static final String KEY_MERCHANT_IMG_URL = "url";
+    public static final String KEY_MERCHANT_IMG_HEIGHT = "height";
+    public static final String KEY_MERCHANT_IMG_WIDTH = "width";
+    public static final String KEY_MERCHANT_IMG_DESCRIPTION = "desc";
+    public static final String KEY_MERCHANT_IMG_COLOR = "color";
+
 
 
     // 用户相关key
@@ -87,6 +107,12 @@ public class Config {
 
     public static final String KEY_GIFT_IMG = "giftImg";
     public static final String KEY_GIFT_NAME = "giftName";
+
+    // 记录相关key
+    public static final String KEY_OPERATE_DATE = "operateDate";
+    public static final String KEY_OPERATE_TYPE = "operateType";
+    public static final String KEY_OPERATE_POINT = "point";
+
 
     // 通用key
     public static final String KEY_ID = "id";

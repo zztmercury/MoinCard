@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:showDividers="middle"
+              android:divider="@drawable/default_divider"
+              android:dividerPadding="5dp">
+
+	<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/text_store_name"
+				android:textSize="18sp" />
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/text_store_addr"
+				android:textColor="@color/secondary_text"
+				android:textSize="14sp" />
+	</LinearLayout>
+
+	<ImageButton
+			android:layout_width="35dp"
+			android:layout_height="35dp"
+			android:src="@drawable/ic_phone"
+			android:background="#00000000"
+			android:id="@+id/btn_tel"
+			android:contentDescription="@string/phone" />
+</LinearLayout>

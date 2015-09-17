@@ -29,7 +29,7 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+        View rootView = inflater.inflate(R.layout.refreshable_list, container, false);
         mListActivity = (RecyclerView) rootView.findViewById(R.id.list);
         mListActivity.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ActivityListAdapter(getContext());

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.anton46.stepsview.StepsView;
@@ -95,6 +96,7 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
                 cover.setVisibility(View.GONE);
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initData() {
@@ -264,5 +266,15 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
                 Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
             }
         };
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

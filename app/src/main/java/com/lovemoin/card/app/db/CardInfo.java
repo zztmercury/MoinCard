@@ -16,8 +16,6 @@ import java.sql.Date;
  */
 public class CardInfo implements java.io.Serializable {
 
-    // KEEP FIELDS - put your custom fields here
-    private static final String DATE_PATTERN = "yyyy-MM-dd";
     /**
      * Not-null value.
      */
@@ -50,6 +48,16 @@ public class CardInfo implements java.io.Serializable {
     private transient CardInfoDao myDao;
     private MerchantInfo merchantInfo;
     private String merchantInfo__resolvedKey;
+    // KEEP FIELDS - put your custom fields here
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    /**
+     * 兑换卡
+     */
+    public static final String TYPE_COUPON = "0001";
+    /**
+     * 积点卡
+     */
+    public static final String TYPE_POINT = "0000";
     // KEEP FIELDS END
 
     public CardInfo() {
@@ -73,22 +81,6 @@ public class CardInfo implements java.io.Serializable {
         this.currentPoint = currentPoint;
         this.maxPoint = maxPoint;
         this.merchantId = merchantId;
-    }
-
-    // KEEP METHODS - put your custom methods here
-    public CardInfo(JSONObject jsonObject) throws JSONException {
-        cardCode = jsonObject.getString(Config.KEY_CARD_CODE);
-        cardImg = jsonObject.getString(Config.KEY_CARD_IMG);
-        cardBrand = jsonObject.getString(Config.KEY_CARD_BRAND);
-        cardType = jsonObject.getString(Config.KEY_CARD_TYPE);
-        cardDesc = jsonObject.getString(Config.KEY_CARD_DESC);
-        convertObj = jsonObject.getString(Config.KEY_CONVERT_OBJ);
-        createDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_CREATE_DATE), DATE_PATTERN));
-        startDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_START_DATE), DATE_PATTERN));
-        endDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_END_DATE),DATE_PATTERN));
-        convertPoint = jsonObject.getInt(Config.KEY_CONVERT_POINT);
-        currentPoint = jsonObject.getInt(Config.KEY_CURRENT_POINT);
-        maxPoint = jsonObject.getInt(Config.KEY_MAX_POINT);
     }
 
     /**
@@ -272,6 +264,22 @@ public class CardInfo implements java.io.Serializable {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.refresh(this);
+    }
+
+    // KEEP METHODS - put your custom methods here
+    public CardInfo(JSONObject jsonObject) throws JSONException {
+        cardCode = jsonObject.getString(Config.KEY_CARD_CODE);
+        cardImg = jsonObject.getString(Config.KEY_CARD_IMG);
+        cardBrand = jsonObject.getString(Config.KEY_CARD_BRAND);
+        cardType = jsonObject.getString(Config.KEY_CARD_TYPE);
+        cardDesc = jsonObject.getString(Config.KEY_CARD_DESC);
+        convertObj = jsonObject.getString(Config.KEY_CONVERT_OBJ);
+        createDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_CREATE_DATE), DATE_PATTERN));
+        startDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_START_DATE), DATE_PATTERN));
+        endDate = new Date(DateUtil.StringToLong(jsonObject.getString(Config.KEY_END_DATE), DATE_PATTERN));
+        convertPoint = jsonObject.getInt(Config.KEY_CONVERT_POINT);
+        currentPoint = jsonObject.getInt(Config.KEY_CURRENT_POINT);
+        maxPoint = jsonObject.getInt(Config.KEY_MAX_POINT);
     }
     // KEEP METHODS END
 

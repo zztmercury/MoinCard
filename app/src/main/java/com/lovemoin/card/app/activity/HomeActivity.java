@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
+import com.lovemoin.card.app.fragment.MyFragment;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
 import java.util.Locale;
@@ -183,6 +184,8 @@ public class HomeActivity extends AppCompatActivity {
                     return new CardListFragment();
                 case 1:
                     return new ActivityListFragment();
+                case 2:
+                    return new MyFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

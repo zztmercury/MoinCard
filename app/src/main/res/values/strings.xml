@@ -43,4 +43,20 @@
 	<string name="view_coupon">查看兑换券</string>
 	<string name="please_select_coupon">请选择您想要的兑换券</string>
 	<string name="confirm">确认</string>
+	<string name="point_card_detail">积点卡详情</string>
+	<string name="point_record">积点记录</string>
+	<string name="exchange">兑换</string>
+	<string name="merchant_img">商家图片</string>
+	<string name="suitable_stores">所有适用门店</string>
+	<string name="merchant_desc">店铺介绍</string>
+	<string name="current_point">目前已有积点</string>
+	<string name="no_record">无记录</string>
+	<string name="card_detail_desc">积点卡详情介绍</string>
+	<string name="card_code">卡片序列号：</string>
+	<string name="card_valid_duration">卡片有效时间：</string>
+	<string name="stores_in_all">共%d家门店</string>
+	<string name="phone">联系电话</string>
+	<string name="activity_calendar">活动日历</string>
+	<string name="device_do_not_support_nfc">设备不支持Nfc\\n无法正常使用积点及兑换功能</string>
+	<string name="nfcIntent">nfcIntent</string>
 </resources>

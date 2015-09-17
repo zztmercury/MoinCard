@@ -63,16 +63,6 @@ public class MerchantInfo {
         this.description = description;
     }
 
-    // KEEP METHODS - put your custom methods here
-    public MerchantInfo(JSONObject jsonObject) throws JSONException {
-        merchantId = jsonObject.getString(Config.KEY_ID);
-        merchantName = jsonObject.getString(Config.KEY_NAME);
-        brand = jsonObject.getString(Config.KEY_MERCHANT_BRAND);
-        mainImg = jsonObject.getString(Config.KEY_MERCHANT_MAIN_IMAGE);
-        brief = jsonObject.getString(Config.KEY_MERCHANT_BRIEF);
-        description = jsonObject.getString(Config.KEY_MERCHANT_DESCRIPTION);
-    }
-
     /**
      * called by internal mechanisms, do not call yourself.
      */
@@ -273,6 +263,16 @@ public class MerchantInfo {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.refresh(this);
+    }
+
+    // KEEP METHODS - put your custom methods here
+    public MerchantInfo(JSONObject jsonObject) throws JSONException {
+        merchantId = jsonObject.getString(Config.KEY_ID);
+        merchantName = jsonObject.getString(Config.KEY_NAME);
+        brand = jsonObject.getString(Config.KEY_MERCHANT_BRAND);
+        mainImg = jsonObject.getString(Config.KEY_MERCHANT_MAIN_IMAGE);
+        brief = jsonObject.getString(Config.KEY_MERCHANT_BRIEF);
+        description = jsonObject.getString(Config.KEY_MERCHANT_DESCRIPTION);
     }
     // KEEP METHODS END
 
