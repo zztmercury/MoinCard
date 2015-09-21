@@ -18,11 +18,14 @@ import com.lovemoin.card.app.db.DaoMaster;
 import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.entity.DeviceInfo;
 import com.lovemoin.card.app.net.CreateCard;
+import com.lovemoin.card.app.net.GetPoint;
+import com.lovemoin.card.app.net.QuickExchange;
 import com.lovemoin.card.app.utils.CommonUtil;
 import de.greenrobot.dao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +39,8 @@ public class MainActivity extends Activity {
     private NfcAdapter nfcAdapter;
     private CardInfoDao cardInfoDao;
     private DeviceInfo deviceInfo;
+    private Tag tag;
+    private IsoDep isoDep;
 
 
     @Override
@@ -82,8 +87,8 @@ public class MainActivity extends Activity {
     }
 
     private void readTag() {
-        Tag tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        IsoDep isoDep = IsoDep.get(tag);
+        tag = getIntent().getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        isoDep = IsoDep.get(tag);
         if (isoDep != null) {
             try {
                 isoDep.connect();
@@ -111,17 +116,17 @@ public class MainActivity extends Activity {
                         operCardConfirm();
                         break;
                     default:
-
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
+                finish();
             }
         }
     }
 
     private void operWait() {
-        List<CardInfo> cardList = findByMerchantId(deviceInfo.getMerchantId());
+        List<CardInfo> cardList = findCardByMerchantId(deviceInfo.getMerchantCode());
         if (cardList.size() > 1) {
             Intent i = new Intent(this, CardSelectorActivity.class);
             i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
@@ -131,17 +136,59 @@ public class MainActivity extends Activity {
                 app.setCurrentCard(cardList.get(0));
                 startActivity(new Intent(this, MerchantDetailActivity.class));
             } else {
-                createCard(deviceInfo.getMerchantId());
+                createCard(deviceInfo.getMerchantCode(), false);
             }
         }
     }
 
     private void operPlus() {
-
+        CardInfo cardInfo = findPointCardByMerchantId(deviceInfo.getMerchantCode());
+        if (cardInfo == null) {
+            createCard(deviceInfo.getMerchantCode(), true);
+        } else {
+            app.setCurrentCard(cardInfo);
+            plusCommand();
+        }
     }
-
     private void operConvert() {
+        if (app.isExchange()) {
+            if (app.getCurrentCard().getCardCode().startsWith(deviceInfo.getMerchantCode())) {
+                try {
+                    byte[] result;
+                    byte[] command;
+                    String commandStr;
+                    commandStr = Command.COMMAND_DEVICE_CONVERT + app.getCurrentCard().getCardCode() + CommonUtil.padLeft(Integer.toHexString(app.getCurrentCard().getCurrentPoint()), 4);
+                    command = CommonUtil.HexStringToByteArray(commandStr);
+                    result = isoDep.transceive(command);
+                    String checkValue = CommonUtil.ByteArrayToHexString(result);
+                    if (checkValue.endsWith(Command.SUCCEED_END_STR)) {
+                        checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
+                        new QuickExchange(checkValue, app.getCachedUserId()) {
+                            @Override
+                            public void onSuccess() {
+                                app.setIsExchange(false);
+                                app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() - app.getCurrentCard().getConvertPoint());
+                                cardInfoDao.insertOrReplace(app.getCurrentCard());
+                                Toast.makeText(MainActivity.this, "兑换成功", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(MainActivity.this, ConvertSuccessActivity.class);
+                                startActivity(i);
+                            }
 
+                            @Override
+                            public void onFail(String message) {
+                                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+                        };
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(this, R.string.card_not_satisfy, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this, R.string.please_press_card_first, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void operSign() {
@@ -155,23 +202,38 @@ public class MainActivity extends Activity {
     /**
      * 根据merchantId获得对应的积点卡
      *
-     * @param merchantId 后台配置的Id，可通过DeviceInfo.getMerchantId()得到
-     * @return 用户拥有的该商户下所有的积点卡
+     * @param merchantCode 可通过DeviceInfo.getMerchantCode()得到
+     * @return 用户拥有的该商户下所有的卡
      */
-    private List<CardInfo> findByMerchantId(String merchantId) {
+    private List<CardInfo> findCardByMerchantId(String merchantCode) {
+        QueryBuilder<CardInfo> queryBuilder = cardInfoDao.queryBuilder();
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
+        queryBuilder.where(CardInfoDao.Properties.CardCode.like(merchantCode + "%"));
+        return queryBuilder.list();
+    }
+
+    private CardInfo findPointCardByMerchantId(String merchantId) {
         QueryBuilder<CardInfo> queryBuilder = cardInfoDao.queryBuilder();
         QueryBuilder.LOG_SQL = true;
         QueryBuilder.LOG_VALUES = true;
         queryBuilder.where(CardInfoDao.Properties.CardCode.like(merchantId + "%"), CardInfoDao.Properties.CardType.eq(CardInfo.TYPE_POINT));
-        return queryBuilder.list();
+        return queryBuilder.unique();
     }
 
-    private void createCard(String merchantId) {
+
+    private void createCard(String merchantId, final boolean isPlus) {
         new CreateCard(app.getCachedUserId(), merchantId) {
             @Override
             public void onSuccess(CardInfo cardInfo) {
-                app.setCurrentCard(cardInfo);
-                startActivity(new Intent(MainActivity.this, MerchantDetailActivity.class));
+                cardInfoDao.insert(cardInfo);
+                if (isPlus) {
+                    app.setCurrentCard(cardInfo);
+                    plusCommand();
+                } else {
+                    app.setCurrentCard(cardInfo);
+                    startActivity(new Intent(MainActivity.this, MerchantDetailActivity.class));
+                }
             }
 
             @Override
@@ -180,4 +242,40 @@ public class MainActivity extends Activity {
             }
         };
     }
+
+    private void plusCommand() {
+        try {
+            byte[] result;
+            byte[] command;
+            String commandStr;
+            commandStr = Command.COMMAND_DEVICE_PLUS + app.getCurrentCard().getCardCode();
+            command = CommonUtil.HexStringToByteArray(commandStr);
+            result = isoDep.transceive(command);
+            String checkValue = CommonUtil.ByteArrayToHexString(result);
+            if (checkValue.endsWith(Command.SUCCEED_END_STR)) {
+                checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
+                new GetPoint(checkValue, app.getCachedUserId()) {
+                    @Override
+                    public void onSuccess() {
+
+                        Intent i = new Intent(MainActivity.this, CardSelectorActivity.class);
+                        List<CardInfo> cardList = new ArrayList<>();
+                        cardList.add(app.getCurrentCard());
+                        i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
+                        i.putExtra(CardSelectorActivity.COUNT, deviceInfo.getPoint());
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                };
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

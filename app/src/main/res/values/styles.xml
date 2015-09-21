@@ -44,8 +44,9 @@
 		<item name="android:textColor">@color/yellow</item>
 	</style>
 
-	<style name="ButtonStyle">
+	<style name="ConfirmButton">
 		<item name="android:textColor">@color/white</item>
+		<item name="android:background">@drawable/btn_red_corner_selector</item>
 	</style>
 
 </resources>

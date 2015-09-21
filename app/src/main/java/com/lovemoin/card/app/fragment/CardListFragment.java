@@ -1,6 +1,5 @@
 package com.lovemoin.card.app.fragment;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,12 +14,9 @@ import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.CardListAdapter;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
-import com.lovemoin.card.app.db.DaoMaster;
-import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.net.LoadCardList;
 import de.greenrobot.dao.query.QueryBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +27,7 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
     private SwipeRefreshLayout layoutSwipe;
     private CardInfoDao cardInfoDao;
     private boolean isPrepared;
+    private MoinCardApplication app;
 
     @Nullable
     @Override
@@ -40,7 +37,8 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
         mListCard.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new CardListAdapter(getContext());
 
-        initDao();
+        app = (MoinCardApplication) getActivity().getApplication();
+        cardInfoDao = app.getDaoSession().getCardInfoDao();
 
         mListCard.setAdapter(mAdapter);
 
@@ -52,46 +50,37 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
                 android.R.color.holo_red_light);
         layoutSwipe.setOnRefreshListener(this);
 
-        System.out.println(((MoinCardApplication) getActivity().getApplication()).getCachedUserTel());
+        System.out.println(app.getCachedUserTel());
 
         isPrepared = true;
-        lazyLoad();
 
         onRefresh();
 
         return rootView;
     }
 
-    private void initDao() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "moinCard.db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
-        cardInfoDao = daoSession.getCardInfoDao();
-    }
-
     private void loadCardListFromDB() {
         QueryBuilder<CardInfo> queryBuilder = cardInfoDao.queryBuilder();
+        queryBuilder.orderDesc(CardInfoDao.Properties.CreateDate);
         List<CardInfo> cardList = queryBuilder.list();
         mAdapter.clear();
         mAdapter.addAll(cardList);
     }
 
     private void loadCardListFromServer() {
-        final List<CardInfo> data = new ArrayList<>();
-        new LoadCardList(((MoinCardApplication) getActivity().getApplication()).getCachedUserId()) {
+        new LoadCardList(app.getCachedUserId()) {
             @Override
             protected void onSuccess(List<CardInfo> cardInfoList) {
                 mAdapter.clear();
                 mAdapter.addAll(cardInfoList);
                 cacheCardListToDB(cardInfoList);
-                Toast.makeText(getActivity(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
                 layoutSwipe.setRefreshing(false);
             }
 
             @Override
             protected void onFail(String message) {
-                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                 layoutSwipe.setRefreshing(false);
             }
         };

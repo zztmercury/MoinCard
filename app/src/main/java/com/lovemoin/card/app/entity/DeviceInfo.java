@@ -4,11 +4,6 @@ package com.lovemoin.card.app.entity;
  * Created by zzt on 15-9-15.
  */
 public class DeviceInfo {
-    private String deviceId;
-    private int point;
-    private int oper;
-    private int count;
-
     /**
      * 等待状态
      */
@@ -29,6 +24,10 @@ public class DeviceInfo {
      * 卡验证设备状态
      */
     public static final int OPER_CARD_CONFIRM = 0x4;
+    private String deviceId;
+    private int point;
+    private int oper;
+    private int count;
 
     public DeviceInfo(String s) {
         deviceId = s.substring(0, 32);
@@ -53,7 +52,7 @@ public class DeviceInfo {
         return count;
     }
 
-    public String getMerchantId() {
+    public String getMerchantCode() {
         return deviceId.substring(0, 12);
     }
 }

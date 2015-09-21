@@ -166,7 +166,7 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
             btnReact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum()) {
+                    new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getMerchantIdList().get(0), activityInfo.getType(), activityInfo.getNum()) {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();

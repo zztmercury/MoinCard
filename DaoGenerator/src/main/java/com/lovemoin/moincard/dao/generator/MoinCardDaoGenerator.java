@@ -66,7 +66,8 @@ public class MoinCardDaoGenerator extends DaoGenerator {
 
     private void initMerchantInfo() {
         merchantInfo = schema.addEntity("MerchantInfo");
-        merchantInfo.addStringProperty("merchantId").primaryKey();
+        merchantInfo.addStringProperty("merchantUUID").primaryKey();
+        merchantInfo.addStringProperty("merchantId");
         merchantInfo.addStringProperty("merchantName").notNull();
         merchantInfo.addStringProperty("brand").notNull();
         merchantInfo.addStringProperty("mainImg");
@@ -88,6 +89,7 @@ public class MoinCardDaoGenerator extends DaoGenerator {
         activityInfo.addBooleanProperty("isTop");
         activityInfo.addBooleanProperty("isOfficial");
         activityInfo.addBooleanProperty("isAttend");
+        activityInfo.addBooleanProperty("isViewed");
         activityInfo.addIntProperty("type").notNull();
         fkActivityInfo = activityInfo.addStringProperty("merchantId").getProperty();
     }

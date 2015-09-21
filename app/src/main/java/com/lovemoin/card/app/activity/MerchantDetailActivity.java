@@ -1,9 +1,14 @@
 package com.lovemoin.card.app.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,15 +18,17 @@ import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Config;
-import com.lovemoin.card.app.db.CardInfo;
-import com.lovemoin.card.app.db.MerchantInfo;
+import com.lovemoin.card.app.db.*;
+import com.lovemoin.card.app.net.DeleteCard;
 import com.lovemoin.card.app.net.LoadMerchantInfo;
+import com.lovemoin.card.app.widget.RecyclerViewForScrollView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 /**
  * Created by zzt on 15-9-2.
+ *
  * @author zzt
  */
 public class MerchantDetailActivity extends AppCompatActivity {
@@ -81,15 +88,23 @@ public class MerchantDetailActivity extends AppCompatActivity {
     private View layoutCardDetail;
     private View layoutCardRecord;
     private View layoutAllStores;
+    private RecyclerViewForScrollView listRecentActivity;
 
     private ImageLoader loader;
 
+    private ProgressDialog pd;
+
+    private boolean canConvert;
+
+    private MoinCardApplication app;
+    private CardInfoDao cardInfoDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_detail);
         loader = ImageLoader.getInstance();
+        initDao();
         initView();
         initData();
     }
@@ -109,30 +124,20 @@ public class MerchantDetailActivity extends AppCompatActivity {
         layoutCardRecord = findViewById(R.id.layoutCardRecord);
         layoutCardDetail = findViewById(R.id.layoutCardDetail);
         layoutAllStores = findViewById(R.id.layoutAllStores);
+        listRecentActivity = (RecyclerViewForScrollView) findViewById(R.id.listRecentActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initData() {
-        cardInfo = ((MoinCardApplication) getApplication()).getCurrentCard();
+        app = (MoinCardApplication) getApplication();
+        cardInfo = app.getCurrentCard();
+        app.setIsExchange(false);
+        pd = new ProgressDialog(this);
+        bindCard();
         loadMerchantInfoFromServer();
     }
 
-    private void loadMerchantInfoFromServer() {
-        new LoadMerchantInfo(cardInfo.getCardCode()) {
-            @Override
-            public void onSuccess(MerchantInfo merchantInfo) {
-                MerchantDetailActivity.this.merchantInfo = merchantInfo;
-                bindData();
-            }
-
-            @Override
-            public void onFail(String message) {
-                Toast.makeText(MerchantDetailActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        };
-    }
-
-    private void bindData() {
+    private void bindCard() {
         loader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), imgCard, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -156,25 +161,50 @@ public class MerchantDetailActivity extends AppCompatActivity {
         });
         int currentPoint = cardInfo.getCurrentPoint();
         int convertPoint = cardInfo.getConvertPoint();
+        canConvert = (currentPoint >= convertPoint);
         if (currentPoint >= convertPoint) {
             imgCardCount.setImageResource(R.drawable.q10);
             textNeededPoint.setText("兑换即获得");
-            btnConvert.setEnabled(true);
         } else {
             int index = Math.round(currentPoint * 10f / convertPoint);
             imgCardCount.setImageResource(getResources().getIdentifier("q" + index, "drawable", getPackageName()));
             textNeededPoint.setText(String.format("再积%d个积点可兑换", convertPoint - currentPoint));
-            btnConvert.setEnabled(false);
         }
+        btnConvert.setEnabled(canConvert);
         textCurrentPoint.setText(String.format("%d枚", cardInfo.getCurrentPoint()));
         textObject.setText(cardInfo.getConvertObj());
         textCardCounter.setText(String.format("%d/%d", currentPoint, convertPoint));
+        btnConvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                app.setIsExchange(true);
+                pd.setMessage(getString(R.string.find_device_hint));
+                pd.show();
+            }
+        });
 
+    }
+
+    private void loadMerchantInfoFromServer() {
+        new LoadMerchantInfo(cardInfo.getCardCode()) {
+            @Override
+            public void onSuccess(MerchantInfo merchantInfo) {
+                MerchantDetailActivity.this.merchantInfo = merchantInfo;
+                bindData();
+            }
+
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(MerchantDetailActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
+    private void bindData() {
         loader.displayImage(Config.SERVER_URL + merchantInfo.getMainImg(), imgMerchant);
         textMerchantName.setText(merchantInfo.getMerchantName());
         textMerchantBrief.setText(merchantInfo.getBrief());
         textMerchantDesc.setText(merchantInfo.getDescription());
-
         layoutCardRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,7 +240,62 @@ public class MerchantDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_delete:
+                new AlertDialog.Builder(MerchantDetailActivity.this)
+                        .setMessage(R.string.confirm_delete)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog, int which) {
+                                new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
+                                        cardInfoDao.delete(app.getCurrentCard());
+                                        dialog.dismiss();
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onFail(String message) {
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                    }
+                                };
+                            }
+                        })
+                        .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_merchant_detail, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pd.isShowing()) {
+            pd.dismiss();
+            app.setIsExchange(false);
+        } else
+            super.onBackPressed();
+    }
+
+
+    private void initDao() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "moinCard.db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+        DaoSession daoSession = daoMaster.newSession();
+        cardInfoDao = daoSession.getCardInfoDao();
     }
 }

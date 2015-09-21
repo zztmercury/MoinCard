@@ -19,6 +19,7 @@ import java.util.Map;
 public abstract class LoadActivityList {
     public static final int TYPE_RELATED = 1;
     public static final int TYPE_ALL = 2;
+    private Map<String, String> paramsMap = new HashMap<>();
 
     /**
      * 获取活动列表
@@ -30,9 +31,8 @@ public abstract class LoadActivityList {
      * @param lastSearchTime 最后一次查询时间
      */
     public LoadActivityList(int viewType, String userId, long lastSearchTime) {
-        Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put(Config.KEY_VIEW_TYPE, String.valueOf(viewType));
-        paramsMap.put(Config.KEY_ID, userId);
+        paramsMap.put(Config.KEY_USER_ID, userId);
         paramsMap.put(Config.KEY_LAST_SEARCH_TIME, String.valueOf(lastSearchTime));
 
         String url = Config.SERVER_URL + Config.ACTION_LOAD_ACTIVITY_LIST;

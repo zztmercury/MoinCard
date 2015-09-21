@@ -15,7 +15,7 @@ public class CouponDto {
     public CouponDto(JSONObject jsonObject) throws JSONException {
         couponId = jsonObject.getString(Config.KEY_POINT_CARD_ID);
         couponName = jsonObject.getString(Config.KEY_COUPON_NAME);
-        merchantId = jsonObject.getString(Config.KEY_MERCHANT_ID);
+        merchantId = jsonObject.getString(Config.KEY_MERCHANT_UUID);
     }
 
     public String getCouponId() {

@@ -1,22 +1,22 @@
 package com.lovemoin.card.app.widget;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.widget.ListView;
 
 /**
  * Created by zzt on 15-8-17.
  */
-public class ListViewForScrollView extends ListView {
-    public ListViewForScrollView(Context context) {
+public class RecyclerViewForScrollView extends RecyclerView {
+    public RecyclerViewForScrollView(Context context) {
         super(context);
     }
 
-    public ListViewForScrollView(Context context, AttributeSet attrs) {
+    public RecyclerViewForScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ListViewForScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RecyclerViewForScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

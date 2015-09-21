@@ -59,4 +59,42 @@
 	<string name="activity_calendar">活动日历</string>
 	<string name="device_do_not_support_nfc">设备不支持Nfc\\n无法正常使用积点及兑换功能</string>
 	<string name="nfcIntent">nfcIntent</string>
+	<string name="find_device_hint">请将手机靠近魔印设备</string>
+	<string name="please_press_card_first">请先点击兑换</string>
+	<string name="card_not_satisfy">这是别家的积点卡，本店不受理噢</string>
+	<string name="get_point_success">领取积点成功</string>
+	<string name="hit_reg_tel">请输入11位手机号码</string>
+	<string name="hit_reg_code">请输入验证码</string>
+	<string name="btn_reg_send_code">获取验证码</string>
+	<string name="hit_login_pwd">请输入密码</string>
+	<string name="hit_reg_agpwd">请重复输入密码</string>
+	<string name="lab_login_agreement">同意用户服务协议</string>
+	<string name="btn_login_reg">提交注册</string>
+	<string name="invalid_tel_hint">请输入有效的手机号</string>
+	<string name="sended">已发送</string>
+	<string name="user_tel_has_been_changed_please_get_code_again">手机号已变更，请重新获取验证码</string>
+	<string name="invalid_pwd_length">请输入6位以上的字符</string>
+	<string name="second">秒</string>
+	<string name="re_send">重新发送</string>
+	<string name="invalid_code">验证码有误</string>
+	<string name="invalid_re_password">两次输入密码不同</string>
+	<string name="hint">提示</string>
+	<string name="uncheck_agreemend">用户服务协议未勾选</string>
+	<string name="reg_success">恭喜您注册成功</string>
+	<string name="register">注册</string>
+	<string name="service_agreement">服务协议</string>
+    <string name="agreement_content">&#160;&#160;&#160;&#160;“魔印积点” 由上海魔印信息科技有限公司在提供的服务，本协议在魔印用户接受注册及魔印服务时生效。\n
+  &#160;&#160;&#160;&#160;除非事先获得授权或法律要求外，魔印保证不对外公开或向第三方提供用户注册资料及用户在使用服务时存储在魔印的非公开内容。\n
+  &#160;&#160;&#160;&#160;用户务必对其用户密码、个人账号等信息保密，以免被盗用或遭窜改。注册成功后，用户必须保护好自己的账号和密码。如因用户自身原因造成其账户无法正常使用及遭受损失，魔印对此概不负责，一切损失由用户自行承担。\n
+  &#160;&#160;&#160;&#160;魔印将在必要时修改本协议的有关条款，一旦条款内容发生变动，魔印将会在相关的页面提示修改内容。\n
+  &#160;&#160;&#160;&#160;如果用户对魔印或本服务条款存有任何疑问，可以通过微信公众号“魔印积点”联系我们。</string>
+	<string name="known">我知道了</string>
+	<string name="account">账号：</string>
+	<string name="change_pwd">修改登录密码</string>
+	<string name="help">帮助</string>
+	<string name="exit">安全退出</string>
+	<string name="delete">删除</string>
+	<string name="confirm_delete">确定要删除吗？</string>
+	<string name="cancle">取消</string>
+	<string name="delete_success">删除成功</string>
 </resources>

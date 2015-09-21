@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.net;
 
 import com.lovemoin.card.app.constant.Config;
+import com.lovemoin.card.app.utils.CommonUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +23,7 @@ public abstract class Register {
     public Register(String userTel, String userPwd, String OSVersion, String model) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
-        paramMap.put(Config.KEY_USER_PASSWORD, userPwd);
+        paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(userPwd));
         paramMap.put(Config.KEY_OS_VERSION, OSVersion);
         paramMap.put(Config.KEY_MODEL, model);
 
@@ -47,7 +48,7 @@ public abstract class Register {
         };
     }
 
-    public abstract void onSuccess(String string, String id);
+    public abstract void onSuccess(String userTel, String id);
 
-    public abstract void onFail(String msg);
+    public abstract void onFail(String message);
 }

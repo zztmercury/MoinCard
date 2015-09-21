@@ -17,12 +17,13 @@ public abstract class AttendActivity {
      * @param type       活动类型
      * @param num        活动详情编号
      */
-    public AttendActivity(String activityId, String userId, int type, int num) {
+    public AttendActivity(String activityId, String userId, String merchantId, int type, int num) {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put(Config.KEY_ACTIVITY_ID, activityId);
         paramsMap.put(Config.KEY_USER_ID, userId);
         paramsMap.put(Config.KEY_ACTIVITY_TYPE, String.valueOf(type));
         paramsMap.put(Config.KEY_ACTIVITY_NUM, String.valueOf(num));
+        paramsMap.put(Config.KEY_MERCHANT_ID, merchantId);
 
         String url = Config.SERVER_URL + Config.ACTION_ATTEND_ACTIVITY;
 

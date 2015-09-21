@@ -25,7 +25,7 @@
 					android:background="@color/gray">
 
 				<RelativeLayout
-						android:layout_width="wrap_content"
+						android:layout_width="match_parent"
 						android:layout_height="wrap_content">
 
 					<ImageView
@@ -33,7 +33,7 @@
 							android:layout_height="200dp"
 							android:contentDescription="@string/activity_main_img"
 							android:id="@+id/imgMain"
-							android:scaleType="centerCrop" />
+							android:scaleType="fitXY" />
 
 					<ImageView
 							android:layout_width="60dp"

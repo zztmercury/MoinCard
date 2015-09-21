@@ -13,8 +13,11 @@ import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.ActivityListAdapter;
 import com.lovemoin.card.app.db.ActivityInfo;
+import com.lovemoin.card.app.db.ActivityInfoDao;
 import com.lovemoin.card.app.net.LoadActivityList;
+import de.greenrobot.dao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,10 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
     private ActivityListAdapter mAdapter;
     private boolean isPrepared = false;
 
+    private ActivityInfoDao activityInfoDao;
+
+    private MoinCardApplication app;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +42,8 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
         mAdapter = new ActivityListAdapter(getContext());
         mListActivity.setAdapter(mAdapter);
 
+        app = (MoinCardApplication) getActivity().getApplication();
+        activityInfoDao = app.getDaoSession().getActivityInfoDao();
 
         layoutSwipe = (SwipeRefreshLayout) rootView.findViewById(R.id.layoutSwipe);
         layoutSwipe.setColorSchemeResources(
@@ -54,10 +63,34 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
             loadActivityListFromServer();
     }
 
+    private void loadActivityListFromDB() {
+        List<ActivityInfo> activityList = new ArrayList<>();
+        QueryBuilder<ActivityInfo> qb = activityInfoDao.queryBuilder()
+                .where(ActivityInfoDao.Properties.IsTop.eq(true))
+                .orderDesc(ActivityInfoDao.Properties.StartDate);
+        activityList.addAll(qb.list());
+        qb = activityInfoDao.queryBuilder()
+                .where(ActivityInfoDao.Properties.IsOfficial.eq(true), ActivityInfoDao.Properties.IsTop.eq(false))
+                .orderDesc(ActivityInfoDao.Properties.StartDate);
+        activityList.addAll(qb.list());
+        qb = activityInfoDao.queryBuilder()
+                .where(ActivityInfoDao.Properties.IsOfficial.eq(false), ActivityInfoDao.Properties.IsTop.eq(false))
+                .orderDesc(ActivityInfoDao.Properties.StartDate);
+        activityList.addAll(qb.list());
+        mAdapter.clear();
+        mAdapter.addAll(activityList);
+    }
+
+    private void cacheActivityListToDB() {
+        // TODO 活动缓存策略
+
+    }
+
     private void loadActivityListFromServer() {
-        new LoadActivityList(LoadActivityList.TYPE_RELATED, ((MoinCardApplication) getActivity().getApplication()).getCachedUserId(), 0) {
+        new LoadActivityList(LoadActivityList.TYPE_RELATED, app.getCachedUserId(), app.getCachedLastSearchTime()) {
             @Override
             public void onSuccess(List<ActivityInfo> activityInfoList) {
+                app.cacheLastSearchTime(System.currentTimeMillis());
                 mAdapter.addAll(activityInfoList);
                 layoutSwipe.setRefreshing(false);
             }

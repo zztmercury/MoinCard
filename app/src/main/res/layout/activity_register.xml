@@ -1,40 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:background="@color/white"
+              android:orientation="vertical">
+
 
 	<EditText
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
+			android:id="@+id/editUserTel"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:ems="10"
+			android:hint="@string/hit_reg_tel"
+			android:inputType="number"
+			android:singleLine="true">
+	</EditText>
 
 	<LinearLayout
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="horizontal">
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin">
 
 		<EditText
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+				android:id="@+id/editCode"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_gravity="left"
+				android:layout_weight="4"
+				android:ems="10"
+				android:hint="@string/hit_reg_code"
+				android:inputType="number"
+				android:singleLine="true">
+		</EditText>
 
 		<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
+				android:id="@+id/btnSendMsg"
+				android:layout_width="140dp"
+				android:layout_height="40dp"
+				android:layout_marginLeft="@dimen/activity_horizontal_margin"
+				android:background="@drawable/btn_red_corner_selector"
+				android:textColor="@color/white"
+				android:textSize="18sp"
+				android:text="@string/btn_reg_send_code" />
 	</LinearLayout>
 
-	<EditText
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
 
 	<EditText
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
+			android:id="@+id/editPassword"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:ems="10"
+			android:hint="@string/hit_login_pwd"
+			android:inputType="textPassword"
+			android:singleLine="true">
+	</EditText>
 
-	<CheckBox
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+
+	<EditText
+			android:id="@+id/editRePassword"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:ems="10"
+			android:hint="@string/hit_reg_agpwd"
+			android:inputType="textPassword"
+			android:singleLine="true">
+	</EditText>
+
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:gravity="left">
+
+		<CheckBox
+				android:id="@+id/checkAgreement"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:checked="true" />
+
+		<TextView
+				android:id="@+id/textLoginAgreement"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="#3399cc"
+				android:textSize="18sp"
+				android:text="@string/lab_login_agreement" />
+	</LinearLayout>
+
 
 	<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+			android:id="@+id/btnReg"
+			android:layout_width="150dp"
+			android:layout_height="40dp"
+			android:layout_gravity="center"
+			android:layout_marginBottom="@dimen/activity_vertical_margin"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="@dimen/activity_vertical_margin"
+			android:background="@drawable/btn_red_corner_selector"
+			android:textColor="@color/white"
+			android:textSize="18sp"
+			android:text="@string/btn_login_reg" />
 </LinearLayout>

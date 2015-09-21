@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class ActivityType3 extends ActivityInfo {
     private List<String> merchantList = new ArrayList<>();
+
+    private List<String> merchantIdList = new ArrayList<>();
     private int currentStep;
     private int totalStep;
     private String stepText;
@@ -40,6 +42,7 @@ public class ActivityType3 extends ActivityInfo {
         JSONArray array = object.getJSONArray(Config.KEY_ACTIVITY_MERCHANT);
         for (int i = 0; i < array.length(); i++) {
             merchantList.add(array.getJSONObject(i).getString(Config.KEY_MERCHANT_NAME));
+            merchantIdList.add(array.getJSONObject(i).getString(Config.KEY_MERCHANT_ID));
         }
         setImg(object.getString(Config.KEY_ACTIVITY_DETAIL_IMAGE));
         setDetail(object.getString(Config.KEY_ACTIVITY_DETAIL));
@@ -100,6 +103,10 @@ public class ActivityType3 extends ActivityInfo {
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public List<String> getMerchantIdList() {
+        return merchantIdList;
     }
 }
 

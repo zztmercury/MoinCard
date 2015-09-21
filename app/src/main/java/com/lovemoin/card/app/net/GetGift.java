@@ -22,7 +22,7 @@ public abstract class GetGift {
         paramsMap.put(Config.KEY_USER_ID, userId);
         paramsMap.put(Config.KEY_ACTIVITY_TYPE, String.valueOf(type));
         paramsMap.put(Config.KEY_ACTIVITY_NUM, String.valueOf(num));
-        paramsMap.put(Config.KEY_MERCHANT_ID, merchantId);
+        paramsMap.put(Config.KEY_MERCHANT_UUID, merchantId);
         paramsMap.put(Config.KEY_POINT_CARD_ID, pointCardId);
 
         String url = Config.SERVER_URL + Config.ACTION_GET_GIFT;

@@ -11,6 +11,7 @@ import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
@@ -131,6 +132,17 @@ public class HomeActivity extends AppCompatActivity {
             drawableTop.setBounds(0, 0, DisplayUtil.dp2Px(this, width), DisplayUtil.dp2Px(this, height));
             radioButton.setCompoundDrawables(null, drawableTop, null, null);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        ((MoinCardApplication) getApplication()).setCurrentCard(null);
+        super.onResume();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

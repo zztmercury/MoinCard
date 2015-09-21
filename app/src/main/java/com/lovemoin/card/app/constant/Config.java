@@ -28,6 +28,11 @@ public class Config {
     public static final String ACTION_LOAD_STORE_LIST = "merchantStoreActionAjax/merchantStoreInfo!findStore.action";
     public static final String ACTION_LOAD_MERCHANT_IMAGE_SET = "merchantActionAjax/merchantInfo!findImgList.action";
     public static final String ACTION_CREATE_CARD = "cardUserActionAjax/allMethod!createCard2CardUser.action";
+    public static final String ACTION_GET_POINT = "cardAction/decipheringMessage.action";
+    public static final String ACTION_QUICK_EXCHANGE = "cardAction/quickExchange.action";
+    public static final String ACTION_SEND_CODE = "cardUserActionAjax/allMethod!sendMobileVerificationCode.action";
+    public static final String ACTION_DELETE_CARD = "cardUserActionAjax/allMethod!deleteCardUserRefCard.action";
+    public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHNAT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -43,11 +48,12 @@ public class Config {
     public static final String KEY_CARD_TYPE = "pointCardType";
     public static final String KEY_CARD_DESC = "comment";
     public static final String KEY_POINT_CARD_ID = "pointCardId";
-    public static final String KEY_COUPON_NAME = "pointName";
+    public static final String KEY_COUPON_NAME = "pointCardName";
     // 商户相关key
     public static final String KEY_MERCHANT = "merchant";
     public static final String KEY_MERCHANT_NAME = "merchantName";
     public static final String KEY_MERCHANT_ID = "merchantId";
+    public static final String KEY_MERCHANT_UUID = "merchantUUID";
     public static final String KEY_MERCHANT_BRAND = "brand";
     public static final String KEY_MERCHANT_MAIN_IMAGE = "mainImg";
     public static final String KEY_MERCHANT_BRIEF = "brief";
@@ -73,6 +79,7 @@ public class Config {
     public static final String KEY_USER_TEL = "userTel";
     public static final String KEY_USER_PASSWORD = "userPwd";
     public static final String KEY_USER_ID = "userId";
+    public static final String KEY_CARD_USER_ID = "cardUserId";
     public static final String KEY_OS_VERSION = "OSVersion";
     public static final String KEY_MODEL = "model";
 
@@ -119,4 +126,5 @@ public class Config {
     public static final String KEY_NAME = "name";
     public static final String KEY_START_DATE = "startDate";
     public static final String KEY_END_DATE = "endDate";
+    public static final String KEY_CHECK_VALUE = "checkValue";
 }

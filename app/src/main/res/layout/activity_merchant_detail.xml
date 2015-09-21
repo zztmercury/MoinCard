@@ -174,7 +174,8 @@
                     android:paddingRight="15dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:id="@+id/layoutActivityCalendar">
+                    android:id="@+id/layoutActivityCalendar"
+                    android:visibility="gone">
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -193,14 +194,14 @@
                         android:src="@drawable/more" />
             </LinearLayout>
 
-            <com.lovemoin.card.app.widget.ListViewForScrollView
+            <com.lovemoin.card.app.widget.RecyclerViewForScrollView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:id="@+id/list_recent_activity"
+                    android:id="@+id/listRecentActivity"
                     android:divider="@drawable/default_divider">
-            </com.lovemoin.card.app.widget.ListViewForScrollView>
+            </com.lovemoin.card.app.widget.RecyclerViewForScrollView>
         </LinearLayout>
 
 
