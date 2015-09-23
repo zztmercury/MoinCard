@@ -41,9 +41,10 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
         mListActivity.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ActivityListAdapter(getContext());
         mListActivity.setAdapter(mAdapter);
+//        mListActivity.addItemDecoration(new DividerItemDecoration(getContext(),R.drawable.default_divider));
 
         app = (MoinCardApplication) getActivity().getApplication();
-        activityInfoDao = app.getDaoSession().getActivityInfoDao();
+        activityInfoDao = app.getActivityInfoDao();
 
         layoutSwipe = (SwipeRefreshLayout) rootView.findViewById(R.id.layoutSwipe);
         layoutSwipe.setColorSchemeResources(
@@ -67,32 +68,33 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
         List<ActivityInfo> activityList = new ArrayList<>();
         QueryBuilder<ActivityInfo> qb = activityInfoDao.queryBuilder()
                 .where(ActivityInfoDao.Properties.IsTop.eq(true))
-                .orderDesc(ActivityInfoDao.Properties.StartDate);
+                .orderDesc(ActivityInfoDao.Properties.Level, ActivityInfoDao.Properties.StartDate);
         activityList.addAll(qb.list());
         qb = activityInfoDao.queryBuilder()
-                .where(ActivityInfoDao.Properties.IsOfficial.eq(true), ActivityInfoDao.Properties.IsTop.eq(false))
-                .orderDesc(ActivityInfoDao.Properties.StartDate);
+                .where(ActivityInfoDao.Properties.IsTop.eq(false))
+                .orderDesc(ActivityInfoDao.Properties.Level, ActivityInfoDao.Properties.StartDate);
         activityList.addAll(qb.list());
-        qb = activityInfoDao.queryBuilder()
-                .where(ActivityInfoDao.Properties.IsOfficial.eq(false), ActivityInfoDao.Properties.IsTop.eq(false))
-                .orderDesc(ActivityInfoDao.Properties.StartDate);
-        activityList.addAll(qb.list());
+//        qb = activityInfoDao.queryBuilder()
+//                .where(ActivityInfoDao.Properties.IsOfficial.eq(false), ActivityInfoDao.Properties.IsTop.eq(false))
+//                .orderDesc(ActivityInfoDao.Properties.StartDate);
+//        activityList.addAll(qb.list());
         mAdapter.clear();
         mAdapter.addAll(activityList);
     }
 
-    private void cacheActivityListToDB() {
-        // TODO 活动缓存策略
-
+    private void cacheActivityListToDB(List<ActivityInfo> activityInfoList) {
+        activityInfoDao.insertOrReplaceInTx(activityInfoList);
+//        QueryBuilder<ActivityInfo> qb = activityInfoDao.queryBuilder();
     }
 
     private void loadActivityListFromServer() {
-        new LoadActivityList(LoadActivityList.TYPE_RELATED, app.getCachedUserId(), app.getCachedLastSearchTime()) {
+        new LoadActivityList(LoadActivityList.TYPE_RELATED, app.getCachedUserId(), 0) {
             @Override
             public void onSuccess(List<ActivityInfo> activityInfoList) {
                 app.cacheLastSearchTime(System.currentTimeMillis());
-                mAdapter.addAll(activityInfoList);
                 layoutSwipe.setRefreshing(false);
+                cacheActivityListToDB(activityInfoList);
+                loadActivityListFromDB();
             }
 
             @Override
@@ -105,6 +107,6 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
 
     @Override
     public void onRefresh() {
-        loadActivityListFromServer();
+        loadActivityListFromDB();
     }
 }

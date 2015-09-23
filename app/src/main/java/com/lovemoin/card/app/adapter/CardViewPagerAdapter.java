@@ -15,10 +15,12 @@ import java.util.List;
  */
 public class CardViewPagerAdapter extends FragmentPagerAdapter {
     private List<CardInfo> cardList;
+    private boolean clickable;
 
-    public CardViewPagerAdapter(FragmentManager fm) {
+    public CardViewPagerAdapter(FragmentManager fm, boolean clickable) {
         super(fm);
         cardList = new ArrayList<>();
+        this.clickable = clickable;
     }
 
     public void add(CardInfo cardInfo) {
@@ -38,7 +40,7 @@ public class CardViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return CardViewFragment.newInstans(cardList.get(position));
+        return CardViewFragment.newInstance(cardList.get(position), clickable);
     }
 
     @Override

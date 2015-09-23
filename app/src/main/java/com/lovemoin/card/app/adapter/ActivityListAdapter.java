@@ -3,6 +3,7 @@ package com.lovemoin.card.app.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.activity.ActivityDetailType1Activity;
 import com.lovemoin.card.app.activity.ActivityDetailType3Activity;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
@@ -92,7 +94,8 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
                 Intent intent;
                 switch (activityInfo.getType()) {
                     case 1:
-                        return;
+                        intent = new Intent(context, ActivityDetailType1Activity.class);
+                        break;
                     case 2:
                         return;
                     case 3:
@@ -118,6 +121,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
         public ImageView imgFlag;
         public TextView textName;
         public TextView textBrief;
+        private CardView r;
 
         public ViewHolder(View itemView) {
             super(itemView);

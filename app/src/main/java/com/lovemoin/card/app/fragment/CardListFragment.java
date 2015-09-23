@@ -38,7 +38,7 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
         mAdapter = new CardListAdapter(getContext());
 
         app = (MoinCardApplication) getActivity().getApplication();
-        cardInfoDao = app.getDaoSession().getCardInfoDao();
+        cardInfoDao = app.getCardInfoDao();
 
         mListCard.setAdapter(mAdapter);
 
@@ -52,9 +52,10 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
 
         System.out.println(app.getCachedUserTel());
 
+        onRefresh();
+
         isPrepared = true;
 
-        onRefresh();
 
         return rootView;
     }

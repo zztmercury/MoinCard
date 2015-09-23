@@ -11,7 +11,7 @@ public class Config {
      * 生产服务器 <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
-    public static final String SERVER_URL = "http://182.92.3.209:8080/moinbox/";
+    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
 
     // 通信接口配置
@@ -91,6 +91,7 @@ public class Config {
     // 活动相关key
     public static final String KEY_ACTIVITY = "activity";
     public static final String KEY_ACTIVITY_ID = "activityId";
+    public static final String KEY_ACTIVITY_ADDR = "address";
     public static final String KEY_ACTIVITY_NAME = "name";
     public static final String KEY_ACTIVITY_BRIEF = "brief";
     public static final String KEY_ACTIVITY_BRIEF_IMAGE = "briefImg";
@@ -109,6 +110,7 @@ public class Config {
     public static final String KEY_ACTIVITY_STEP_TEXT = "stepText";
     public static final String KEY_ACTIVITY_PROGRESS = "progress";
     public static final String KEY_ACTIVITY_MEMBER_COUNT = "memberCount";
+    public static final String KEY_ACTIVITY_LEVEL = "level";
 
     public static final String KEY_LAST_SEARCH_TIME = "lastSearchTime";
 

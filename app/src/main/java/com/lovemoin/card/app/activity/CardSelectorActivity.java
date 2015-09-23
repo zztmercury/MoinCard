@@ -1,18 +1,16 @@
 package com.lovemoin.card.app.activity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.CardViewPagerAdapter;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
-import com.lovemoin.card.app.db.DaoMaster;
-import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.widget.PlusStarDrawView;
 
 import java.util.List;
@@ -34,12 +32,14 @@ public class CardSelectorActivity extends AppCompatActivity {
     private List<CardInfo> cardList;
     private CardInfoDao cardInfoDao;
 
+    private MoinCardApplication app;
+    private int realCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_selector);
         initView();
-        initDao();
         initData();
         initListener();
     }
@@ -52,9 +52,12 @@ public class CardSelectorActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        app = (MoinCardApplication) getApplication();
+        cardInfoDao = app.getCardInfoDao();
         cardList = (List<CardInfo>) getIntent().getSerializableExtra(CARD_LIST);
+        app.setCurrentCard(cardList.get(0));
         count = getIntent().getIntExtra(COUNT, -1);
-        mAdapter = new CardViewPagerAdapter(getSupportFragmentManager());
+        mAdapter = new CardViewPagerAdapter(getSupportFragmentManager(), count == -1);
         cardViewPager.setAdapter(mAdapter);
         mAdapter.clear();
         mAdapter.addAll(cardList);
@@ -66,29 +69,37 @@ public class CardSelectorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 starView.setCount(-1);
-                cardList.get(0).setCurrentPoint(cardList.get(0).getCurrentPoint() + count);
+                realCount = Math.min(count, app.getCurrentCard().getMaxPoint() - app.getCurrentCard().getCurrentPoint());
+                app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() + realCount);
+                cardInfoDao.insertOrReplace(app.getCurrentCard());
 //                cardInfoDao.insertOrReplace(cardList.get(0));
-                cardInfoDao.update(cardList.get(0));
                 starView.setVisibility(View.GONE);
                 mAdapter.notifyDataSetChanged();
-                textHint.setText(R.string.get_point_success);
+                if (realCount != count) {
+                    textHint.setText("超过最大值，本次积点" + realCount + "枚");
+                } else {
+                    textHint.setText(R.string.get_point_success);
+                }
                 textHint.setVisibility(View.VISIBLE);
                 rootView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(CardSelectorActivity.this, HomeActivity.class));
+                        startActivity(new Intent(CardSelectorActivity.this, MerchantDetailActivity.class));
+                        finish();
                     }
                 });
             }
         });
+        cardViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                app.setCurrentCard(cardList.get(position));
+            }
+        });
     }
 
-
-    private void initDao() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "moinCard.db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
-        cardInfoDao = daoSession.getCardInfoDao();
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

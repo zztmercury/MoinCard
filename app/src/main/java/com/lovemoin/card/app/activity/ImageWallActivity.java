@@ -1,7 +1,6 @@
 package com.lovemoin.card.app.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.MenuItem;
@@ -17,7 +16,7 @@ import java.util.List;
 /**
  * Created by zzt on 15-9-14.
  */
-public class ImageWallActivity extends AppCompatActivity {
+public class ImageWallActivity extends BaseActivity {
     private RecyclerView list;
     private ImageWallAdapter mAdapter;
 

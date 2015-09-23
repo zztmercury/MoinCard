@@ -1,8 +1,10 @@
 package com.lovemoin.card.app.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,19 @@ public class MyFragment extends LazyFragment {
                 app.reset();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();
+            }
+        });
+        rootView.findViewById(R.id.layoutHelp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage(R.string.msg_help_desc)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
         textAccount.setText(app.getCachedUserTel());

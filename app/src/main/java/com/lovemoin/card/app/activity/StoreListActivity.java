@@ -1,7 +1,6 @@
 package com.lovemoin.card.app.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -12,13 +11,14 @@ import com.lovemoin.card.app.adapter.StoreListAdapter;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.StoreInfo;
 import com.lovemoin.card.app.net.LoadStoreList;
+import com.lovemoin.card.app.widget.DividerItemDecoration;
 
 import java.util.List;
 
 /**
  * Created by zzt on 15-9-14.
  */
-public class StoreListActivity extends AppCompatActivity {
+public class StoreListActivity extends BaseActivity {
     private TextView textStoreCount;
     private RecyclerView list;
     private StoreListAdapter mAdapter;
@@ -35,6 +35,7 @@ public class StoreListActivity extends AppCompatActivity {
         textStoreCount = (TextView) findViewById(R.id.textStoreCount);
         list = (RecyclerView) findViewById(R.id.list);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new DividerItemDecoration(this, R.drawable.default_divider));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

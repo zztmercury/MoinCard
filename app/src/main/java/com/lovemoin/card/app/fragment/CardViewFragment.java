@@ -1,5 +1,6 @@
 package com.lovemoin.card.app.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.activity.MerchantDetailActivity;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.CardInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,29 +51,40 @@ public class CardViewFragment extends Fragment {
      * 积点计数
      */
     private TextView textCardCounter;
+    private View rootView;
 
     private ImageLoader loader = ImageLoader.getInstance();
+
+    private boolean clickable;
 
     public CardViewFragment() {
     }
 
-    public static CardViewFragment newInstans(CardInfo cardInfo) {
+    public static CardViewFragment newInstance(CardInfo cardInfo, boolean clickable) {
         CardViewFragment fragment = new CardViewFragment();
         fragment.cardInfo = cardInfo;
+        fragment.clickable = clickable;
         return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.layout_card_info, container, false);
+        rootView = inflater.inflate(R.layout.layout_card_info, container, false);
         imgCard = (ImageView) rootView.findViewById(R.id.imgCard);
         imgCardCount = (ImageView) rootView.findViewById(R.id.imgCardCounter);
         textCurrentPoint = (TextView) rootView.findViewById(R.id.textCurrentPoint);
         textNeededPoint = (TextView) rootView.findViewById(R.id.textNeededPoint);
         textObject = (TextView) rootView.findViewById(R.id.textObject);
         textCardCounter = (TextView) rootView.findViewById(R.id.textCardCounter);
-
+        rootView.setClickable(clickable);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(getContext(), MerchantDetailActivity.class));
+                getActivity().finish();
+            }
+        });
         bindData();
         return rootView;
     }

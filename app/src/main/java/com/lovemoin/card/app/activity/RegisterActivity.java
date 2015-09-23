@@ -3,7 +3,6 @@ package com.lovemoin.card.app.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
@@ -35,8 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private String userTel;
     private String userPwd;
-    private String OSVersion;
-    private String model;
     private String checkCode;
 
     @Override
@@ -74,8 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                 btnSendMsg.setEnabled(true);
             }
         };
-        OSVersion = "Android " + Build.VERSION.RELEASE;
-        model = Build.MODEL;
     }
 
     private void initListener() {
@@ -141,14 +136,14 @@ public class RegisterActivity extends AppCompatActivity {
                             }).show();
                     return;
                 }
-                new Register(userTel, userPwd, OSVersion, model) {
+                new Register(userTel, userPwd) {
                     @Override
                     public void onSuccess(String userTel, String id) {
                         Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
                         app.cacheUserTel(userTel);
                         app.cachedUserId(id);
                         app.cacheLoginStatus(true);
-                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                        startActivity(new Intent(RegisterActivity.this, GuideActivity.class));
                         finish();
                     }
 
@@ -173,5 +168,12 @@ public class RegisterActivity extends AppCompatActivity {
                         }).show();
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }

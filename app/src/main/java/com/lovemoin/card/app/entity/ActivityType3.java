@@ -51,18 +51,11 @@ public class ActivityType3 extends ActivityInfo {
         stepText = object.getString(Config.KEY_ACTIVITY_STEP_TEXT);
         memberCount = object.getInt(Config.KEY_ACTIVITY_MEMBER_COUNT);
         num = object.getInt(Config.KEY_ACTIVITY_NUM);
+        setAddress(object.getString(Config.KEY_ACTIVITY_ADDR));
     }
 
     public void completeFromJSON(JSONObject object) throws JSONException {
         initFromJSON(object);
-    }
-
-    public List<String> getMerchantList() {
-        return merchantList;
-    }
-
-    public void setMerchantList(List<String> merchantList) {
-        this.merchantList = merchantList;
     }
 
     public int getCurrentStep() {
@@ -107,6 +100,14 @@ public class ActivityType3 extends ActivityInfo {
 
     public List<String> getMerchantIdList() {
         return merchantIdList;
+    }
+
+    public List<String> getMerchantList() {
+        return merchantList;
+    }
+
+    public void setMerchantList(List<String> merchantList) {
+        this.merchantList = merchantList;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.net;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.entity.Response;
 
@@ -34,7 +35,7 @@ public abstract class NetConnection {
                     }
                     paramStr.deleteCharAt(paramStr.length() - 1);
 
-                    System.out.println("request: " + paramStr.toString());
+                    Log.d("NetConnection", url + "?" + paramStr.toString());
 
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     connection.setConnectTimeout(4000);

@@ -3,11 +3,10 @@ package com.lovemoin.card.app.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,21 +16,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.adapter.ActivityNameListAdapter;
 import com.lovemoin.card.app.constant.Config;
-import com.lovemoin.card.app.db.*;
+import com.lovemoin.card.app.db.ActivityInfo;
+import com.lovemoin.card.app.db.CardInfo;
+import com.lovemoin.card.app.db.CardInfoDao;
+import com.lovemoin.card.app.db.MerchantInfo;
 import com.lovemoin.card.app.net.DeleteCard;
+import com.lovemoin.card.app.net.LoadActivityByMerchant;
 import com.lovemoin.card.app.net.LoadMerchantInfo;
-import com.lovemoin.card.app.widget.RecyclerViewForScrollView;
+import com.lovemoin.card.app.widget.DividerItemDecoration;
+import com.lovemoin.card.app.widget.LinearLayoutManagerForScrollView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.util.List;
 
 /**
  * Created by zzt on 15-9-2.
  *
  * @author zzt
  */
-public class MerchantDetailActivity extends AppCompatActivity {
+public class MerchantDetailActivity extends BaseActivity {
     /**
      * 卡片信息
      */
@@ -85,10 +92,13 @@ public class MerchantDetailActivity extends AppCompatActivity {
      * 兑换按钮
      */
     private Button btnConvert;
+    private TextView textCardDetail;
+    private TextView textCardRecord;
     private View layoutCardDetail;
+
     private View layoutCardRecord;
     private View layoutAllStores;
-    private RecyclerViewForScrollView listRecentActivity;
+    private RecyclerView listRecentActivity;
 
     private ImageLoader loader;
 
@@ -98,13 +108,13 @@ public class MerchantDetailActivity extends AppCompatActivity {
 
     private MoinCardApplication app;
     private CardInfoDao cardInfoDao;
+    private ActivityNameListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_detail);
         loader = ImageLoader.getInstance();
-        initDao();
         initView();
         initData();
     }
@@ -124,17 +134,39 @@ public class MerchantDetailActivity extends AppCompatActivity {
         layoutCardRecord = findViewById(R.id.layoutCardRecord);
         layoutCardDetail = findViewById(R.id.layoutCardDetail);
         layoutAllStores = findViewById(R.id.layoutAllStores);
-        listRecentActivity = (RecyclerViewForScrollView) findViewById(R.id.listRecentActivity);
+        textCardDetail = (TextView) findViewById(R.id.textCardDetail);
+        textCardRecord = (TextView) findViewById(R.id.textCardRecord);
+        listRecentActivity = (RecyclerView) findViewById(R.id.listRecentActivity);
+        listRecentActivity.setLayoutManager(new LinearLayoutManagerForScrollView(getApplicationContext()));
+        listRecentActivity.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.default_divider));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initData() {
         app = (MoinCardApplication) getApplication();
         cardInfo = app.getCurrentCard();
+        cardInfoDao = app.getCardInfoDao();
         app.setIsExchange(false);
         pd = new ProgressDialog(this);
+        mAdapter = new ActivityNameListAdapter(this);
+        listRecentActivity.setAdapter(mAdapter);
         bindCard();
         loadMerchantInfoFromServer();
+    }
+
+    private void loadActivities() {
+        new LoadActivityByMerchant(app.getCachedUserId(), 0, merchantInfo.getMerchantUUID()) {
+            @Override
+            public void onSuccess(List<ActivityInfo> activityList) {
+                mAdapter.clear();
+                mAdapter.addAll(activityList);
+            }
+
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        };
     }
 
     private void bindCard() {
@@ -170,6 +202,11 @@ public class MerchantDetailActivity extends AppCompatActivity {
             imgCardCount.setImageResource(getResources().getIdentifier("q" + index, "drawable", getPackageName()));
             textNeededPoint.setText(String.format("再积%d个积点可兑换", convertPoint - currentPoint));
         }
+        if (cardInfo.getCardType().equals(CardInfo.TYPE_POINT)) {
+            textCardDetail.setText(R.string.point_card_detail);
+        } else {
+            textCardDetail.setText(R.string.coupon_detail);
+        }
         btnConvert.setEnabled(canConvert);
         textCurrentPoint.setText(String.format("%d枚", cardInfo.getCurrentPoint()));
         textObject.setText(cardInfo.getConvertObj());
@@ -190,6 +227,7 @@ public class MerchantDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(MerchantInfo merchantInfo) {
                 MerchantDetailActivity.this.merchantInfo = merchantInfo;
+                loadActivities();
                 bindData();
             }
 
@@ -221,7 +259,7 @@ public class MerchantDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MerchantDetailActivity.this, StoreListActivity.class);
-                i.putExtra(Config.KEY_MERCHANT_ID, merchantInfo.getMerchantId());
+                i.putExtra(Config.KEY_MERCHANT_ID, merchantInfo.getMerchantUUID());
                 startActivity(i);
             }
         });
@@ -229,7 +267,7 @@ public class MerchantDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MerchantDetailActivity.this, ImageWallActivity.class);
-                i.putExtra(Config.KEY_MERCHANT_ID, merchantInfo.getMerchantId());
+                i.putExtra(Config.KEY_MERCHANT_ID, merchantInfo.getMerchantUUID());
                 startActivity(i);
             }
         });
@@ -239,7 +277,7 @@ public class MerchantDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
             case R.id.action_delete:
                 new AlertDialog.Builder(MerchantDetailActivity.this)
@@ -253,7 +291,7 @@ public class MerchantDetailActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
                                         cardInfoDao.delete(app.getCurrentCard());
                                         dialog.dismiss();
-                                        finish();
+                                        onBackPressed();
                                     }
 
                                     @Override
@@ -286,16 +324,10 @@ public class MerchantDetailActivity extends AppCompatActivity {
         if (pd.isShowing()) {
             pd.dismiss();
             app.setIsExchange(false);
-        } else
-            super.onBackPressed();
-    }
-
-
-    private void initDao() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "moinCard.db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
-        cardInfoDao = daoSession.getCardInfoDao();
+        } else {
+            Intent i = new Intent(this, HomeActivity.class);
+            i.putExtra(HomeActivity.KEY_SECTION, 0);
+            startActivity(i);
+        }
     }
 }

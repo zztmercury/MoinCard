@@ -1,7 +1,6 @@
 package com.lovemoin.card.app.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -19,7 +18,7 @@ import java.util.List;
 /**
  * Created by zzt on 15-9-14.
  */
-public class CardRecordListActivity extends AppCompatActivity {
+public class CardRecordListActivity extends BaseActivity {
     private RecyclerView list;
     private TextView textCardRecord;
     private CardRecordAdapter mAdapter;

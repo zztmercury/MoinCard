@@ -2,14 +2,16 @@ package com.lovemoin.card.app;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 import com.lovemoin.card.app.constant.Config;
-import com.lovemoin.card.app.db.CardInfo;
-import com.lovemoin.card.app.db.DaoMaster;
-import com.lovemoin.card.app.db.DaoSession;
+import com.lovemoin.card.app.db.*;
+import com.lovemoin.card.app.net.LoadCardList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
+import java.util.List;
 
 /**
  * Created by zzt on 15-8-24.
@@ -22,7 +24,8 @@ public class MoinCardApplication extends Application {
     private CardInfo currentCard;
     private boolean isExchange;
 
-    private DaoSession daoSession;
+    private CardInfoDao cardInfoDao;
+    private ActivityInfoDao activityInfoDao;
 
     @Override
     public void onCreate() {
@@ -43,7 +46,9 @@ public class MoinCardApplication extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getApplicationContext(), "moinCard.db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
+        DaoSession daoSession = daoMaster.newSession();
+        cardInfoDao = daoSession.getCardInfoDao();
+        activityInfoDao = daoSession.getActivityInfoDao();
     }
 
     public String getCachedUserId() {
@@ -100,10 +105,34 @@ public class MoinCardApplication extends Application {
         cacheLoginStatus(false);
         cachedUserId(null);
         cacheUserTel(null);
-        daoSession.clear();
+        cacheLastSearchTime(0);
+        cardInfoDao.deleteAll();
+        activityInfoDao.deleteAll();
     }
 
-    public DaoSession getDaoSession() {
-        return daoSession;
+    public CardInfoDao getCardInfoDao() {
+        return cardInfoDao;
+    }
+
+    public ActivityInfoDao getActivityInfoDao() {
+        return activityInfoDao;
+    }
+
+    public void updateCardInfoFromServer(final boolean showToast) {
+        new LoadCardList(getCachedUserId()) {
+            @Override
+            protected void onSuccess(List<CardInfo> cardInfoList) {
+                cardInfoDao.deleteAll();
+                cardInfoDao.insertInTx(cardInfoList);
+                if (showToast)
+                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onFail(String message) {
+                if (showToast)
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        };
     }
 }

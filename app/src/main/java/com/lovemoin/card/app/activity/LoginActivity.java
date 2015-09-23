@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void register() {
         startActivity(new Intent(this, RegisterActivity.class));
+        finish();
     }
 
     private boolean checkValue() {

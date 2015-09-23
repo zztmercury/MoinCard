@@ -13,7 +13,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/textActivityName"
-			android:textSize="18sp" />
+			style="@style/TextStyleTitle"
+			android:textSize="14sp" />
 
 	<TextView
 			android:layout_width="0dp"

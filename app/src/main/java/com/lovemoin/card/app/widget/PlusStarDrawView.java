@@ -12,8 +12,9 @@ import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
 public class PlusStarDrawView extends View {
-    private static final int starWidth = 40;
-    private static final int starHeight = 40;
+    private static final int STAR_WIDTH = 40;
+    private static final int STAR_HEIGHT = 40;
+    private static final int PADDING = 20;
     private int count = 3;
     private Bitmap star;
     private Paint paint;
@@ -23,7 +24,7 @@ public class PlusStarDrawView extends View {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         star = BitmapFactory.decodeResource(getResources(), R.drawable.star, options);
-        star = Bitmap.createScaledBitmap(star, DisplayUtil.dp2Px(context, starWidth), DisplayUtil.dp2Px(context, 40), true);
+        star = Bitmap.createScaledBitmap(star, DisplayUtil.dp2Px(context, STAR_WIDTH), DisplayUtil.dp2Px(context, 40), true);
         paint = new Paint();
     }
 
@@ -49,15 +50,14 @@ public class PlusStarDrawView extends View {
     protected void onDraw(Canvas canvas) {
         if (count != -1) {
 
-            int dx = DisplayUtil.dp2Px(getContext(), starWidth + 10);
-            int dy = DisplayUtil.dp2Px(getContext(), starHeight);
-
-            int width = getWidth();
-            int height = getHeight();
+            int dx = DisplayUtil.dp2Px(getContext(), STAR_WIDTH + 10);
+            int dy = DisplayUtil.dp2Px(getContext(), STAR_HEIGHT);
+            int startX = DisplayUtil.dp2Px(getContext(), PADDING);
+            int startY = DisplayUtil.dp2Px(getContext(), PADDING);
 
             for (int i = 0; i < count; i++) {
-                int x = (i % 5) * dx;
-                int y = (i / 5) * dy;
+                int x = (i % 5) * dx + startX;
+                int y = (i / 5) * dy + startY;
                 canvas.drawBitmap(star, x, y, paint);
             }
 
@@ -77,11 +77,11 @@ public class PlusStarDrawView extends View {
         int width;
         int height;
         if (count >= 5) {
-            width = DisplayUtil.dp2Px(getContext(), (5 * starWidth + 4 * 10));
+            width = DisplayUtil.dp2Px(getContext(), (5 * STAR_WIDTH + 4 * 10 + 2 * PADDING));
         } else {
-            width = DisplayUtil.dp2Px(getContext(), (count * starWidth + (count - 1) * 10));
+            width = DisplayUtil.dp2Px(getContext(), (count * STAR_WIDTH + (count - 1) * 10) + 2 * PADDING);
         }
-        height = DisplayUtil.dp2Px(getContext(), (float) (starHeight * (Math.ceil(count / 5.0))));
+        height = DisplayUtil.dp2Px(getContext(), (float) (STAR_HEIGHT * (Math.ceil(count / 5.0)) + 2 * PADDING));
         setMeasuredDimension(width < 0 ? 0 : width, height < 0 ? 0 : height);
     }
 }

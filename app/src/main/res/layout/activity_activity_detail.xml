@@ -1,199 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content">
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">
 
 	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	            android:layout_width="match_parent"
 	            android:layout_height="fill_parent"
+	            android:paddingTop="@dimen/activity_vertical_margin"
+	            android:paddingBottom="@dimen/activity_vertical_margin"
+	            android:paddingLeft="@dimen/activity_horizontal_margin"
+	            android:paddingRight="@dimen/activity_horizontal_margin"
 	            android:fillViewport="true"
 	            android:id="@+id/scrollView">
 
-		<FrameLayout
-				android:layout_width="wrap_content"
+		<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:paddingTop="@dimen/activity_vertical_margin"
-				android:paddingBottom="@dimen/activity_vertical_margin"
-				android:paddingLeft="@dimen/activity_horizontal_margin"
-				android:paddingRight="@dimen/activity_horizontal_margin">
+				android:orientation="vertical"
+				android:id="@+id/layoutContainer"
+				android:background="@color/gray">
+
+			<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+				<ImageView
+						android:layout_width="match_parent"
+						android:layout_height="200dp"
+						android:contentDescription="@string/activity_main_img"
+						android:id="@+id/imgMain"
+						android:scaleType="fitXY" />
+
+				<ImageView
+						android:layout_width="60dp"
+						android:layout_height="60dp"
+						android:layout_alignParentRight="true"
+						android:id="@+id/imgFlag"
+						android:contentDescription="@string/activity_level_flag" />
+			</RelativeLayout>
 
 			<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="vertical"
-					android:id="@+id/layoutContainer"
-					android:background="@color/gray">
+					android:background="@color/white"
+					android:padding="5dp"
+					android:layout_marginLeft="5dp"
+					android:layout_marginRight="5dp">
 
-				<RelativeLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content">
-
-					<ImageView
-							android:layout_width="match_parent"
-							android:layout_height="200dp"
-							android:contentDescription="@string/activity_main_img"
-							android:id="@+id/imgMain"
-							android:scaleType="fitXY" />
-
-					<ImageView
-							android:layout_width="60dp"
-							android:layout_height="60dp"
-							android:layout_alignParentRight="true"
-							android:id="@+id/imgFlag"
-							android:contentDescription="@string/activity_level_flag" />
-				</RelativeLayout>
+				<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						style="@style/TextStyleTitle"
+						android:id="@+id/textName"
+						android:layout_marginTop="5dp"
+						android:text="Title"
+						android:layout_marginBottom="10dp" />
 
 				<LinearLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:orientation="vertical"
-						android:background="@color/white"
-						android:padding="5dp"
-						android:layout_marginLeft="5dp"
-						android:layout_marginRight="5dp">
-
-					<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							style="@style/TextStyleTitle"
-							android:id="@+id/textName"
-							android:layout_marginTop="5dp"
-							android:text="Title"
-							android:layout_marginBottom="10dp" />
-
-					<LinearLayout
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:orientation="horizontal">
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:text="@string/activity_merchant" />
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:id="@+id/textMerchant" />
-
-					</LinearLayout>
-
-					<LinearLayout
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:orientation="horizontal">
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:text="@string/activity_address" />
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:id="@+id/textAddress" />
-
-					</LinearLayout>
-
-					<LinearLayout
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:orientation="horizontal">
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:text="@string/activity_Duration" />
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleDetail"
-								android:id="@+id/textDuration" />
-
-					</LinearLayout>
-
-					<LinearLayout
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:orientation="horizontal"
-							android:layout_marginTop="8dp"
-							android:layout_marginBottom="8dp">
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								android:textSize="30sp"
-								android:textColor="@color/black"
-								android:id="@+id/textMemberCount" />
-
-						<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								style="@style/TextStyleTitle"
-								android:text="@string/person_attended" />
-
-						<TextView
-								android:layout_width="0dp"
-								android:layout_height="wrap_content"
-								android:layout_weight="1" />
-
-						<Button
-								android:layout_width="120dp"
-								android:layout_height="wrap_content"
-								android:minHeight="0dp"
-								android:padding="8dp"
-								android:background="@drawable/btn_orange_corner_selector"
-								android:textSize="18sp"
-								android:textColor="@color/white"
-								android:layout_gravity="center_vertical"
-								android:id="@+id/btnReact"
-								android:text="@string/attend_now" />
-					</LinearLayout>
-
-					<com.anton46.stepsview.StepsView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:id="@+id/steps"
-							android:visibility="gone">
-
-					</com.anton46.stepsview.StepsView>
-
-				</LinearLayout>
-
-				<LinearLayout
-						android:layout_width="match_parent"
-						android:layout_height="fill_parent"
-						android:orientation="vertical"
-						android:layout_margin="5dp"
-						android:background="@color/white"
-						android:padding="5dp">
-
-					<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_marginTop="5dp"
-							android:layout_marginBottom="10dp"
-							style="@style/TextStyleTitle"
-							android:text="@string/activity_detail" />
+						android:orientation="horizontal">
 
 					<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							style="@style/TextStyleDetail"
-							android:id="@+id/textDetail"
-							android:text="活动说明\n\n\n\n\n\n123123123" />
+							android:text="@string/activity_merchant" />
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleDetail"
+							android:id="@+id/textMerchant" />
 
 				</LinearLayout>
 
+				<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal">
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleDetail"
+							android:text="@string/activity_address" />
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleDetail"
+							android:id="@+id/textAddress" />
+
+				</LinearLayout>
+
+				<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal">
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleDetail"
+							android:text="@string/activity_Duration" />
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleDetail"
+							android:id="@+id/textDuration" />
+
+				</LinearLayout>
+
+				<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:layout_marginTop="8dp"
+						android:layout_marginBottom="8dp"
+						android:id="@+id/layoutAttend">
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="30sp"
+							android:textColor="@color/black"
+							android:id="@+id/textMemberCount" />
+
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							style="@style/TextStyleTitle"
+							android:text="@string/person_attended" />
+
+					<TextView
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_weight="1" />
+
+					<Button
+							android:layout_width="120dp"
+							android:layout_height="wrap_content"
+							android:minHeight="0dp"
+							android:padding="8dp"
+							android:background="@drawable/btn_orange_corner_selector"
+							android:textSize="18sp"
+							android:textColor="@color/white"
+							android:layout_gravity="center_vertical"
+							android:id="@+id/btnReact"
+							android:text="@string/attend_now" />
+				</LinearLayout>
+
+				<com.anton46.stepsview.StepsView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/steps"
+						android:visibility="gone">
+
+				</com.anton46.stepsview.StepsView>
+
 			</LinearLayout>
 
-		</FrameLayout>
+			<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="fill_parent"
+					android:orientation="vertical"
+					android:layout_margin="5dp"
+					android:background="@color/white"
+					android:padding="5dp">
+
+				<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="5dp"
+						android:layout_marginBottom="10dp"
+						style="@style/TextStyleTitle"
+						android:text="@string/activity_detail" />
+
+				<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						style="@style/TextStyleDetail"
+						android:id="@+id/textDetail"
+						android:text="活动说明\n\n\n\n\n\n123123123" />
+
+			</LinearLayout>
+
+		</LinearLayout>
 
 	</ScrollView>
 
@@ -250,6 +245,7 @@
 					app:border_color="@color/light_gray" />
 
 			<Button
+					android:id="@+id/btn_view_coupon"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:minHeight="0dp"

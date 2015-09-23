@@ -1,7 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_height="match_parent"
               android:layout_width="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:showDividers="middle"
+              android:divider="@drawable/default_divider">
 
 	<android.support.v4.view.ViewPager
 			android:id="@+id/pager"
@@ -15,7 +17,6 @@
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
 			android:gravity="center_vertical"
-			android:background="@color/white"
 			android:paddingTop="5dp"
 			android:paddingBottom="2dp">
 

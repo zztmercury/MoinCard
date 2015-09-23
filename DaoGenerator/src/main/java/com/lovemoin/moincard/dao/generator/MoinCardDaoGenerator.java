@@ -27,7 +27,7 @@ public class MoinCardDaoGenerator extends DaoGenerator {
 
 
     public MoinCardDaoGenerator() throws IOException {
-        schema = new Schema(2, "com.lovemoin.card.app.db");
+        schema = new Schema(3, "com.lovemoin.card.app.db");
         schema.enableKeepSectionsByDefault();
         initCardInfo();
         initMerchantInfo();
@@ -50,6 +50,7 @@ public class MoinCardDaoGenerator extends DaoGenerator {
         cardInfo = schema.addEntity("CardInfo");
         cardInfo.implementsSerializable();
         pkCardInfo = cardInfo.addStringProperty("cardCode").notNull().primaryKey().getProperty();
+        cardInfo.addStringProperty("cardName");
         cardInfo.addStringProperty("cardImg");
         cardInfo.addStringProperty("cardBrand");
         cardInfo.addStringProperty("cardType").notNull();
@@ -81,6 +82,8 @@ public class MoinCardDaoGenerator extends DaoGenerator {
         pkActivityInfo = activityInfo.addStringProperty("activityId").primaryKey().getProperty();
         activityInfo.addStringProperty("name").notNull();
         activityInfo.addStringProperty("brief").notNull();
+        activityInfo.addStringProperty("address");
+        activityInfo.addIntProperty("level");
         activityInfo.addStringProperty("detail");
         activityInfo.addStringProperty("img");
         activityInfo.addStringProperty("briefImg");

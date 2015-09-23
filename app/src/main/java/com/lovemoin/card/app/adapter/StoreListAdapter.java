@@ -73,6 +73,9 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
+            textStoreName = (TextView) itemView.findViewById(R.id.text_store_name);
+            textStoreAddr = (TextView) itemView.findViewById(R.id.text_store_addr);
+            btnTel = (ImageButton) itemView.findViewById(R.id.btn_tel);
         }
     }
 }

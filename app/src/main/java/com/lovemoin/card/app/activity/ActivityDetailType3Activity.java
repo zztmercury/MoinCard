@@ -1,11 +1,11 @@
 package com.lovemoin.card.app.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +15,8 @@ import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
+import com.lovemoin.card.app.db.CardInfo;
+import com.lovemoin.card.app.db.CardInfoDao;
 import com.lovemoin.card.app.dto.CouponDto;
 import com.lovemoin.card.app.entity.ActivityType3;
 import com.lovemoin.card.app.net.AttendActivity;
@@ -25,6 +27,7 @@ import com.lovemoin.card.app.utils.DateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import de.greenrobot.dao.query.QueryBuilder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
@@ -32,11 +35,12 @@ import java.util.List;
 /**
  * Created by zzt on 15-9-2.
  */
-public class ActivityDetailType3Activity extends AppCompatActivity {
+public class ActivityDetailType3Activity extends BaseActivity {
     private static final String DATE_PATTERN = "yyyy年M月d日hh:mm";
     private ActivityInfo activityInfo;
     private String userId;
     private ImageLoader imageLoader;
+    private MoinCardApplication app;
 
     private LinearLayout container;
     private ImageView imgMain;
@@ -52,7 +56,6 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
     private View cover;
     private TextView textGiftName;
     private CircleImageView imgGift;
-    private Button btnCloseCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,33 +92,49 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
         cover = findViewById(R.id.layoutCover);
         textGiftName = (TextView) findViewById(R.id.textGiftName);
         imgGift = (CircleImageView) findViewById(R.id.imgGift);
-        btnCloseCover = (Button) findViewById(R.id.btnCloseCover);
-        btnCloseCover.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnCloseCover).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cover.setVisibility(View.GONE);
             }
         });
+        findViewById(R.id.btn_view_coupon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String couponName = textGiftName.getText().toString();
+                QueryBuilder<CardInfo> qb = app.getCardInfoDao().queryBuilder();
+                qb.where(CardInfoDao.Properties.CardName.eq(couponName), CardInfoDao.Properties.CardType.eq(CardInfo.TYPE_COUPON));
+                CardInfo cardInfo = qb.unique();
+                app.setCurrentCard(cardInfo);
+                startActivity(new Intent(ActivityDetailType3Activity.this, MerchantDetailActivity.class));
+                finish();
+            }
+        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initData() {
+        app = (MoinCardApplication) getApplication();
         activityInfo = (ActivityInfo) getIntent().getSerializableExtra(Config.KEY_ACTIVITY);
-        userId = ((MoinCardApplication) getApplication()).getCachedUserId();
+        userId = app.getCachedUserId();
         imageLoader = ImageLoader.getInstance();
         loadDetail();
     }
 
     private void loadDetail() {
+        pd.setMessage(getString(R.string.loading));
+        pd.show();
         new LoadActivityDetail(activityInfo, userId) {
             @Override
             public void onSuccess(ActivityInfo completeActivityInfo) {
+                pd.dismiss();
                 bindDataToViews((ActivityType3) completeActivityInfo);
-
             }
 
             @Override
             public void onFail(String message) {
+                pd.dismiss();
                 Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
             }
         };
@@ -166,18 +185,23 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
             btnReact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    pd.setMessage(getString(R.string.attending));
+                    pd.show();
                     new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getMerchantIdList().get(0), activityInfo.getType(), activityInfo.getNum()) {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();
-                            btnReact.setText(R.string.attended);
-                            btnReact.setEnabled(false);
-                            stepsView.setVisibility(View.VISIBLE);
+                            pd.dismiss();
+//                            btnReact.setText(R.string.attended);
+//                            btnReact.setEnabled(false);
+//                            stepsView.setVisibility(View.VISIBLE);
+                            loadDetail();
                         }
 
                         @Override
                         public void onFail(String message) {
                             Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                            pd.dismiss();
                         }
                     };
                 }
@@ -214,7 +238,7 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
                 .setLabelColorIndicator(getResources().getColor(R.color.gray))
                 .setCompletedPosition(activityInfo.getCurrentStep())
                 .drawView();
-        textAddress.setText(R.string.see_in_merchant_detail);
+        textAddress.setText(activityInfo.getAddress());
     }
 
 
@@ -252,17 +276,23 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
     }
 
     private void getGift(final ActivityType3 activityInfo, @Nullable String couponId, @Nullable String merchantId) {
+        pd.setMessage(getString(R.string.getting_gift));
+        pd.show();
         new GetGift(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), merchantId, couponId) {
 
             @Override
             public void onSuccess(String img, String giftName) {
+                pd.dismiss();
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
                 imageLoader.displayImage(Config.SERVER_URL + img, imgGift);
+                app.updateCardInfoFromServer(false);
+                loadDetail();
             }
 
             @Override
             public void onFail(String message) {
+                pd.dismiss();
                 Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
             }
         };
@@ -276,5 +306,16 @@ public class ActivityDetailType3Activity extends AppCompatActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pd.isShowing()) {
+            pd.dismiss();
+        } else if (cover.getVisibility() != View.GONE) {
+            cover.setVisibility(View.GONE);
+        } else {
+            finish();
+        }
     }
 }

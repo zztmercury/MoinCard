@@ -1,50 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:paddingTop="10dp"
-              android:layout_margin="10dp">
+<android.support.v7.widget.CardView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		app:cardCornerRadius="0dp"
+		app:cardPreventCornerOverlap="true"
+		app:cardElevation="2dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="@dimen/activity_horizontal_margin">
 
-	<RelativeLayout
+	<LinearLayout
+			android:orientation="vertical"
 			android:layout_width="match_parent"
-			android:layout_height="180dp">
+			android:layout_height="match_parent"
+			android:layout_margin="@dimen/activity_horizontal_margin">
 
-		<ImageView
+		<RelativeLayout
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:id="@+id/imgMin"
-				android:scaleType="fitXY"
-				android:contentDescription="@string/activity_min_img"
-				android:layout_margin="5dp"
-				android:src="@drawable/default_card" />
+				android:layout_height="180dp">
 
-		<ImageView
-				android:layout_width="60dp"
-				android:layout_height="60dp"
-				android:layout_alignParentRight="true"
-				android:layout_margin="5dp"
-				android:id="@+id/imgFlag"
-				android:src="@drawable/official_activity" />
+			<ImageView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:id="@+id/imgMin"
+					android:scaleType="fitXY"
+					android:contentDescription="@string/activity_min_img"
+					android:layout_margin="5dp"
+					android:src="@drawable/default_card" />
 
-		<ImageView
-				android:layout_width="15dp"
-				android:layout_height="15dp"
-				android:layout_alignParentRight="true"
-				android:id="@+id/imgViewed"
-				android:src="@drawable/red_point" />
-	</RelativeLayout>
+			<ImageView
+					android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:layout_alignParentRight="true"
+					android:layout_margin="5dp"
+					android:id="@+id/imgFlag"
+					android:src="@drawable/official_activity" />
 
-	<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/textName"
-			android:text="123456" />
+			<ImageView
+					android:layout_width="10dp"
+					android:layout_height="10dp"
+					android:layout_alignTop="@id/imgMin"
+					android:layout_alignRight="@id/imgMin"
+					android:layout_marginTop="-5dp"
+					android:layout_marginRight="-5dp"
+					android:id="@+id/imgViewed"
+					android:src="@drawable/red_point"
+					android:visibility="gone" />
+		</RelativeLayout>
 
-	<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/textBrief"
-			android:text="153123" />
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/textName"
+				android:layout_marginLeft="5dp"
+				style="@style/TextStyleTitle"
+				android:text="123456" />
 
-</LinearLayout>
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/textBrief"
+				android:layout_marginLeft="5dp"
+				style="@style/TextStyleDetailSecondary"
+				android:text="153123" />
+
+	</LinearLayout>
+</android.support.v7.widget.CardView>

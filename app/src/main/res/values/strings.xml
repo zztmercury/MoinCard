@@ -44,7 +44,7 @@
 	<string name="please_select_coupon">请选择您想要的兑换券</string>
 	<string name="confirm">确认</string>
 	<string name="point_card_detail">积点卡详情</string>
-	<string name="point_record">积点记录</string>
+	<string name="card_record">使用记录</string>
 	<string name="exchange">兑换</string>
 	<string name="merchant_img">商家图片</string>
 	<string name="suitable_stores">所有适用门店</string>
@@ -97,4 +97,11 @@
 	<string name="confirm_delete">确定要删除吗？</string>
 	<string name="cancle">取消</string>
 	<string name="delete_success">删除成功</string>
+	<string name="msg_help_desc">请搜索并关注微信公众号“魔印积点”，并发送“帮助”可获得详细使用帮助，也欢迎您向微信服务号直接发送您宝贵的意见和建议，魔印信息真诚为您服务。</string>
+	<string name="coupon_detail">兑换券详情</string>
+	<string name="error_login_before_convert">请先登陆再进行兑换或者积点操作</string>
+	<string name="attending">报名中，请稍候</string>
+	<string name="getting_gift">领取中，请稍候</string>
+	<string name="loading">加载中，请稍候</string>
+
 </resources>

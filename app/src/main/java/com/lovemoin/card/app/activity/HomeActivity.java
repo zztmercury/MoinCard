@@ -1,12 +1,12 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,8 +21,9 @@ import com.lovemoin.card.app.utils.DisplayUtil;
 import java.util.Locale;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
+    public static final String KEY_SECTION = "section";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
@@ -93,7 +94,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -112,7 +112,8 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_help) {
+            startActivity(new Intent(HomeActivity.this, GuideActivity.class));
             return true;
         }
 
@@ -137,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         ((MoinCardApplication) getApplication()).setCurrentCard(null);
+        mViewPager.setCurrentItem(getIntent().getIntExtra(KEY_SECTION, mViewPager.getCurrentItem()));
         super.onResume();
     }
 

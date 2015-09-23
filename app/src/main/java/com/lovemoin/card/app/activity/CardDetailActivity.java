@@ -2,7 +2,6 @@ package com.lovemoin.card.app.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +18,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 /**
  * Created by zzt on 15-9-14.
  */
-public class CardDetailActivity extends AppCompatActivity {
+public class CardDetailActivity extends BaseActivity {
     private ImageView imgCardDetail;
     private TextView textCardDesc;
     private TextView textCardCode;

@@ -2,6 +2,7 @@ package com.lovemoin.card.app.net;
 
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
+import com.lovemoin.card.app.entity.ActivityType1;
 import com.lovemoin.card.app.entity.ActivityType3;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,11 +35,16 @@ public abstract class LoadActivityDetail {
                     JSONObject jsonObject = new JSONObject(result);
                     switch (activityInfo.getType()) {
                         case 1:
+                            ActivityType1 completeInfo1 = new ActivityType1(activityInfo);
+                            completeInfo1.completeFromJSON(jsonObject);
+                            LoadActivityDetail.this.onSuccess(completeInfo1);
+                            break;
                         case 2:
+                            break;
                         case 3:
-                            ActivityType3 completeInfo = new ActivityType3(activityInfo);
-                            completeInfo.completeFromJSON(jsonObject);
-                            LoadActivityDetail.this.onSuccess(completeInfo);
+                            ActivityType3 completeInfo3 = new ActivityType3(activityInfo);
+                            completeInfo3.completeFromJSON(jsonObject);
+                            LoadActivityDetail.this.onSuccess(completeInfo3);
                             break;
                         default:
                             LoadActivityDetail.this.onFail("不支持该活动种类");

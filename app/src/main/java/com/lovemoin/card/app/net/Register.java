@@ -1,5 +1,6 @@
 package com.lovemoin.card.app.net;
 
+import android.os.Build;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.utils.CommonUtil;
 import org.json.JSONException;
@@ -17,15 +18,13 @@ public abstract class Register {
      *
      * @param userTel   用户手机号
      * @param userPwd   用户密码
-     * @param OSVersion 注册时手机操作系统版本
-     * @param model     注册所用手机型号
      */
-    public Register(String userTel, String userPwd, String OSVersion, String model) {
+    public Register(String userTel, String userPwd) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
         paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(userPwd));
-        paramMap.put(Config.KEY_OS_VERSION, OSVersion);
-        paramMap.put(Config.KEY_MODEL, model);
+        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
+        paramMap.put(Config.KEY_MODEL, Build.MODEL);
 
         String url = Config.SERVER_URL + Config.ACTION_REGISTER;
 
