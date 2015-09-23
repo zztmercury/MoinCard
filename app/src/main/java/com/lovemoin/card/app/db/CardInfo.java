@@ -20,6 +20,7 @@ public class CardInfo implements java.io.Serializable {
 
     /** Not-null value. */
     private String cardCode;
+    private String cardName;
     private String cardImg;
     private String cardBrand;
     /** Not-null value. */
@@ -51,6 +52,14 @@ public class CardInfo implements java.io.Serializable {
 
     // KEEP FIELDS - put your custom fields here
     private static final String DATE_PATTERN = "yyyy-MM-dd";
+    /**
+     * 兑换卡
+     */
+    public static final String TYPE_COUPON = "0001";
+    /**
+     * 积点卡
+     */
+    public static final String TYPE_POINT = "0000";
     // KEEP FIELDS END
 
     public CardInfo() {
@@ -60,8 +69,9 @@ public class CardInfo implements java.io.Serializable {
         this.cardCode = cardCode;
     }
 
-    public CardInfo(String cardCode, String cardImg, String cardBrand, String cardType, String cardDesc, String convertObj, java.util.Date createDate, java.util.Date startDate, java.util.Date endDate, int convertPoint, int currentPoint, int maxPoint, String merchantId) {
+    public CardInfo(String cardCode, String cardName, String cardImg, String cardBrand, String cardType, String cardDesc, String convertObj, java.util.Date createDate, java.util.Date startDate, java.util.Date endDate, int convertPoint, int currentPoint, int maxPoint, String merchantId) {
         this.cardCode = cardCode;
+        this.cardName = cardName;
         this.cardImg = cardImg;
         this.cardBrand = cardBrand;
         this.cardType = cardType;
@@ -90,6 +100,14 @@ public class CardInfo implements java.io.Serializable {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCardCode(String cardCode) {
         this.cardCode = cardCode;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
     }
 
     public String getCardImg() {
@@ -252,6 +270,7 @@ public class CardInfo implements java.io.Serializable {
     // KEEP METHODS - put your custom methods here
     public CardInfo(JSONObject jsonObject) throws JSONException {
         cardCode = jsonObject.getString(Config.KEY_CARD_CODE);
+        cardName = jsonObject.getString(Config.KEY_NAME);
         cardImg = jsonObject.getString(Config.KEY_CARD_IMG);
         cardBrand = jsonObject.getString(Config.KEY_CARD_BRAND);
         cardType = jsonObject.getString(Config.KEY_CARD_TYPE);

@@ -29,18 +29,19 @@ public class CardInfoDao extends AbstractDao<CardInfo, String> {
     */
     public static class Properties {
         public final static Property CardCode = new Property(0, String.class, "cardCode", true, "CARD_CODE");
-        public final static Property CardImg = new Property(1, String.class, "cardImg", false, "CARD_IMG");
-        public final static Property CardBrand = new Property(2, String.class, "cardBrand", false, "CARD_BRAND");
-        public final static Property CardType = new Property(3, String.class, "cardType", false, "CARD_TYPE");
-        public final static Property CardDesc = new Property(4, String.class, "cardDesc", false, "CARD_DESC");
-        public final static Property ConvertObj = new Property(5, String.class, "convertObj", false, "CONVERT_OBJ");
-        public final static Property CreateDate = new Property(6, java.util.Date.class, "createDate", false, "CREATE_DATE");
-        public final static Property StartDate = new Property(7, java.util.Date.class, "startDate", false, "START_DATE");
-        public final static Property EndDate = new Property(8, java.util.Date.class, "endDate", false, "END_DATE");
-        public final static Property ConvertPoint = new Property(9, int.class, "convertPoint", false, "CONVERT_POINT");
-        public final static Property CurrentPoint = new Property(10, int.class, "currentPoint", false, "CURRENT_POINT");
-        public final static Property MaxPoint = new Property(11, int.class, "maxPoint", false, "MAX_POINT");
-        public final static Property MerchantId = new Property(12, String.class, "merchantId", false, "MERCHANT_ID");
+        public final static Property CardName = new Property(1, String.class, "cardName", false, "CARD_NAME");
+        public final static Property CardImg = new Property(2, String.class, "cardImg", false, "CARD_IMG");
+        public final static Property CardBrand = new Property(3, String.class, "cardBrand", false, "CARD_BRAND");
+        public final static Property CardType = new Property(4, String.class, "cardType", false, "CARD_TYPE");
+        public final static Property CardDesc = new Property(5, String.class, "cardDesc", false, "CARD_DESC");
+        public final static Property ConvertObj = new Property(6, String.class, "convertObj", false, "CONVERT_OBJ");
+        public final static Property CreateDate = new Property(7, java.util.Date.class, "createDate", false, "CREATE_DATE");
+        public final static Property StartDate = new Property(8, java.util.Date.class, "startDate", false, "START_DATE");
+        public final static Property EndDate = new Property(9, java.util.Date.class, "endDate", false, "END_DATE");
+        public final static Property ConvertPoint = new Property(10, int.class, "convertPoint", false, "CONVERT_POINT");
+        public final static Property CurrentPoint = new Property(11, int.class, "currentPoint", false, "CURRENT_POINT");
+        public final static Property MaxPoint = new Property(12, int.class, "maxPoint", false, "MAX_POINT");
+        public final static Property MerchantId = new Property(13, String.class, "merchantId", false, "MERCHANT_ID");
     };
 
     private DaoSession daoSession;
@@ -61,18 +62,19 @@ public class CardInfoDao extends AbstractDao<CardInfo, String> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"CARD_INFO\" (" + //
                 "\"CARD_CODE\" TEXT PRIMARY KEY NOT NULL ," + // 0: cardCode
-                "\"CARD_IMG\" TEXT," + // 1: cardImg
-                "\"CARD_BRAND\" TEXT," + // 2: cardBrand
-                "\"CARD_TYPE\" TEXT NOT NULL ," + // 3: cardType
-                "\"CARD_DESC\" TEXT NOT NULL ," + // 4: cardDesc
-                "\"CONVERT_OBJ\" TEXT NOT NULL ," + // 5: convertObj
-                "\"CREATE_DATE\" INTEGER NOT NULL ," + // 6: createDate
-                "\"START_DATE\" INTEGER NOT NULL ," + // 7: startDate
-                "\"END_DATE\" INTEGER NOT NULL ," + // 8: endDate
-                "\"CONVERT_POINT\" INTEGER NOT NULL ," + // 9: convertPoint
-                "\"CURRENT_POINT\" INTEGER NOT NULL ," + // 10: currentPoint
-                "\"MAX_POINT\" INTEGER NOT NULL ," + // 11: maxPoint
-                "\"MERCHANT_ID\" TEXT);"); // 12: merchantId
+                "\"CARD_NAME\" TEXT," + // 1: cardName
+                "\"CARD_IMG\" TEXT," + // 2: cardImg
+                "\"CARD_BRAND\" TEXT," + // 3: cardBrand
+                "\"CARD_TYPE\" TEXT NOT NULL ," + // 4: cardType
+                "\"CARD_DESC\" TEXT NOT NULL ," + // 5: cardDesc
+                "\"CONVERT_OBJ\" TEXT NOT NULL ," + // 6: convertObj
+                "\"CREATE_DATE\" INTEGER NOT NULL ," + // 7: createDate
+                "\"START_DATE\" INTEGER NOT NULL ," + // 8: startDate
+                "\"END_DATE\" INTEGER NOT NULL ," + // 9: endDate
+                "\"CONVERT_POINT\" INTEGER NOT NULL ," + // 10: convertPoint
+                "\"CURRENT_POINT\" INTEGER NOT NULL ," + // 11: currentPoint
+                "\"MAX_POINT\" INTEGER NOT NULL ," + // 12: maxPoint
+                "\"MERCHANT_ID\" TEXT);"); // 13: merchantId
     }
 
     /** Drops the underlying database table. */
@@ -87,28 +89,33 @@ public class CardInfoDao extends AbstractDao<CardInfo, String> {
         stmt.clearBindings();
         stmt.bindString(1, entity.getCardCode());
  
+        String cardName = entity.getCardName();
+        if (cardName != null) {
+            stmt.bindString(2, cardName);
+        }
+ 
         String cardImg = entity.getCardImg();
         if (cardImg != null) {
-            stmt.bindString(2, cardImg);
+            stmt.bindString(3, cardImg);
         }
  
         String cardBrand = entity.getCardBrand();
         if (cardBrand != null) {
-            stmt.bindString(3, cardBrand);
+            stmt.bindString(4, cardBrand);
         }
-        stmt.bindString(4, entity.getCardType());
-        stmt.bindString(5, entity.getCardDesc());
-        stmt.bindString(6, entity.getConvertObj());
-        stmt.bindLong(7, entity.getCreateDate().getTime());
-        stmt.bindLong(8, entity.getStartDate().getTime());
-        stmt.bindLong(9, entity.getEndDate().getTime());
-        stmt.bindLong(10, entity.getConvertPoint());
-        stmt.bindLong(11, entity.getCurrentPoint());
-        stmt.bindLong(12, entity.getMaxPoint());
+        stmt.bindString(5, entity.getCardType());
+        stmt.bindString(6, entity.getCardDesc());
+        stmt.bindString(7, entity.getConvertObj());
+        stmt.bindLong(8, entity.getCreateDate().getTime());
+        stmt.bindLong(9, entity.getStartDate().getTime());
+        stmt.bindLong(10, entity.getEndDate().getTime());
+        stmt.bindLong(11, entity.getConvertPoint());
+        stmt.bindLong(12, entity.getCurrentPoint());
+        stmt.bindLong(13, entity.getMaxPoint());
  
         String merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindString(13, merchantId);
+            stmt.bindString(14, merchantId);
         }
     }
 
@@ -129,18 +136,19 @@ public class CardInfoDao extends AbstractDao<CardInfo, String> {
     public CardInfo readEntity(Cursor cursor, int offset) {
         CardInfo entity = new CardInfo( //
             cursor.getString(offset + 0), // cardCode
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // cardImg
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cardBrand
-            cursor.getString(offset + 3), // cardType
-            cursor.getString(offset + 4), // cardDesc
-            cursor.getString(offset + 5), // convertObj
-            new java.util.Date(cursor.getLong(offset + 6)), // createDate
-            new java.util.Date(cursor.getLong(offset + 7)), // startDate
-            new java.util.Date(cursor.getLong(offset + 8)), // endDate
-            cursor.getInt(offset + 9), // convertPoint
-            cursor.getInt(offset + 10), // currentPoint
-            cursor.getInt(offset + 11), // maxPoint
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // merchantId
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // cardName
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cardImg
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // cardBrand
+            cursor.getString(offset + 4), // cardType
+            cursor.getString(offset + 5), // cardDesc
+            cursor.getString(offset + 6), // convertObj
+            new java.util.Date(cursor.getLong(offset + 7)), // createDate
+            new java.util.Date(cursor.getLong(offset + 8)), // startDate
+            new java.util.Date(cursor.getLong(offset + 9)), // endDate
+            cursor.getInt(offset + 10), // convertPoint
+            cursor.getInt(offset + 11), // currentPoint
+            cursor.getInt(offset + 12), // maxPoint
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // merchantId
         );
         return entity;
     }
@@ -149,18 +157,19 @@ public class CardInfoDao extends AbstractDao<CardInfo, String> {
     @Override
     public void readEntity(Cursor cursor, CardInfo entity, int offset) {
         entity.setCardCode(cursor.getString(offset + 0));
-        entity.setCardImg(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCardBrand(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCardType(cursor.getString(offset + 3));
-        entity.setCardDesc(cursor.getString(offset + 4));
-        entity.setConvertObj(cursor.getString(offset + 5));
-        entity.setCreateDate(new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setStartDate(new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setEndDate(new java.util.Date(cursor.getLong(offset + 8)));
-        entity.setConvertPoint(cursor.getInt(offset + 9));
-        entity.setCurrentPoint(cursor.getInt(offset + 10));
-        entity.setMaxPoint(cursor.getInt(offset + 11));
-        entity.setMerchantId(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setCardName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setCardImg(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCardBrand(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCardType(cursor.getString(offset + 4));
+        entity.setCardDesc(cursor.getString(offset + 5));
+        entity.setConvertObj(cursor.getString(offset + 6));
+        entity.setCreateDate(new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setStartDate(new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setEndDate(new java.util.Date(cursor.getLong(offset + 9)));
+        entity.setConvertPoint(cursor.getInt(offset + 10));
+        entity.setCurrentPoint(cursor.getInt(offset + 11));
+        entity.setMaxPoint(cursor.getInt(offset + 12));
+        entity.setMerchantId(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     /** @inheritdoc */

@@ -239,7 +239,7 @@ public class MerchantInfo {
 
     // KEEP METHODS - put your custom methods here
     public MerchantInfo(JSONObject jsonObject) throws JSONException {
-        merchantId = jsonObject.getString(Config.KEY_ID);
+        merchantUUID = jsonObject.getString(Config.KEY_ID);
         merchantName = jsonObject.getString(Config.KEY_NAME);
         brand = jsonObject.getString(Config.KEY_MERCHANT_BRAND);
         mainImg = jsonObject.getString(Config.KEY_MERCHANT_MAIN_IMAGE);

@@ -22,6 +22,8 @@ public class ActivityInfo implements java.io.Serializable {
     private String name;
     /** Not-null value. */
     private String brief;
+    private String address;
+    private Integer level;
     private String detail;
     private String img;
     private String briefImg;
@@ -56,10 +58,12 @@ public class ActivityInfo implements java.io.Serializable {
         this.activityId = activityId;
     }
 
-    public ActivityInfo(String activityId, String name, String brief, String detail, String img, String briefImg, java.util.Date startDate, java.util.Date endDate, Boolean isTop, Boolean isOfficial, Boolean isAttend, Boolean isViewed, int type, String merchantId) {
+    public ActivityInfo(String activityId, String name, String brief, String address, Integer level, String detail, String img, String briefImg, java.util.Date startDate, java.util.Date endDate, Boolean isTop, Boolean isOfficial, Boolean isAttend, Boolean isViewed, int type, String merchantId) {
         this.activityId = activityId;
         this.name = name;
         this.brief = brief;
+        this.address = address;
+        this.level = level;
         this.detail = detail;
         this.img = img;
         this.briefImg = briefImg;
@@ -105,6 +109,22 @@ public class ActivityInfo implements java.io.Serializable {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setBrief(String brief) {
         this.brief = brief;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public String getDetail() {
@@ -260,6 +280,7 @@ public class ActivityInfo implements java.io.Serializable {
         isOfficial = object.getInt(Config.KEY_IS_OFFICIAL) == 1;
         isTop = object.getInt(Config.KEY_IS_TOP) == 1;
         isAttend = object.getInt(Config.KEY_IS_ATTEND) == 1;
+        level = object.getInt(Config.KEY_ACTIVITY_LEVEL);
     }
     // KEEP METHODS END
 

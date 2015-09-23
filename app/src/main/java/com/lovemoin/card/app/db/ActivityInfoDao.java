@@ -31,17 +31,19 @@ public class ActivityInfoDao extends AbstractDao<ActivityInfo, String> {
         public final static Property ActivityId = new Property(0, String.class, "activityId", true, "ACTIVITY_ID");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Brief = new Property(2, String.class, "brief", false, "BRIEF");
-        public final static Property Detail = new Property(3, String.class, "detail", false, "DETAIL");
-        public final static Property Img = new Property(4, String.class, "img", false, "IMG");
-        public final static Property BriefImg = new Property(5, String.class, "briefImg", false, "BRIEF_IMG");
-        public final static Property StartDate = new Property(6, java.util.Date.class, "startDate", false, "START_DATE");
-        public final static Property EndDate = new Property(7, java.util.Date.class, "endDate", false, "END_DATE");
-        public final static Property IsTop = new Property(8, Boolean.class, "isTop", false, "IS_TOP");
-        public final static Property IsOfficial = new Property(9, Boolean.class, "isOfficial", false, "IS_OFFICIAL");
-        public final static Property IsAttend = new Property(10, Boolean.class, "isAttend", false, "IS_ATTEND");
-        public final static Property IsViewed = new Property(11, Boolean.class, "isViewed", false, "IS_VIEWED");
-        public final static Property Type = new Property(12, int.class, "type", false, "TYPE");
-        public final static Property MerchantId = new Property(13, String.class, "merchantId", false, "MERCHANT_ID");
+        public final static Property Address = new Property(3, String.class, "address", false, "ADDRESS");
+        public final static Property Level = new Property(4, Integer.class, "level", false, "LEVEL");
+        public final static Property Detail = new Property(5, String.class, "detail", false, "DETAIL");
+        public final static Property Img = new Property(6, String.class, "img", false, "IMG");
+        public final static Property BriefImg = new Property(7, String.class, "briefImg", false, "BRIEF_IMG");
+        public final static Property StartDate = new Property(8, java.util.Date.class, "startDate", false, "START_DATE");
+        public final static Property EndDate = new Property(9, java.util.Date.class, "endDate", false, "END_DATE");
+        public final static Property IsTop = new Property(10, Boolean.class, "isTop", false, "IS_TOP");
+        public final static Property IsOfficial = new Property(11, Boolean.class, "isOfficial", false, "IS_OFFICIAL");
+        public final static Property IsAttend = new Property(12, Boolean.class, "isAttend", false, "IS_ATTEND");
+        public final static Property IsViewed = new Property(13, Boolean.class, "isViewed", false, "IS_VIEWED");
+        public final static Property Type = new Property(14, int.class, "type", false, "TYPE");
+        public final static Property MerchantId = new Property(15, String.class, "merchantId", false, "MERCHANT_ID");
     };
 
     private DaoSession daoSession;
@@ -64,17 +66,19 @@ public class ActivityInfoDao extends AbstractDao<ActivityInfo, String> {
                 "\"ACTIVITY_ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: activityId
                 "\"NAME\" TEXT NOT NULL ," + // 1: name
                 "\"BRIEF\" TEXT NOT NULL ," + // 2: brief
-                "\"DETAIL\" TEXT," + // 3: detail
-                "\"IMG\" TEXT," + // 4: img
-                "\"BRIEF_IMG\" TEXT," + // 5: briefImg
-                "\"START_DATE\" INTEGER NOT NULL ," + // 6: startDate
-                "\"END_DATE\" INTEGER NOT NULL ," + // 7: endDate
-                "\"IS_TOP\" INTEGER," + // 8: isTop
-                "\"IS_OFFICIAL\" INTEGER," + // 9: isOfficial
-                "\"IS_ATTEND\" INTEGER," + // 10: isAttend
-                "\"IS_VIEWED\" INTEGER," + // 11: isViewed
-                "\"TYPE\" INTEGER NOT NULL ," + // 12: type
-                "\"MERCHANT_ID\" TEXT);"); // 13: merchantId
+                "\"ADDRESS\" TEXT," + // 3: address
+                "\"LEVEL\" INTEGER," + // 4: level
+                "\"DETAIL\" TEXT," + // 5: detail
+                "\"IMG\" TEXT," + // 6: img
+                "\"BRIEF_IMG\" TEXT," + // 7: briefImg
+                "\"START_DATE\" INTEGER NOT NULL ," + // 8: startDate
+                "\"END_DATE\" INTEGER NOT NULL ," + // 9: endDate
+                "\"IS_TOP\" INTEGER," + // 10: isTop
+                "\"IS_OFFICIAL\" INTEGER," + // 11: isOfficial
+                "\"IS_ATTEND\" INTEGER," + // 12: isAttend
+                "\"IS_VIEWED\" INTEGER," + // 13: isViewed
+                "\"TYPE\" INTEGER NOT NULL ," + // 14: type
+                "\"MERCHANT_ID\" TEXT);"); // 15: merchantId
     }
 
     /** Drops the underlying database table. */
@@ -95,47 +99,57 @@ public class ActivityInfoDao extends AbstractDao<ActivityInfo, String> {
         stmt.bindString(2, entity.getName());
         stmt.bindString(3, entity.getBrief());
  
+        String address = entity.getAddress();
+        if (address != null) {
+            stmt.bindString(4, address);
+        }
+ 
+        Integer level = entity.getLevel();
+        if (level != null) {
+            stmt.bindLong(5, level);
+        }
+ 
         String detail = entity.getDetail();
         if (detail != null) {
-            stmt.bindString(4, detail);
+            stmt.bindString(6, detail);
         }
  
         String img = entity.getImg();
         if (img != null) {
-            stmt.bindString(5, img);
+            stmt.bindString(7, img);
         }
  
         String briefImg = entity.getBriefImg();
         if (briefImg != null) {
-            stmt.bindString(6, briefImg);
+            stmt.bindString(8, briefImg);
         }
-        stmt.bindLong(7, entity.getStartDate().getTime());
-        stmt.bindLong(8, entity.getEndDate().getTime());
+        stmt.bindLong(9, entity.getStartDate().getTime());
+        stmt.bindLong(10, entity.getEndDate().getTime());
  
         Boolean isTop = entity.getIsTop();
         if (isTop != null) {
-            stmt.bindLong(9, isTop ? 1L: 0L);
+            stmt.bindLong(11, isTop ? 1L: 0L);
         }
  
         Boolean isOfficial = entity.getIsOfficial();
         if (isOfficial != null) {
-            stmt.bindLong(10, isOfficial ? 1L: 0L);
+            stmt.bindLong(12, isOfficial ? 1L: 0L);
         }
  
         Boolean isAttend = entity.getIsAttend();
         if (isAttend != null) {
-            stmt.bindLong(11, isAttend ? 1L: 0L);
+            stmt.bindLong(13, isAttend ? 1L: 0L);
         }
  
         Boolean isViewed = entity.getIsViewed();
         if (isViewed != null) {
-            stmt.bindLong(12, isViewed ? 1L: 0L);
+            stmt.bindLong(14, isViewed ? 1L: 0L);
         }
-        stmt.bindLong(13, entity.getType());
+        stmt.bindLong(15, entity.getType());
  
         String merchantId = entity.getMerchantId();
         if (merchantId != null) {
-            stmt.bindString(14, merchantId);
+            stmt.bindString(16, merchantId);
         }
     }
 
@@ -158,17 +172,19 @@ public class ActivityInfoDao extends AbstractDao<ActivityInfo, String> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // activityId
             cursor.getString(offset + 1), // name
             cursor.getString(offset + 2), // brief
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // detail
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // img
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // briefImg
-            new java.util.Date(cursor.getLong(offset + 6)), // startDate
-            new java.util.Date(cursor.getLong(offset + 7)), // endDate
-            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // isTop
-            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // isOfficial
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isAttend
-            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isViewed
-            cursor.getInt(offset + 12), // type
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // merchantId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // address
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // level
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // detail
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // img
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // briefImg
+            new java.util.Date(cursor.getLong(offset + 8)), // startDate
+            new java.util.Date(cursor.getLong(offset + 9)), // endDate
+            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isTop
+            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isOfficial
+            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isAttend
+            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0, // isViewed
+            cursor.getInt(offset + 14), // type
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // merchantId
         );
         return entity;
     }
@@ -179,17 +195,19 @@ public class ActivityInfoDao extends AbstractDao<ActivityInfo, String> {
         entity.setActivityId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setName(cursor.getString(offset + 1));
         entity.setBrief(cursor.getString(offset + 2));
-        entity.setDetail(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setImg(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setBriefImg(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setStartDate(new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setEndDate(new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setIsTop(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
-        entity.setIsOfficial(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
-        entity.setIsAttend(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
-        entity.setIsViewed(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
-        entity.setType(cursor.getInt(offset + 12));
-        entity.setMerchantId(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setAddress(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setLevel(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setDetail(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setImg(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setBriefImg(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setStartDate(new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setEndDate(new java.util.Date(cursor.getLong(offset + 9)));
+        entity.setIsTop(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
+        entity.setIsOfficial(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
+        entity.setIsAttend(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
+        entity.setIsViewed(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
+        entity.setType(cursor.getInt(offset + 14));
+        entity.setMerchantId(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
      }
     
     /** @inheritdoc */
