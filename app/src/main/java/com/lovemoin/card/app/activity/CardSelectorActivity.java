@@ -61,7 +61,19 @@ public class CardSelectorActivity extends AppCompatActivity {
         cardViewPager.setAdapter(mAdapter);
         mAdapter.clear();
         mAdapter.addAll(cardList);
-        starView.setCount(count);
+        if (count == -2) {
+            starView.setCount(-1);
+            textHint.setVisibility(View.VISIBLE);
+            textHint.setText(getString(R.string.sign_in_success));
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(CardSelectorActivity.this, MerchantDetailActivity.class));
+                    finish();
+                }
+            });
+        } else
+            starView.setCount(count);
     }
 
     private void initListener() {

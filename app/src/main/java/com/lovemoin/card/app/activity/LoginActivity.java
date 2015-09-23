@@ -1,11 +1,14 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
@@ -18,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editUserTel;
     private EditText editPassword;
     private MoinCardApplication app;
+    private TextView textFindBackPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,20 @@ public class LoginActivity extends AppCompatActivity {
 
         editUserTel = (EditText) findViewById(R.id.editUserTel);
         editPassword = (EditText) findViewById(R.id.editPassword);
+        findViewById(R.id.text_find_back_password).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setMessage(R.string.msg_modify_pwd_desc)
+                        .setTitle(R.string.hint)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
 
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override

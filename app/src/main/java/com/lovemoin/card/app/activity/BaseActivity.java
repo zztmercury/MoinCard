@@ -9,12 +9,13 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import com.lovemoin.card.app.MoinCardApplication;
 
 /**
  * Created by zzt on 15-9-22.
  */
 public class BaseActivity extends AppCompatActivity {
-
+    protected MoinCardApplication app;
     protected ProgressDialog pd;
     private PendingIntent mPendingIntent;
     private IntentFilter[] mFilters;
@@ -25,6 +26,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pd = new ProgressDialog(this);
+        app = (MoinCardApplication) getApplication();
         nfcForegroundDispatch();
     }
 

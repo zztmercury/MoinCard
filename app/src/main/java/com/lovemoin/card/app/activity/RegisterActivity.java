@@ -113,13 +113,13 @@ public class RegisterActivity extends AppCompatActivity {
 //                    editCode.requestFocus();
 //                    return;
 //                }
-                userPwd = editPassword.getText().toString();
+                userPwd = editPassword.getText().toString().trim();
                 if (userPwd.length() < 6) {
                     editPassword.setError(getString(R.string.invalid_pwd_length));
                     editPassword.requestFocus();
                     return;
                 }
-                if (!userPwd.equals(editRePassword.getText().toString())) {
+                if (!userPwd.equals(editRePassword.getText().toString().trim())) {
                     editRePassword.setError(getString(R.string.invalid_re_password));
                     editRePassword.requestFocus();
                     return;

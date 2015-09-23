@@ -12,10 +12,11 @@ import java.util.Map;
  * Created by zzt on 15-9-15.
  */
 public abstract class CreateCard {
-    public CreateCard(String cardUserId, String merchantId) {
+    public CreateCard(String cardUserId, String merchantId, String cardType) {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put(Config.KEY_CARD_USER_ID, cardUserId);
         paramsMap.put(Config.KEY_MERCHANT_ID, merchantId);
+        paramsMap.put(Config.KEY_CARD_TYPE, cardType);
 
         String url = Config.SERVER_URL + Config.ACTION_CREATE_CARD;
 

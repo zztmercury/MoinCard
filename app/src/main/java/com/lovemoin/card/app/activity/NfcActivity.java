@@ -21,6 +21,7 @@ import com.lovemoin.card.app.entity.DeviceInfo;
 import com.lovemoin.card.app.net.CreateCard;
 import com.lovemoin.card.app.net.GetPoint;
 import com.lovemoin.card.app.net.QuickExchange;
+import com.lovemoin.card.app.net.SignIn;
 import com.lovemoin.card.app.utils.CommonUtil;
 import de.greenrobot.dao.query.QueryBuilder;
 
@@ -164,7 +165,7 @@ public class NfcActivity extends Activity {
                 startActivity(new Intent(this, MerchantDetailActivity.class));
                 finish();
             } else {
-                createCard(deviceInfo.getMerchantCode(), false);
+                createCard(deviceInfo.getMerchantCode(), CardInfo.TYPE_POINT, false);
             }
         }
     }
@@ -172,7 +173,7 @@ public class NfcActivity extends Activity {
     private void operPlus() {
         CardInfo cardInfo = findPointCardByMerchantId(deviceInfo.getMerchantCode());
         if (cardInfo == null) {
-            createCard(deviceInfo.getMerchantCode(), true);
+            createCard(deviceInfo.getMerchantCode(), CardInfo.TYPE_POINT, true);
         } else {
             app.setCurrentCard(cardInfo);
             plusCommand();
@@ -231,8 +232,13 @@ public class NfcActivity extends Activity {
     }
 
     private void operSign() {
-        pd.dismiss();
-        finish();
+        CardInfo cardInfo = findSignCardByMerchantId(deviceInfo.getMerchantCode());
+        if (cardInfo == null) {
+            createCard(deviceInfo.getMerchantCode(), CardInfo.TYPE_SIGN, true);
+        } else {
+            app.setCurrentCard(cardInfo);
+            signCommand();
+        }
     }
 
     private void operCardConfirm() {
@@ -262,15 +268,26 @@ public class NfcActivity extends Activity {
         return queryBuilder.unique();
     }
 
+    private CardInfo findSignCardByMerchantId(String merchantId) {
+        QueryBuilder<CardInfo> queryBuilder = cardInfoDao.queryBuilder();
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
+        queryBuilder.where(CardInfoDao.Properties.CardCode.like(merchantId + "%"), CardInfoDao.Properties.CardType.eq(CardInfo.TYPE_SIGN));
+        return queryBuilder.unique();
+    }
 
-    private void createCard(String merchantId, final boolean isPlus) {
-        new CreateCard(app.getCachedUserId(), merchantId) {
+
+    private void createCard(final String merchantId, final String cardType, final boolean isPlus) {
+        new CreateCard(app.getCachedUserId(), merchantId, cardType) {
             @Override
             public void onSuccess(CardInfo cardInfo) {
                 cardInfoDao.insert(cardInfo);
-                if (isPlus) {
+                if (isPlus && cardType.equals(CardInfo.TYPE_POINT)) {
                     app.setCurrentCard(cardInfo);
                     plusCommand();
+                } else if (isPlus && cardType.equals(CardInfo.TYPE_SIGN)) {
+                    app.setCurrentCard(cardInfo);
+                    signCommand();
                 } else {
                     pd.dismiss();
                     app.setCurrentCard(cardInfo);
@@ -281,6 +298,7 @@ public class NfcActivity extends Activity {
 
             @Override
             public void onFail(String message) {
+                Toast.makeText(NfcActivity.this, merchantId, Toast.LENGTH_LONG).show();
                 pd.dismiss();
                 finish();
             }
@@ -307,6 +325,47 @@ public class NfcActivity extends Activity {
                         cardList.add(app.getCurrentCard());
                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                         i.putExtra(CardSelectorActivity.COUNT, deviceInfo.getPoint());
+                        startActivity(i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        pd.dismiss();
+                        Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                };
+            }
+
+        } catch (IOException e) {
+            finish();
+            e.printStackTrace();
+            finish();
+        }
+    }
+
+    private void signCommand() {
+        try {
+            byte[] result;
+            byte[] command;
+            String commandStr;
+            commandStr = Command.COMMAND_DEVICE_SIGN_IN + app.getCurrentCard().getCardCode();
+            command = CommonUtil.HexStringToByteArray(commandStr);
+            result = isoDep.transceive(command);
+            String checkValue = CommonUtil.ByteArrayToHexString(result);
+            if (checkValue.endsWith(Command.SUCCEED_END_STR)) {
+                checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
+                new SignIn(checkValue, app.getCachedUserId()) {
+                    @Override
+                    public void onSuccess() {
+                        pd.dismiss();
+                        Intent i = new Intent(NfcActivity.this, CardSelectorActivity.class);
+                        List<CardInfo> cardList = new ArrayList<>();
+                        app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() + 1);
+                        cardList.add(app.getCurrentCard());
+                        i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
+                        i.putExtra(CardSelectorActivity.COUNT, -2);
                         startActivity(i);
                         finish();
                     }

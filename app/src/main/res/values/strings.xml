@@ -103,5 +103,18 @@
 	<string name="attending">报名中，请稍候</string>
 	<string name="getting_gift">领取中，请稍候</string>
 	<string name="loading">加载中，请稍候</string>
+	<string name="sign_in_success">签到成功</string>
+	<string name="msg_ex_succeed">恭喜兑换成功</string>
+	<string name="msg_ex_succed_desc">请向商家索要对应的礼品</string>
+	<string name="old_password">原密码：</string>
+	<string name="new_password">新密码：</string>
+	<string name="confirm_password">确认密码：</string>
+	<string name="save">保存</string>
+	<string name="hint_modify_user">密码校验中</string>
+	<string name="hint_modify_user_success">修改密码成功</string>
+	<string name="modify_user">修改个人信息</string>
+	<string name="find_back_password">密码找回</string>
+	<string name="msg_modify_pwd_desc">请关注微信公众号“魔印积点”，并回复“忘记密码”，魔印客服专员为您提供找回密码服务。</string>
+	<string name="hint_coupon_used_up">兑换次数已用尽，是否删除？</string>
 
 </resources>

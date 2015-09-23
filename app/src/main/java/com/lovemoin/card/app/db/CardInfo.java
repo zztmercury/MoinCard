@@ -60,6 +60,10 @@ public class CardInfo implements java.io.Serializable {
      * 积点卡
      */
     public static final String TYPE_POINT = "0000";
+    /**
+     * 签到卡
+     */
+    public static final String TYPE_SIGN = "0002";
     // KEEP FIELDS END
 
     public CardInfo() {

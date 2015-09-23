@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.activity.LoginActivity;
+import com.lovemoin.card.app.activity.UserModifyActivity;
 
 /**
  * Created by zzt on 15-9-15.
@@ -48,6 +49,12 @@ public class MyFragment extends LazyFragment {
                                 dialog.dismiss();
                             }
                         }).show();
+            }
+        });
+        rootView.findViewById(R.id.layoutModifyUser).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), UserModifyActivity.class));
             }
         });
         textAccount.setText(app.getCachedUserTel());

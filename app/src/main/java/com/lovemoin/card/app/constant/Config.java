@@ -29,10 +29,12 @@ public class Config {
     public static final String ACTION_LOAD_MERCHANT_IMAGE_SET = "merchantActionAjax/merchantInfo!findImgList.action";
     public static final String ACTION_CREATE_CARD = "cardUserActionAjax/allMethod!createCard2CardUser.action";
     public static final String ACTION_GET_POINT = "cardAction/decipheringMessage.action";
+    public static final String ACTION_SIGN_IN = "cardAction/decipheringMessageOfSignIn.action";
     public static final String ACTION_QUICK_EXCHANGE = "cardAction/quickExchange.action";
     public static final String ACTION_SEND_CODE = "cardUserActionAjax/allMethod!sendMobileVerificationCode.action";
     public static final String ACTION_DELETE_CARD = "cardUserActionAjax/allMethod!deleteCardUserRefCard.action";
     public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHNAT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
+    public static final String ACTION_MODIFY_USER = "cardUserActionAjax/allMethod!modifyCardUserPwd.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -78,6 +80,8 @@ public class Config {
     // 用户相关key
     public static final String KEY_USER_TEL = "userTel";
     public static final String KEY_USER_PASSWORD = "userPwd";
+    public static final String KEY_NEW_PASSWORD = "userPwd";
+    public static final String KEY_OLD_PASSWORD = "oldPwd";
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_CARD_USER_ID = "cardUserId";
     public static final String KEY_OS_VERSION = "OSVersion";

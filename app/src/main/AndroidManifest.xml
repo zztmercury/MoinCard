@@ -15,6 +15,7 @@
 		<meta-data
 				android:name="android.nfc.disable_beam_default"
 				android:value="true" />
+
 		<activity
 				android:name=".activity.MainActivity"
 				android:label="@string/app_name"
@@ -124,6 +125,12 @@
 		<activity
 				android:name=".activity.GuideActivity"
 				android:screenOrientation="portrait">
+
+		</activity>
+		<activity
+				android:name=".activity.UserModifyActivity"
+				android:screenOrientation="portrait"
+				android:label="@string/modify_user">
 
 		</activity>
 	</application>

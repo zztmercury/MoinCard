@@ -21,7 +21,9 @@ public class CardRecord {
         String operateType;
         int point;
         buffer.append(operateType = jsonObject.getString(Config.KEY_OPERATE_TYPE));
-        if ((point = jsonObject.getInt(Config.KEY_OPERATE_POINT)) == 0 || operateType.contains("领取新卡") || operateType.contains("增加积点") || operateType.contains("赠送积点") || operateType.contains("获得"))
+        if ((point = jsonObject.getInt(Config.KEY_OPERATE_POINT)) == 0 || operateType.contains("领取新卡")
+                || operateType.contains("增加积点") || operateType.contains("赠送积点")
+                || operateType.contains("获得") || operateType.contains("签到"))
             buffer.append("+");
         else
             buffer.append("-");

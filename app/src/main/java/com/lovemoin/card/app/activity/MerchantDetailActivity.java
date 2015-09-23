@@ -102,8 +102,6 @@ public class MerchantDetailActivity extends BaseActivity {
 
     private ImageLoader loader;
 
-    private ProgressDialog pd;
-
     private boolean canConvert;
 
     private MoinCardApplication app;
@@ -116,7 +114,6 @@ public class MerchantDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_merchant_detail);
         loader = ImageLoader.getInstance();
         initView();
-        initData();
     }
 
     private void initView() {
@@ -152,6 +149,48 @@ public class MerchantDetailActivity extends BaseActivity {
         listRecentActivity.setAdapter(mAdapter);
         bindCard();
         loadMerchantInfoFromServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pd.dismiss();
+        initData();
+        if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON) && cardInfo.getCurrentPoint() == 0) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.hint_coupon_used_up)
+                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, int which) {
+
+                            new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
+                                    cardInfoDao.delete(app.getCurrentCard());
+                                    dialog.dismiss();
+                                    onBackPressed();
+                                }
+
+                                @Override
+                                public void onFail(String message) {
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                }
+                            };
+                        }
+                    }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pd.dismiss();
     }
 
     private void loadActivities() {
