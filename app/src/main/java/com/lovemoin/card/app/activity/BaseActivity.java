@@ -9,18 +9,20 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.lovemoin.card.app.MoinCardApplication;
 
 /**
  * Created by zzt on 15-9-22.
  */
 public class BaseActivity extends AppCompatActivity {
+    public static final int EXCHANGE_SUCCESS = RESULT_FIRST_USER + 1;
     protected MoinCardApplication app;
     protected ProgressDialog pd;
+    protected NfcAdapter nfcAdapter;
     private PendingIntent mPendingIntent;
     private IntentFilter[] mFilters;
     private String[][] mTechLists;
-    private NfcAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,13 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         String action = intent.getAction();
+        Log.d("action", action == null ? "null" : action);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
             intent.setClass(this, NfcActivity.class);
-            startActivity(intent);
+            if (!app.isExchange()) {
+                startActivity(intent);
+            } else
+                startActivityForResult(intent, EXCHANGE_SUCCESS);
         } else {
             setIntent(intent);
         }
@@ -45,21 +51,21 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mAdapter != null)
-            mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
+        if (nfcAdapter != null)
+            nfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAdapter != null)
-            mAdapter.disableForegroundDispatch(this);
+        if (nfcAdapter != null)
+            nfcAdapter.disableForegroundDispatch(this);
     }
 
     private void nfcForegroundDispatch() {
-        mAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Setup an intent filter for all MIME based dispatches
         IntentFilter tech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
@@ -76,5 +82,16 @@ public class BaseActivity extends AppCompatActivity {
                 new String[]{MifareClassic.class.getName()},
                 new String[]{NfcA.class.getName()}};// 允许扫描的标签类型
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case EXCHANGE_SUCCESS:
+                pd.dismiss();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

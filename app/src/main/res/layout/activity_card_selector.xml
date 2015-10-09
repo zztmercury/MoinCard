@@ -20,6 +20,27 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 
+	<LinearLayout
+			android:id="@+id/layoutClickHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:visibility="gone">
+		<ImageView
+				android:layout_width="72dp"
+				android:layout_height="80dp"
+				android:src="@drawable/click_hint" />
+		<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="5dp"
+				android:textColor="@color/white"
+				android:text="@string/click_to_get_point"
+				android:background="@drawable/bg_border_stroke" />
+
+	</LinearLayout>
+
 	<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -27,6 +48,6 @@
 			style="@style/TextStyleConvert"
 			android:textStyle="bold"
 			android:id="@+id/textHint"
-			android:text="哈哈哈哈"
+			android:gravity="center_horizontal"
 			android:visibility="gone" />
 </LinearLayout>

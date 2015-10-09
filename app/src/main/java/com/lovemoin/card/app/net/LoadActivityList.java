@@ -33,7 +33,7 @@ public abstract class LoadActivityList {
     public LoadActivityList(int viewType, String userId, long lastSearchTime) {
         paramsMap.put(Config.KEY_VIEW_TYPE, String.valueOf(viewType));
         paramsMap.put(Config.KEY_USER_ID, userId);
-        paramsMap.put(Config.KEY_LAST_SEARCH_TIME, String.valueOf(lastSearchTime));
+        paramsMap.put(Config.KEY_LAST_SEARCH_TIME, String.valueOf(lastSearchTime / 1000));
 
         String url = Config.SERVER_URL + Config.ACTION_LOAD_ACTIVITY_LIST;
 

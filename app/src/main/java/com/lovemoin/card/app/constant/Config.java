@@ -8,7 +8,7 @@ public class Config {
     /**
      * 服务器地址<br/>
      * 测试服务器 http://182.92.3.209:8080/moinbox/<br/>
-     * 生产服务器 <br/>
+     * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
     public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
@@ -33,8 +33,9 @@ public class Config {
     public static final String ACTION_QUICK_EXCHANGE = "cardAction/quickExchange.action";
     public static final String ACTION_SEND_CODE = "cardUserActionAjax/allMethod!sendMobileVerificationCode.action";
     public static final String ACTION_DELETE_CARD = "cardUserActionAjax/allMethod!deleteCardUserRefCard.action";
-    public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHNAT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
+    public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHANT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
     public static final String ACTION_MODIFY_USER = "cardUserActionAjax/allMethod!modifyCardUserPwd.action";
+    public static final String ACTION_CHECK_VERSION = "cardUserActionAjax/allMethod!checkVersionAjax.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -133,4 +134,5 @@ public class Config {
     public static final String KEY_START_DATE = "startDate";
     public static final String KEY_END_DATE = "endDate";
     public static final String KEY_CHECK_VALUE = "checkValue";
+    public static final String KEY_VERSION = "version";
 }

@@ -72,9 +72,8 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
         new LoadCardList(app.getCachedUserId()) {
             @Override
             protected void onSuccess(List<CardInfo> cardInfoList) {
-                mAdapter.clear();
-                mAdapter.addAll(cardInfoList);
                 cacheCardListToDB(cardInfoList);
+                loadCardListFromDB();
                 Toast.makeText(getContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
                 layoutSwipe.setRefreshing(false);
             }

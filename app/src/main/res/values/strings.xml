@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">MoinCard</string>
+	<string name="app_name">魔印积点</string>
 	<string name="hello_world">Hello world!</string>
 	<string name="title_activity_main">MainActivity</string>
 
@@ -37,7 +37,7 @@
 	<string name="person_attended">人已参加</string>
 	<string name="see_in_merchant_detail">见商户详情</string>
 	<string name="attend_success">报名成功</string>
-	<string name="extrange_success">兑换成功</string>
+	<string name="exchange_success">兑换成功</string>
 	<string name="you_get_the_prize">恭喜您获得：</string>
 	<string name="added_to_card">已帮您加入首页卡夹\n兑换该券可获得以下礼品</string>
 	<string name="view_coupon">查看兑换券</string>
@@ -57,8 +57,7 @@
 	<string name="stores_in_all">共%d家门店</string>
 	<string name="phone">联系电话</string>
 	<string name="activity_calendar">活动日历</string>
-	<string name="device_do_not_support_nfc">设备不支持Nfc\\n无法正常使用积点及兑换功能</string>
-	<string name="nfcIntent">nfcIntent</string>
+	<string name="device_do_not_support_nfc">设备不支持Nfc\n无法正常使用积点及兑换功能</string>
 	<string name="find_device_hint">请将手机靠近魔印设备</string>
 	<string name="please_press_card_first">请先点击兑换</string>
 	<string name="card_not_satisfy">这是别家的积点卡，本店不受理噢</string>
@@ -71,7 +70,7 @@
 	<string name="lab_login_agreement">同意用户服务协议</string>
 	<string name="btn_login_reg">提交注册</string>
 	<string name="invalid_tel_hint">请输入有效的手机号</string>
-	<string name="sended">已发送</string>
+	<string name="sent">已发送</string>
 	<string name="user_tel_has_been_changed_please_get_code_again">手机号已变更，请重新获取验证码</string>
 	<string name="invalid_pwd_length">请输入6位以上的字符</string>
 	<string name="second">秒</string>
@@ -79,7 +78,7 @@
 	<string name="invalid_code">验证码有误</string>
 	<string name="invalid_re_password">两次输入密码不同</string>
 	<string name="hint">提示</string>
-	<string name="uncheck_agreemend">用户服务协议未勾选</string>
+	<string name="unchecked_agreement">用户服务协议未勾选</string>
 	<string name="reg_success">恭喜您注册成功</string>
 	<string name="register">注册</string>
 	<string name="service_agreement">服务协议</string>
@@ -105,7 +104,7 @@
 	<string name="loading">加载中，请稍候</string>
 	<string name="sign_in_success">签到成功</string>
 	<string name="msg_ex_succeed">恭喜兑换成功</string>
-	<string name="msg_ex_succed_desc">请向商家索要对应的礼品</string>
+	<string name="msg_ex_succeed_desc">请向商家索要</string>
 	<string name="old_password">原密码：</string>
 	<string name="new_password">新密码：</string>
 	<string name="confirm_password">确认密码：</string>
@@ -116,5 +115,17 @@
 	<string name="find_back_password">密码找回</string>
 	<string name="msg_modify_pwd_desc">请关注微信公众号“魔印积点”，并回复“忘记密码”，魔印客服专员为您提供找回密码服务。</string>
 	<string name="hint_coupon_used_up">兑换次数已用尽，是否删除？</string>
+	<string name="sign_card_detail">签到卡详情</string>
+	<string name="hint_found_new_version">有新版本更新，是否立即下载体验？</string>
+	<string name="hint_download_upgrade_file">正在下载更新文件，请稍等...</string>
+	<string name="download_canceled">下载已取消</string>
+	<string name="download_finished">下载完成</string>
+	<string name="hint_no_nfc_device">哎呀，您的手机不支持NFC</string>
+	<string name="can_not_use_all_function">暂无法使用魔印电子积点功能</string>
+	<string name="please_wait_for_new_version">敬请期待魔印的下一版本</string>
+	<string name="I_know">我知道了</string>
+	<string name="about_to_begin">即将开始</string>
+	<string name="activity_end">活动已结束</string>
+	<string name="click_to_get_point">点击星星\n获取积点</string>
 
 </resources>

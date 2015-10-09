@@ -32,6 +32,16 @@
 			android:textSize="15sp"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="@string/msg_ex_succed_desc" />
+			android:text="@string/msg_ex_succeed_desc" />
+
+	<TextView
+			android:id="@+id/text_convert_object"
+			android:gravity="center"
+			android:textColor="@color/activity_text"
+			android:layout_marginTop="25dp"
+			android:textStyle="bold"
+			android:textSize="20sp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
 
 </LinearLayout>

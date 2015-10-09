@@ -1,5 +1,6 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,6 +18,9 @@ import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
 import com.lovemoin.card.app.fragment.MyFragment;
+import com.lovemoin.card.app.net.CheckVersion;
+import com.lovemoin.card.app.net.FileDownloader;
+import com.lovemoin.card.app.utils.DateUtil;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
 import java.util.Locale;
@@ -94,6 +99,7 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
+        checkVersion();
     }
 
 
@@ -137,7 +143,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        ((MoinCardApplication) getApplication()).setCurrentCard(null);
+        ((MoinCardApplication) getApplication()).setIsExchange(false);
         mViewPager.setCurrentItem(getIntent().getIntExtra(KEY_SECTION, mViewPager.getCurrentItem()));
         super.onResume();
     }
@@ -145,6 +151,39 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void checkVersion() {
+        new CheckVersion(app.getVersionCode()) {
+            @Override
+            public void onSuccess(final String apkName) {
+                app.cacheHasNewVersion(true);
+                if (app.isShowNewVersionOnStart()) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle(R.string.hint)
+                            .setMessage(R.string.hint_found_new_version)
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    FileDownloader fileDownloader = new FileDownloader(HomeActivity.this);
+                                    fileDownloader.download(apkName, "Download", "MoinCard" + DateUtil.LongToString(System.currentTimeMillis(), "yyyyMMdd") + ".apk");
+                                }
+                            })
+                            .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+
+                }
+            }
+
+            @Override
+            public void onFail(String message) {
+                app.cacheHasNewVersion(false);
+            }
+        };
     }
 
     /**

@@ -63,6 +63,7 @@ public class NfcActivity extends Activity {
         pd = new ProgressDialog(this);
         mAdapter = NfcAdapter.getDefaultAdapter(this);
         nfcForegroundDispatch();
+        readTag();
     }
 
 
@@ -147,6 +148,7 @@ public class NfcActivity extends Activity {
                 finish();
             }
         }
+        finish();
         pd.dismiss();
     }
 
@@ -196,6 +198,7 @@ public class NfcActivity extends Activity {
                         new QuickExchange(checkValue, app.getCachedUserId()) {
                             @Override
                             public void onSuccess() {
+                                setResult(BaseActivity.EXCHANGE_SUCCESS);
                                 pd.dismiss();
                                 app.setIsExchange(false);
                                 app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() - app.getCurrentCard().getConvertPoint());
@@ -339,7 +342,6 @@ public class NfcActivity extends Activity {
             }
 
         } catch (IOException e) {
-            finish();
             e.printStackTrace();
             finish();
         }

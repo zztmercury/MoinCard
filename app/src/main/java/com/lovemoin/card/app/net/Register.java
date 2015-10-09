@@ -16,14 +16,15 @@ public abstract class Register {
     /**
      * 注册
      *
-     * @param userTel   用户手机号
-     * @param userPwd   用户密码
+     * @param userTel 用户手机号
+     * @param userPwd 用户密码
      */
-    public Register(String userTel, String userPwd) {
+    public Register(String userTel, String userPwd, String versionName) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
         paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(userPwd));
-        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
+//        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
+        paramMap.put(Config.KEY_OS_VERSION, versionName);
         paramMap.put(Config.KEY_MODEL, Build.MODEL);
 
         String url = Config.SERVER_URL + Config.ACTION_REGISTER;

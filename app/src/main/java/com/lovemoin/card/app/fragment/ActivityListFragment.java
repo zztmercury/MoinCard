@@ -54,6 +54,8 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
                 android.R.color.holo_red_light);
         layoutSwipe.setOnRefreshListener(this);
 
+        onRefresh();
+
         isPrepared = true;
         return rootView;
     }
@@ -61,7 +63,7 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
     @Override
     protected void lazyLoad() {
         if (isPrepared && isVisible)
-            loadActivityListFromServer();
+            loadActivityListFromDB();
     }
 
     private void loadActivityListFromDB() {
@@ -95,6 +97,7 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
                 layoutSwipe.setRefreshing(false);
                 cacheActivityListToDB(activityInfoList);
                 loadActivityListFromDB();
+                layoutSwipe.setRefreshing(false);
             }
 
             @Override
@@ -107,6 +110,6 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
 
     @Override
     public void onRefresh() {
-        loadActivityListFromDB();
+        loadActivityListFromServer();
     }
 }

@@ -124,13 +124,17 @@
 		</activity>
 		<activity
 				android:name=".activity.GuideActivity"
-				android:screenOrientation="portrait">
+				android:screenOrientation="portrait"
+				android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
 		</activity>
 		<activity
 				android:name=".activity.UserModifyActivity"
 				android:screenOrientation="portrait"
 				android:label="@string/modify_user">
+
+		</activity>
+		<activity android:name=".activity.ActivityCalendarActivity">
 
 		</activity>
 	</application>

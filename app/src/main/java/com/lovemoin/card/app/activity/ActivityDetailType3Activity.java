@@ -177,60 +177,68 @@ public class ActivityDetailType3Activity extends BaseActivity {
                 DateUtil.LongToString(activityInfo.getEndDate().getTime(), DATE_PATTERN)));
         textMemberCount.setText(String.valueOf(activityInfo.getMemberCount()));
         textDetail.setText(activityInfo.getDetail());
-        if (!activityInfo.getIsAttend()) {
-            btnReact.setText(R.string.attend_now);
-            btnReact.setEnabled(true);
-            activityInfo.setCurrentStep(0);
-            stepsView.setVisibility(View.GONE);
-            btnReact.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pd.setMessage(getString(R.string.attending));
-                    pd.show();
-                    new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getMerchantIdList().get(0), activityInfo.getType(), activityInfo.getNum()) {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();
-                            pd.dismiss();
-//                            btnReact.setText(R.string.attended);
-//                            btnReact.setEnabled(false);
-//                            stepsView.setVisibility(View.VISIBLE);
-                            loadDetail();
-                        }
-
-                        @Override
-                        public void onFail(String message) {
-                            Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
-                            pd.dismiss();
-                        }
-                    };
-                }
-            });
-        } else {
-            stepsView.setVisibility(View.VISIBLE);
-            if (activityInfo.getCurrentStep() < activityInfo.getTotalStep() - 2) {
-                btnReact.setText(R.string.attended);
-                btnReact.setEnabled(false);
-            } else if (activityInfo.getCurrentStep() == activityInfo.getTotalStep() - 2) {
-                btnReact.setText(R.string.get_prize);
+        if (activityInfo.getStartDate().getTime() <= System.currentTimeMillis() && System.currentTimeMillis() <= activityInfo.getEndDate().getTime()) {
+            if (!activityInfo.getIsAttend()) {
+                btnReact.setText(R.string.attend_now);
                 btnReact.setEnabled(true);
+                activityInfo.setCurrentStep(0);
+                stepsView.setVisibility(View.GONE);
                 btnReact.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switch (activityInfo.getNum()) {
-                            case 1:
-                                showPrizeSelectDialog(activityInfo);
-                                break;
-                            default:
-                                getGift(activityInfo, null, null);
-                                break;
-                        }
+                        pd.setMessage(getString(R.string.attending));
+                        pd.show();
+                        new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getMerchantIdList().get(0), activityInfo.getType(), activityInfo.getNum()) {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();
+                                pd.dismiss();
+//                            btnReact.setText(R.string.attended);
+//                            btnReact.setEnabled(false);
+//                            stepsView.setVisibility(View.VISIBLE);
+                                loadDetail();
+                            }
+
+                            @Override
+                            public void onFail(String message) {
+                                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                                pd.dismiss();
+                            }
+                        };
                     }
                 });
             } else {
-                btnReact.setText(R.string.completed);
-                btnReact.setEnabled(false);
+                stepsView.setVisibility(View.VISIBLE);
+                if (activityInfo.getCurrentStep() < activityInfo.getTotalStep() - 2) {
+                    btnReact.setText(R.string.attended);
+                    btnReact.setEnabled(false);
+                } else if (activityInfo.getCurrentStep() == activityInfo.getTotalStep() - 2) {
+                    btnReact.setText(R.string.get_prize);
+                    btnReact.setEnabled(true);
+                    btnReact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (activityInfo.getNum()) {
+                                case 1:
+                                    showPrizeSelectDialog(activityInfo);
+                                    break;
+                                default:
+                                    getGift(activityInfo, null, null);
+                                    break;
+                            }
+                        }
+                    });
+                } else {
+                    btnReact.setText(R.string.completed);
+                    btnReact.setEnabled(false);
+                }
             }
+        } else {
+            btnReact.setEnabled(false);
+            if (System.currentTimeMillis() < activityInfo.getStartDate().getTime())
+                btnReact.setText(getString(R.string.about_to_begin));
+            else
+                btnReact.setText(getString(R.string.activity_end));
         }
         stepsView.setLabels(activityInfo.getStepText().split("\\|"))
                 .setProgressColorIndicator(getResources().getColor(R.color.light_orange))
@@ -263,7 +271,8 @@ public class ActivityDetailType3Activity extends BaseActivity {
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                getGift(activityInfo, couponList.get(selectedCouponIndex).getCouponId(), couponList.get(selectedCouponIndex).getMerchantId());
+                                if (!couponList.isEmpty())
+                                    getGift(activityInfo, couponList.get(selectedCouponIndex).getCouponId(), couponList.get(selectedCouponIndex).getMerchantId());
                             }
                         }).show();
             }

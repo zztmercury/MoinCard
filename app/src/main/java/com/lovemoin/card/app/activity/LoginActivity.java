@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +17,7 @@ import com.lovemoin.card.app.net.Login;
 /**
  * Created by zzt on 15-8-25.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private EditText editUserTel;
     private EditText editPassword;
     private MoinCardApplication app;
@@ -28,6 +28,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         app = (MoinCardApplication) getApplication();
+
+        if (nfcAdapter == null && app.isFirstTimeInstalled()) {
+            final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).create();
+            dialog.show();
+            dialog.setContentView(R.layout.dialog_no_nfc);
+            Window window = dialog.getWindow();
+            window.findViewById(R.id.btn_I_know).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    app.setFirstTimeInstalled(false);
+                }
+            });
+        }
 
         editUserTel = (EditText) findViewById(R.id.editUserTel);
         editPassword = (EditText) findViewById(R.id.editPassword);
@@ -62,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         if (checkValue()) {
-            new Login(editUserTel.getText().toString(), editPassword.getText().toString()) {
+            new Login(editUserTel.getText().toString(), editPassword.getText().toString(), app.getVersionName()) {
                 @Override
                 public void onSuccess(String userTel, String userId) {
                     app.cacheUserTel(userTel);
@@ -96,4 +110,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+    }
+
 }

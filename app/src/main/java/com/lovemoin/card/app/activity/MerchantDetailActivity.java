@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -114,6 +115,7 @@ public class MerchantDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_merchant_detail);
         loader = ImageLoader.getInstance();
         initView();
+        initData();
     }
 
     private void initView() {
@@ -154,8 +156,7 @@ public class MerchantDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        pd.dismiss();
-        initData();
+        bindCard();
         if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON) && cardInfo.getCurrentPoint() == 0) {
             new AlertDialog.Builder(this)
                     .setMessage(R.string.hint_coupon_used_up)
@@ -185,12 +186,6 @@ public class MerchantDetailActivity extends BaseActivity {
                 }
             }).show();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        pd.dismiss();
     }
 
     private void loadActivities() {
@@ -243,18 +238,28 @@ public class MerchantDetailActivity extends BaseActivity {
         }
         if (cardInfo.getCardType().equals(CardInfo.TYPE_POINT)) {
             textCardDetail.setText(R.string.point_card_detail);
-        } else {
+        } else if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON)) {
             textCardDetail.setText(R.string.coupon_detail);
+        } else if (cardInfo.getCardType().equals(CardInfo.TYPE_SIGN)) {
+            textCardDetail.setText(getString(R.string.sign_card_detail));
         }
         btnConvert.setEnabled(canConvert);
         textCurrentPoint.setText(String.format("%d枚", cardInfo.getCurrentPoint()));
         textObject.setText(cardInfo.getConvertObj());
+        textObject.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         textCardCounter.setText(String.format("%d/%d", currentPoint, convertPoint));
         btnConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 app.setIsExchange(true);
                 pd.setMessage(getString(R.string.find_device_hint));
+                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        app.setIsExchange(false);
+                    }
+                });
                 pd.show();
             }
         });
@@ -367,6 +372,7 @@ public class MerchantDetailActivity extends BaseActivity {
             Intent i = new Intent(this, HomeActivity.class);
             i.putExtra(HomeActivity.KEY_SECTION, 0);
             startActivity(i);
+            finish();
         }
     }
 }

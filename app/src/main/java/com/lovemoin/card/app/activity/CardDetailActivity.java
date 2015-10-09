@@ -64,7 +64,7 @@ public class CardDetailActivity extends BaseActivity {
 
             }
         });
-        textCardCode.setText(cardInfo.getCardCode());
+        textCardCode.setText(cardInfo.getCardCode().substring(16));
         String datePattern = "yyyy-MM-dd";
         textCardDuration.setText(String.format("%s至%s", DateUtil.LongToString(cardInfo.getStartDate().getTime(), datePattern), DateUtil.LongToString(cardInfo.getEndDate().getTime(), datePattern)));
         textCardDesc.setText(cardInfo.getCardDesc());

@@ -1,6 +1,7 @@
 package com.lovemoin.card.app;
 
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 import com.lovemoin.card.app.constant.Config;
@@ -20,6 +21,10 @@ public class MoinCardApplication extends Application {
     public static final String APP_NAME = "moinCard";
     public static final String KEY_LOGIN_STATUS = "loginStatus";
     public static final String KEY_LAST_SEARCH_TIME = "lastSearchTime";
+    public static final String KEY_SHOW_NEW_VERSION_ON_START = "showNewVersionOnStart";
+    public static final String KEY_HAS_NEW_VERSION = "hasNewVersion";
+    public static final String KEY_IS_FIRST_TIME_INSTALLED = "isFirstTimeInstalled";
+    public static final String KEY_IS_USER_FIRST_TIME = "isUserFirstTime";
 
     private CardInfo currentCard;
     private boolean isExchange;
@@ -75,6 +80,22 @@ public class MoinCardApplication extends Application {
         getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_LOGIN_STATUS, loginStatus).commit();
     }
 
+    public boolean isShowNewVersionOnStart() {
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_SHOW_NEW_VERSION_ON_START, true);
+    }
+
+    public void cacheShowNewVersionOnStart(boolean isShowOnStart) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_SHOW_NEW_VERSION_ON_START, isShowOnStart).commit();
+    }
+
+    public boolean hasNewVersion() {
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_HAS_NEW_VERSION, false);
+    }
+
+    public void cacheHasNewVersion(boolean hasNewVersion) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_HAS_NEW_VERSION, hasNewVersion).commit();
+    }
+
     public void cacheLastSearchTime(long lastSearchTime) {
         getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putLong(KEY_LAST_SEARCH_TIME, lastSearchTime).commit();
     }
@@ -108,6 +129,7 @@ public class MoinCardApplication extends Application {
         cacheLastSearchTime(0);
         cardInfoDao.deleteAll();
         activityInfoDao.deleteAll();
+        setUserFirstTime(false);
     }
 
     public CardInfoDao getCardInfoDao() {
@@ -134,5 +156,39 @@ public class MoinCardApplication extends Application {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
         };
+    }
+
+    public int getVersionCode() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public String getVersionName() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isFirstTimeInstalled() {
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_IS_FIRST_TIME_INSTALLED, true);
+    }
+
+    public void setFirstTimeInstalled(boolean isFirstTimeInstalled) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_IS_FIRST_TIME_INSTALLED, isFirstTimeInstalled).commit();
+    }
+
+    public boolean isUserFirstTime() {
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_IS_USER_FIRST_TIME, true);
+    }
+
+    public void setUserFirstTime(boolean isUserFirstTime) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_IS_USER_FIRST_TIME, isUserFirstTime).commit();
     }
 }

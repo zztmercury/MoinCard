@@ -18,11 +18,12 @@ public abstract class Login {
      *  @param userTel  用户手机号
      * @param password 用户密码
      */
-    public Login(String userTel, String password) {
+    public Login(String userTel, String password, String versionName) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
         paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(password));
-        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
+//        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
+        paramMap.put(Config.KEY_OS_VERSION, versionName);
         paramMap.put(Config.KEY_MODEL, Build.MODEL);
 
         String url = Config.SERVER_URL + Config.ACTION_LOGIN;

@@ -17,10 +17,10 @@ public abstract class LoadActivityByMerchant {
     public LoadActivityByMerchant(String userId, long lastSearchTime, String merchantUUID) {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put(Config.KEY_USER_ID, userId);
-        paramsMap.put(Config.KEY_LAST_SEARCH_TIME, String.valueOf(lastSearchTime));
+        paramsMap.put(Config.KEY_LAST_SEARCH_TIME, String.valueOf(lastSearchTime / 1000));
         paramsMap.put(Config.KEY_MERCHANT_UUID, merchantUUID);
 
-        String url = Config.SERVER_URL + Config.ACTION_LOAD_ACTIVITY_LIST_BY_MERCHNAT;
+        String url = Config.SERVER_URL + Config.ACTION_LOAD_ACTIVITY_LIST_BY_MERCHANT;
 
         new NetConnection(url, paramsMap) {
             @Override

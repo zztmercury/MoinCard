@@ -2,6 +2,7 @@ package com.lovemoin.card.app.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -123,6 +124,7 @@ public class CardViewFragment extends Fragment {
         }
         textCurrentPoint.setText(String.format("%d枚", cardInfo.getCurrentPoint()));
         textObject.setText(cardInfo.getConvertObj());
+        textObject.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         textCardCounter.setText(String.format("%d/%d", currentPoint, convertPoint));
 
     }

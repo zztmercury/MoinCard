@@ -6,19 +6,19 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.net.Register;
+import com.lovemoin.card.app.net.SendCode;
 import com.lovemoin.card.app.utils.CommonUtil;
 
 /**
  * Created by zzt on 15-8-31.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
     private EditText editUserTel;
     private EditText editCode;
     private EditText editPassword;
@@ -82,19 +82,19 @@ public class RegisterActivity extends AppCompatActivity {
                     editUserTel.requestFocus();
                 } else {
                     userTel = editUserTel.getText().toString().trim();
-//                    new SendCode(userTel) {
-//                        @Override
-//                        public void onSuccess(String checkCode) {
-//                            btnSendMsg.setEnabled(false);
-//                            RegisterActivity.this.checkCode = checkCode;
-//                            timer.start();
-//                        }
-//
-//                        @Override
-//                        public void onFail(String message) {
-//                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                        }
-//                    };
+                    new SendCode(userTel) {
+                        @Override
+                        public void onSuccess(String checkCode) {
+                            btnSendMsg.setEnabled(false);
+                            RegisterActivity.this.checkCode = checkCode;
+                            timer.start();
+                        }
+
+                        @Override
+                        public void onFail(String message) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                        }
+                    };
                 }
             }
         });
@@ -108,11 +108,11 @@ public class RegisterActivity extends AppCompatActivity {
                     timer.onFinish();
                     return;
                 }
-//                if (checkCode == null || !checkCode.equals(editCode.getText().toString())) {
-//                    editCode.setError(getString(R.string.invalid_code));
-//                    editCode.requestFocus();
-//                    return;
-//                }
+                if (checkCode == null || !checkCode.equals(editCode.getText().toString())) {
+                    editCode.setError(getString(R.string.invalid_code));
+                    editCode.requestFocus();
+                    return;
+                }
                 userPwd = editPassword.getText().toString().trim();
                 if (userPwd.length() < 6) {
                     editPassword.setError(getString(R.string.invalid_pwd_length));
@@ -127,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!checkAgreement.isChecked()) {
                     new AlertDialog.Builder(RegisterActivity.this)
                             .setTitle(R.string.hint)
-                            .setMessage(R.string.uncheck_agreemend)
+                            .setMessage(R.string.unchecked_agreement)
                             .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -136,13 +136,14 @@ public class RegisterActivity extends AppCompatActivity {
                             }).show();
                     return;
                 }
-                new Register(userTel, userPwd) {
+                new Register(userTel, userPwd, app.getVersionName()) {
                     @Override
                     public void onSuccess(String userTel, String id) {
                         Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
                         app.cacheUserTel(userTel);
                         app.cachedUserId(id);
                         app.cacheLoginStatus(true);
+                        app.setUserFirstTime(true);
                         startActivity(new Intent(RegisterActivity.this, GuideActivity.class));
                         finish();
                     }
@@ -175,5 +176,10 @@ public class RegisterActivity extends AppCompatActivity {
     public void onBackPressed() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
     }
 }
