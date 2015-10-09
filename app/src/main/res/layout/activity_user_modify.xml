@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="@dimen/activity_vertical_margin"
+              android:gravity="center_horizontal"
+              android:showDividers="beginning|end|middle"
+              android:divider="@drawable/default_divider">
+
+	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="2dp"
+			android:paddingBottom="2dp"
+			android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin">
+
+		<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="2"
+				style="@style/TextStyleDetail"
+				android:gravity="right"
+				android:layout_marginRight="10dp"
+				android:text="@string/old_password" />
+
+		<EditText
+				android:id="@+id/editOldPassword"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="9"
+				android:inputType="textPassword" />
+	</LinearLayout>
+
+	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="2dp"
+			android:paddingBottom="2dp"
+			android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin">
+
+		<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="2"
+				style="@style/TextStyleDetail"
+				android:gravity="right"
+				android:layout_marginRight="10dp"
+				android:text="@string/new_password" />
+
+		<EditText
+				android:id="@+id/editNewPassword"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="9"
+				android:inputType="textPassword" />
+	</LinearLayout>
+
+	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="2dp"
+			android:paddingBottom="2dp"
+			android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin">
+
+		<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="2"
+				style="@style/TextStyleDetail"
+				android:gravity="right"
+				android:layout_marginRight="10dp"
+				android:text="@string/confirm_password" />
+
+		<EditText
+				android:id="@+id/editConfirmPassword"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="9"
+				android:inputType="textPassword" />
+	</LinearLayout>
+</LinearLayout>

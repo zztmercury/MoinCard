@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:showDividers="middle"
+              android:divider="@drawable/default_divider"
+              android:padding="@dimen/activity_horizontal_margin">
+
+	<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="18sp"
+			android:id="@+id/textStoreCount" />
+
+	<include layout="@layout/constant_list" />
+</LinearLayout>

@@ -28,4 +28,10 @@ public abstract class LazyFragment extends Fragment {
 
     protected void onInvisible() {
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        lazyLoad();
+    }
 }

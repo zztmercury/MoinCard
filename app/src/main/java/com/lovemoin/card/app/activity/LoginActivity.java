@@ -1,11 +1,14 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
@@ -14,10 +17,11 @@ import com.lovemoin.card.app.net.Login;
 /**
  * Created by zzt on 15-8-25.
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends BaseActivity {
     private EditText editUserTel;
     private EditText editPassword;
     private MoinCardApplication app;
+    private TextView textFindBackPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +29,36 @@ public class LoginActivity extends ActionBarActivity {
         setContentView(R.layout.activity_login);
         app = (MoinCardApplication) getApplication();
 
+        if (nfcAdapter == null && app.isFirstTimeInstalled()) {
+            final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).create();
+            dialog.show();
+            dialog.setContentView(R.layout.dialog_no_nfc);
+            Window window = dialog.getWindow();
+            window.findViewById(R.id.btn_I_know).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    app.setFirstTimeInstalled(false);
+                }
+            });
+        }
+
         editUserTel = (EditText) findViewById(R.id.editUserTel);
         editPassword = (EditText) findViewById(R.id.editPassword);
+        findViewById(R.id.text_find_back_password).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setMessage(R.string.msg_modify_pwd_desc)
+                        .setTitle(R.string.hint)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
 
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +76,7 @@ public class LoginActivity extends ActionBarActivity {
 
     private void login() {
         if (checkValue()) {
-            new Login(editUserTel.getText().toString(), editPassword.getText().toString()) {
+            new Login(editUserTel.getText().toString(), editPassword.getText().toString(), app.getVersionName()) {
                 @Override
                 public void onSuccess(String userTel, String userId) {
                     app.cacheUserTel(userTel);
@@ -63,7 +95,8 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     private void register() {
-
+        startActivity(new Intent(this, RegisterActivity.class));
+        finish();
     }
 
     private boolean checkValue() {
@@ -77,4 +110,10 @@ public class LoginActivity extends ActionBarActivity {
         }
         return true;
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+    }
+
 }

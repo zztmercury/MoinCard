@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/list_item_record_view"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:orientation="horizontal"
+              android:gravity="center_vertical">
+
+	<TextView
+			android:id="@+id/textRecordDate"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:textSize="14sp"
+			android:textColor="@color/black"
+			android:text="2015-05-02 12：20：10" />
+
+	<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" />
+
+	<TextView
+			android:id="@+id/textRecordDesc"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textSize="14sp"
+			android:textColor="@color/black"
+			android:layout_marginRight="8dp"
+			android:text="兑换+15" />
+
+</LinearLayout>

@@ -1,25 +1,34 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
+import com.lovemoin.card.app.fragment.MyFragment;
+import com.lovemoin.card.app.net.CheckVersion;
+import com.lovemoin.card.app.net.FileDownloader;
+import com.lovemoin.card.app.utils.DateUtil;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
 import java.util.Locale;
 
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends BaseActivity {
 
+    public static final String KEY_SECTION = "section";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too
@@ -49,7 +58,7 @@ public class HomeActivity extends ActionBarActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
@@ -90,7 +99,7 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
-
+        checkVersion();
     }
 
 
@@ -109,7 +118,8 @@ public class HomeActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_help) {
+            startActivity(new Intent(HomeActivity.this, GuideActivity.class));
             return true;
         }
 
@@ -129,6 +139,51 @@ public class HomeActivity extends ActionBarActivity {
             drawableTop.setBounds(0, 0, DisplayUtil.dp2Px(this, width), DisplayUtil.dp2Px(this, height));
             radioButton.setCompoundDrawables(null, drawableTop, null, null);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        ((MoinCardApplication) getApplication()).setIsExchange(false);
+        mViewPager.setCurrentItem(getIntent().getIntExtra(KEY_SECTION, mViewPager.getCurrentItem()));
+        super.onResume();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void checkVersion() {
+        new CheckVersion(app.getVersionCode()) {
+            @Override
+            public void onSuccess(final String apkName) {
+                app.cacheHasNewVersion(true);
+                if (app.isShowNewVersionOnStart()) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle(R.string.hint)
+                            .setMessage(R.string.hint_found_new_version)
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    FileDownloader fileDownloader = new FileDownloader(HomeActivity.this);
+                                    fileDownloader.download(apkName, "Download", "MoinCard" + DateUtil.LongToString(System.currentTimeMillis(), "yyyyMMdd") + ".apk");
+                                }
+                            })
+                            .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+
+                }
+            }
+
+            @Override
+            public void onFail(String message) {
+                app.cacheHasNewVersion(false);
+            }
+        };
     }
 
     /**
@@ -180,6 +235,10 @@ public class HomeActivity extends ActionBarActivity {
             switch (position) {
                 case 0:
                     return new CardListFragment();
+                case 1:
+                    return new ActivityListFragment();
+                case 2:
+                    return new MyFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

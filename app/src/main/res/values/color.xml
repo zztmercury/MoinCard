@@ -4,8 +4,15 @@
 	<color name="dark_gray">#505050</color>
 	<color name="light_gray">#E0E0E0</color>
 	<color name="gray">#A0A0A0</color>
-	<color name="white">#FFFFFF</color>
+	<color name="white">#FFFFFFFF</color>
 	<color name="red">#FB3434</color>
+	<color name="light_orange">#FFF7AB49</color>
+	<color name="yellow">#F6F700</color>
+
+	<color name="itembackcolor">#f0f0f0</color>
+	<color name="secondary_text">#737373</color>
 
 	<color name="split_line">#ceced3</color>
+	<color name="activity_text">#993333</color>
+
 </resources>

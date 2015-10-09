@@ -2,12 +2,18 @@
 
 	<!-- Base application theme. -->
 	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!-- Customize your theme here. -->
 		<item name="android:actionBarStyle">@style/AppActionBarStyle</item>
 		<item name="android:editTextStyle">@style/AppEditTextStyle</item>
-		<!-- Customize your theme here. -->
+		<item name="android:textColor">@color/black</item>
 	</style>
 
-	<style name="AppActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+	<style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+		<item name="android:windowFullscreen">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+	</style>
+
+	<style name="AppActionBarStyle" parent="Base.Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:displayOptions">showTitle</item>
 		<!--<item name="android:titleTextStyle"></item>-->
 	</style>
@@ -21,6 +27,31 @@
 	<style name="AppEditTextStyle" parent="Widget.AppCompat.EditText">
 		<item name="android:background">@android:drawable/edit_text</item>
 		<item name="android:textCursorDrawable">@null</item>
+	</style>
+
+	<style name="TextStyleTitle">
+		<item name="android:textSize">18sp</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
+
+	<style name="TextStyleDetail">
+		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">@color/black</item>
+	</style>
+
+	<style name="TextStyleDetailSecondary">
+		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">#727272</item>
+	</style>
+
+	<style name="TextStyleConvert">
+		<item name="android:textSize">22sp</item>
+		<item name="android:textColor">@color/yellow</item>
+	</style>
+
+	<style name="ConfirmButton">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:background">@drawable/btn_red_corner_selector</item>
 	</style>
 
 </resources>

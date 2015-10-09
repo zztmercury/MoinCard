@@ -7,6 +7,9 @@ import java.util.Locale;
 
 /**
  * Created by zzt on 15-8-24.
+ *
+ * @author zzt
+ *         日期辅助类
  */
 public class DateUtil {
     public static Long StringToLong(String timeStr, String pattern) {
@@ -24,7 +27,14 @@ public class DateUtil {
         return format.format(new Date(timeMills));
     }
 
+    /**
+     * 日期间隔
+     *
+     * @param date1 需对比的日期
+     * @param date2 参照日期
+     * @return date2 - date1 的天数
+     */
     public static int dateDifference(Long date1, Long date2) {
-        return new Long((date2 - date1) / (1000 * 60 * 60 * 24)).intValue();
+        return Long.valueOf((long) Math.floor((date2 - date1) / (1000 * 60 * 60 * 24.0))).intValue();
     }
 }

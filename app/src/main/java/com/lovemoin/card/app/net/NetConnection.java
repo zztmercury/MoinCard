@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.net;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.entity.Response;
 
@@ -11,9 +12,16 @@ import java.util.Map;
 
 /**
  * Created by zzt on 15-8-24.
+ * 网络通讯基类
+ * @author zzt
  */
 public abstract class NetConnection {
-
+    /**
+     * 网络通讯
+     *
+     * @param url      通讯地址
+     * @param paramMap 参数对
+     */
     public NetConnection(final String url, final Map<String, String> paramMap) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -27,7 +35,7 @@ public abstract class NetConnection {
                     }
                     paramStr.deleteCharAt(paramStr.length() - 1);
 
-                    System.out.println("request: " + paramStr.toString());
+                    Log.d("NetConnection", url + "?" + paramStr.toString());
 
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     connection.setConnectTimeout(4000);
