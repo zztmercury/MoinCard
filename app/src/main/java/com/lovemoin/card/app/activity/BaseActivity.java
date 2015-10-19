@@ -10,13 +10,14 @@ import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
 import com.lovemoin.card.app.MoinCardApplication;
+import com.lovemoin.card.app.constant.ResultCode;
 
 /**
  * Created by zzt on 15-9-22.
  */
 public class BaseActivity extends AppCompatActivity {
-    public static final int EXCHANGE_SUCCESS = RESULT_FIRST_USER + 1;
     protected MoinCardApplication app;
     protected ProgressDialog pd;
     protected NfcAdapter nfcAdapter;
@@ -41,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
             if (!app.isExchange()) {
                 startActivity(intent);
             } else
-                startActivityForResult(intent, EXCHANGE_SUCCESS);
+                startActivityForResult(intent, 100);
         } else {
             setIntent(intent);
         }
@@ -87,9 +88,11 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case EXCHANGE_SUCCESS:
-                pd.dismiss();
-                break;
+            case 100:
+                if (resultCode == ResultCode.EXCHANGE_SUCCESS) {
+                    pd.dismiss();
+                    break;
+                }
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }

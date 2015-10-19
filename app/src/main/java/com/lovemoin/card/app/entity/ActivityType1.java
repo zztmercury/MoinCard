@@ -2,6 +2,7 @@ package com.lovemoin.card.app.entity;
 
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

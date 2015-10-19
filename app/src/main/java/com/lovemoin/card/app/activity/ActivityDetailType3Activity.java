@@ -9,7 +9,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.graphics.Palette;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.anton46.stepsview.StepsView;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
@@ -20,17 +25,18 @@ import com.lovemoin.card.app.db.CardInfoDao;
 import com.lovemoin.card.app.dto.CouponDto;
 import com.lovemoin.card.app.entity.ActivityType3;
 import com.lovemoin.card.app.net.AttendActivity;
-import com.lovemoin.card.app.net.GetGift;
+import com.lovemoin.card.app.net.GetPrize;
 import com.lovemoin.card.app.net.GetRelateMerchantCoupon;
 import com.lovemoin.card.app.net.LoadActivityDetail;
 import com.lovemoin.card.app.utils.DateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import de.greenrobot.dao.query.QueryBuilder;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
+
+import de.greenrobot.dao.query.QueryBuilder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zzt on 15-9-2.
@@ -287,7 +293,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
     private void getGift(final ActivityType3 activityInfo, @Nullable String couponId, @Nullable String merchantId) {
         pd.setMessage(getString(R.string.getting_gift));
         pd.show();
-        new GetGift(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), merchantId, couponId) {
+        new GetPrize(activityInfo.getActivityId(), userId, activityInfo.getType(), activityInfo.getNum(), merchantId, couponId) {
 
             @Override
             public void onSuccess(String img, String giftName) {

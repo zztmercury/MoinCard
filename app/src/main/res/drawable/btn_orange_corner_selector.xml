@@ -6,8 +6,8 @@
 			         android:left="2dp"
 			         android:right="2dp"
 			         android:top="2dp" />
-			<corners android:radius="10dp" />
-			<solid android:color="#fff7ab49" />
+			<corners android:radius="5dp" />
+			<solid android:color="#f8c84b" />
 		</shape>
 	</item>
 	<item android:state_enabled="true" android:state_pressed="true">
@@ -16,8 +16,8 @@
 			         android:left="2dp"
 			         android:right="2dp"
 			         android:top="2dp" />
-			<corners android:radius="10dp" />
-			<solid android:color="#fff78b45" />
+			<corners android:radius="5dp" />
+			<solid android:color="#c69c40" />
 		</shape>
 	</item>
 

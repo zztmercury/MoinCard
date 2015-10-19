@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.ImageWallAdapter;
 import com.lovemoin.card.app.constant.Config;

@@ -12,9 +12,11 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Command;
+import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
 import com.lovemoin.card.app.entity.DeviceInfo;
@@ -23,12 +25,13 @@ import com.lovemoin.card.app.net.GetPoint;
 import com.lovemoin.card.app.net.QuickExchange;
 import com.lovemoin.card.app.net.SignIn;
 import com.lovemoin.card.app.utils.CommonUtil;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by zzt on 15-8-24.
@@ -198,7 +201,7 @@ public class NfcActivity extends Activity {
                         new QuickExchange(checkValue, app.getCachedUserId()) {
                             @Override
                             public void onSuccess() {
-                                setResult(BaseActivity.EXCHANGE_SUCCESS);
+                                setResult(ResultCode.EXCHANGE_SUCCESS);
                                 pd.dismiss();
                                 app.setIsExchange(false);
                                 app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() - app.getCurrentCard().getConvertPoint());
@@ -301,7 +304,7 @@ public class NfcActivity extends Activity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(NfcActivity.this, merchantId, Toast.LENGTH_LONG).show();
+                Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
                 pd.dismiss();
                 finish();
             }

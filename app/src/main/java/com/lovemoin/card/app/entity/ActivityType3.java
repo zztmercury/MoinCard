@@ -2,6 +2,7 @@ package com.lovemoin.card.app.entity;
 
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +22,6 @@ public class ActivityType3 extends ActivityInfo {
     private int totalStep;
     private String stepText;
     private int memberCount;
-    private int num;
 
 
     public ActivityType3(ActivityInfo activityInfo) throws JSONException {
@@ -50,7 +50,7 @@ public class ActivityType3 extends ActivityInfo {
         totalStep = object.getInt(Config.KEY_ACTIVITY_TOTAL_STEP);
         stepText = object.getString(Config.KEY_ACTIVITY_STEP_TEXT);
         memberCount = object.getInt(Config.KEY_ACTIVITY_MEMBER_COUNT);
-        num = object.getInt(Config.KEY_ACTIVITY_NUM);
+        setNum(object.getInt(Config.KEY_ACTIVITY_NUM));
         setAddress(object.getString(Config.KEY_ACTIVITY_ADDR));
     }
 
@@ -88,14 +88,6 @@ public class ActivityType3 extends ActivityInfo {
 
     public void setMemberCount(int memberCount) {
         this.memberCount = memberCount;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
     }
 
     public List<String> getMerchantIdList() {

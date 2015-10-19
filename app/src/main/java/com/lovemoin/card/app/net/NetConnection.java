@@ -2,10 +2,15 @@ package com.lovemoin.card.app.net;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.entity.Response;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
@@ -13,6 +18,7 @@ import java.util.Map;
 /**
  * Created by zzt on 15-8-24.
  * 网络通讯基类
+ *
  * @author zzt
  */
 public abstract class NetConnection {

@@ -4,7 +4,8 @@
               android:background="#323232"
               android:layout_height="match_parent"
               android:id="@+id/layoutContainer"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:fitsSystemWindows="true">
 
 	<ImageView
 			android:layout_width="match_parent"

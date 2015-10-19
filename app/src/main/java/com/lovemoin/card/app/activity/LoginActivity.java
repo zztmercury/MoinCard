@@ -2,16 +2,19 @@ package com.lovemoin.card.app.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.net.Login;
 
 /**
@@ -21,13 +24,16 @@ public class LoginActivity extends BaseActivity {
     private EditText editUserTel;
     private EditText editPassword;
     private MoinCardApplication app;
-    private TextView textFindBackPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         app = (MoinCardApplication) getApplication();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
 
         if (nfcAdapter == null && app.isFirstTimeInstalled()) {
             final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).create();
@@ -43,8 +49,8 @@ public class LoginActivity extends BaseActivity {
             });
         }
 
-        editUserTel = (EditText) findViewById(R.id.editUserTel);
-        editPassword = (EditText) findViewById(R.id.editPassword);
+        editUserTel = (EditText) findViewById(R.id.edit_user_tel);
+        editPassword = (EditText) findViewById(R.id.edit_password);
         findViewById(R.id.text_find_back_password).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,13 +66,13 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
             }
         });
-        findViewById(R.id.btnRegister).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 register();
@@ -82,7 +88,7 @@ public class LoginActivity extends BaseActivity {
                     app.cacheUserTel(userTel);
                     app.cachedUserId(userId);
                     app.cacheLoginStatus(true);
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    setResult(ResultCode.LOGIN_SUCCESS);
                     finish();
                 }
 
@@ -104,10 +110,10 @@ public class LoginActivity extends BaseActivity {
             editUserTel.setError(getString(R.string.user_tel_can_not_be_empty));
             return false;
         }
-        if (TextUtils.isEmpty(editPassword.getText())) {
-            editPassword.setError(getString(R.string.password_can_not_be_empty));
-            return false;
-        }
+//        if (TextUtils.isEmpty(editPassword.getText())) {
+//            editPassword.setError(getString(R.string.password_can_not_be_empty));
+//            return false;
+//        }
         return true;
     }
 

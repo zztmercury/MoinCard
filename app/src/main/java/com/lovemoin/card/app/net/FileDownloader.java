@@ -7,11 +7,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.utils.FileUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 

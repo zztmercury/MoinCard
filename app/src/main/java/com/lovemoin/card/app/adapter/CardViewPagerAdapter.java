@@ -3,6 +3,7 @@ package com.lovemoin.card.app.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.fragment.CardViewFragment;
 

@@ -6,7 +6,8 @@
               android:layout_height="match_parent"
               android:showDividers="middle"
               android:divider="@drawable/default_divider"
-              android:padding="@dimen/activity_horizontal_margin">
+              android:padding="@dimen/activity_horizontal_margin"
+              android:fitsSystemWindows="true">
 
 	<TextView
 			android:layout_width="fill_parent"

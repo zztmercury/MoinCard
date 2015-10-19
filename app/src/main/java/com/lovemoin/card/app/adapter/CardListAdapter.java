@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.activity.MerchantDetailActivity;
@@ -65,28 +66,28 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
         imageLoader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), holder.imgCard,
                 new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
+                    @Override
+                    public void onLoadingStarted(String imageUri, View view) {
 
-            }
+                    }
 
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                ((ImageView) view).setImageResource(R.drawable.nocard);
-            }
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                        ((ImageView) view).setImageResource(R.drawable.nocard);
+                    }
 
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                int height = loadedImage.getHeight();
-                Bitmap scaledImg = Bitmap.createBitmap(loadedImage, 0, 0, loadedImage.getWidth(), 80);
-                ((ImageView) view).setImageBitmap(scaledImg);
-            }
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        int height = loadedImage.getHeight();
+                        Bitmap scaledImg = Bitmap.createBitmap(loadedImage, 0, 0, loadedImage.getWidth(), 80);
+                        ((ImageView) view).setImageBitmap(scaledImg);
+                    }
 
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
 
-            }
-        });
+                    }
+                });
 
         if (DateUtil.dateDifference(System.currentTimeMillis(), cardInfo.getEndDate().getTime()) < 0) {
             holder.imgCardOverdueStat.setVisibility(View.VISIBLE);

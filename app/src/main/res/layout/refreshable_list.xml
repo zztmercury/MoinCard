@@ -1,14 +1,28 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                              xmlns:tools="http://schemas.android.com/tools"
-                                              android:layout_width="fill_parent"
-                                              android:layout_height="fill_parent"
-                                              tools:context="com.lovemoin.card.app.fragment.CardListFragment"
-                                              android:id="@+id/layoutSwipe">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layoutSwipe"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-	<android.support.v7.widget.RecyclerView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:id="@+id/list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/white" />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/img_gift_pack"
+        android:visibility="gone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/gift_pack"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

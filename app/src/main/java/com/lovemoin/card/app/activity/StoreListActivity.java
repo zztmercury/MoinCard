@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.StoreListAdapter;
 import com.lovemoin.card.app.constant.Config;

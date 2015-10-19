@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 
@@ -32,7 +33,7 @@ public class MainActivity extends Activity {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
         } else {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, EntranceActivity.class));
             finish();
         }
     }

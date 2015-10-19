@@ -6,15 +6,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.ActivityNameListAdapter;
@@ -163,21 +166,7 @@ public class MerchantDetailActivity extends BaseActivity {
                     .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
-
-                            new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
-                                    cardInfoDao.delete(app.getCurrentCard());
-                                    dialog.dismiss();
-                                    onBackPressed();
-                                }
-
-                                @Override
-                                public void onFail(String message) {
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                }
-                            };
+                            deleteCard(dialog);
                         }
                     }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
                 @Override
@@ -236,12 +225,16 @@ public class MerchantDetailActivity extends BaseActivity {
             imgCardCount.setImageResource(getResources().getIdentifier("q" + index, "drawable", getPackageName()));
             textNeededPoint.setText(String.format("再积%d个积点可兑换", convertPoint - currentPoint));
         }
-        if (cardInfo.getCardType().equals(CardInfo.TYPE_POINT)) {
-            textCardDetail.setText(R.string.point_card_detail);
-        } else if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON)) {
-            textCardDetail.setText(R.string.coupon_detail);
-        } else if (cardInfo.getCardType().equals(CardInfo.TYPE_SIGN)) {
-            textCardDetail.setText(getString(R.string.sign_card_detail));
+        switch (cardInfo.getCardType()) {
+            case CardInfo.TYPE_POINT:
+                textCardDetail.setText(R.string.point_card_detail);
+                break;
+            case CardInfo.TYPE_COUPON:
+                textCardDetail.setText(R.string.coupon_detail);
+                break;
+            case CardInfo.TYPE_SIGN:
+                textCardDetail.setText(getString(R.string.sign_card_detail));
+                break;
         }
         btnConvert.setEnabled(canConvert);
         textCurrentPoint.setText(String.format("%d枚", cardInfo.getCurrentPoint()));
@@ -251,16 +244,41 @@ public class MerchantDetailActivity extends BaseActivity {
         btnConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.setIsExchange(true);
-                pd.setMessage(getString(R.string.find_device_hint));
-                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        dialog.dismiss();
-                        app.setIsExchange(false);
-                    }
-                });
-                pd.show();
+                if (nfcAdapter == null) {
+                    final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MerchantDetailActivity.this).create();
+                    dialog.show();
+                    dialog.setContentView(R.layout.dialog_no_nfc);
+                    Window window = dialog.getWindow();
+                    window.findViewById(R.id.btn_I_know).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            app.setFirstTimeInstalled(false);
+                        }
+                    });
+                } else if (!nfcAdapter.isEnabled()) {
+                    new AlertDialog.Builder(MerchantDetailActivity.this)
+                            .setMessage(R.string.hint_enable_nfc)
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                } else {
+                    app.setIsExchange(true);
+                    pd.setMessage(getString(R.string.find_device_hint));
+                    pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.dismiss();
+                            app.setIsExchange(false);
+                        }
+                    });
+                    pd.show();
+                }
             }
         });
 
@@ -329,20 +347,7 @@ public class MerchantDetailActivity extends BaseActivity {
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialog, int which) {
-                                new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
-                                        cardInfoDao.delete(app.getCurrentCard());
-                                        dialog.dismiss();
-                                        onBackPressed();
-                                    }
-
-                                    @Override
-                                    public void onFail(String message) {
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                    }
-                                };
+                                deleteCard(dialog);
                             }
                         })
                         .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
@@ -374,5 +379,22 @@ public class MerchantDetailActivity extends BaseActivity {
             startActivity(i);
             finish();
         }
+    }
+
+    private void deleteCard(final DialogInterface dialog) {
+        new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
+                cardInfoDao.delete(app.getCurrentCard());
+                dialog.dismiss();
+                onBackPressed();
+            }
+
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+        };
     }
 }

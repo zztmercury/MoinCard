@@ -5,7 +5,8 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:background="@drawable/bg_card_selector"
-              android:id="@+id/rootView">
+              android:id="@+id/rootView"
+              android:fitsSystemWindows="true">
 
 	<android.support.v4.view.ViewPager
 			android:id="@+id/pager"
@@ -37,7 +38,7 @@
 				android:padding="5dp"
 				android:textColor="@color/white"
 				android:text="@string/click_to_get_point"
-				android:background="@drawable/bg_border_stroke" />
+				android:background="@drawable/bg_border_white_dash" />
 
 	</LinearLayout>
 

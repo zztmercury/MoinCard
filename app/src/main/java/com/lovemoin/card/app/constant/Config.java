@@ -11,7 +11,7 @@ public class Config {
      * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
-    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
+    public static final String SERVER_URL = "http://182.92.3.209:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
 
     // 通信接口配置
@@ -22,7 +22,7 @@ public class Config {
     public static final String ACTION_ATTEND_ACTIVITY = "activityActionAjax/activityInfo!attend.action";
     public static final String ACTION_LOAD_MERCHANT_INFO = "merchantActionAjax/merchantInfo!findMerchant.action";
     public static final String ACTION_LOAD_ACTIVITY_DETAIL = "activityActionAjax/activityInfo!detail.action";
-    public static final String ACTION_GET_GIFT = "activityActionAjax/activityInfo!getThePrize.action";
+    public static final String ACTION_GET_PRIZE = "activityActionAjax/activityInfo!getThePrize.action";
     public static final String ACTION_GET_RELATE_MERCHANT_COUPON = "activityActionAjax/activityInfo!getMerchantAndPointCard.action";
     public static final String ACTION_LOAD_CARD_RECORD = "cardUserHisActionAjax/ajax!queryCardHisListByAjax.action";
     public static final String ACTION_LOAD_STORE_LIST = "merchantStoreActionAjax/merchantStoreInfo!findStore.action";
@@ -36,6 +36,10 @@ public class Config {
     public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHANT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
     public static final String ACTION_MODIFY_USER = "cardUserActionAjax/allMethod!modifyCardUserPwd.action";
     public static final String ACTION_CHECK_VERSION = "cardUserActionAjax/allMethod!checkVersionAjax.action";
+    public static final String ACTION_GET_GIFT_FOR_NEW_USER_BY_CODE = "discountActionAjax/getGiftForNewUserByCode.action";
+    public static final String ACTION_LOAD_GIFT_PACK_LIST = "discountActionAjax/getList.action";
+    public static final String ACTION_GET_GIFT = "discountActionAjax/getGift.action";
+    public static final String ACTIOB_HAS_NUM_1_ACT = "activityActionAjax/activityInfo!hasNum1.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -77,7 +81,6 @@ public class Config {
     public static final String KEY_MERCHANT_IMG_COLOR = "color";
 
 
-
     // 用户相关key
     public static final String KEY_USER_TEL = "userTel";
     public static final String KEY_USER_PASSWORD = "userPwd";
@@ -87,6 +90,7 @@ public class Config {
     public static final String KEY_CARD_USER_ID = "cardUserId";
     public static final String KEY_OS_VERSION = "OSVersion";
     public static final String KEY_MODEL = "model";
+    public static final String KEY_CHECK_CODE = "checkCode";
 
     // 服务器返回结果key
     public static final String KEY_SUCCESS = "success";
@@ -127,6 +131,14 @@ public class Config {
     public static final String KEY_OPERATE_TYPE = "operateType";
     public static final String KEY_OPERATE_POINT = "point";
 
+    // 礼包key
+    public static final String KEY_GIFT_PACK = "gift_pack";
+    public static final String KEY_GIFT_CODE = "code";
+    public static final String KEY_GIFT_ID = "giftId";
+    public static final String KEY_GIFT_PRIORITY = "level";
+    public static final String KEY_GIFT_COMMENT = "comment";
+    public static final String KEY_GIFT_IGNORE = "ignore";
+    public static final String KEY_NEED_CODE = "needCode";
 
     // 通用key
     public static final String KEY_ID = "id";

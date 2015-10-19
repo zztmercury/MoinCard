@@ -3,6 +3,7 @@ package com.lovemoin.card.app.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import com.lovemoin.card.app.R;
 
 /**

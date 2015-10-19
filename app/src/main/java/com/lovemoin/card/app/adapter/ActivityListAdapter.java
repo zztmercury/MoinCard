@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.activity.ActivityDetailType1Activity;
 import com.lovemoin.card.app.activity.ActivityDetailType3Activity;

@@ -2,7 +2,10 @@ package com.lovemoin.card.app.net;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+
 import com.lovemoin.card.app.constant.Config;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,20 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by zzt on 15-9-10.
- * 领取奖品
- *
- * @author zzt
+ * Created by zzt on 15-10-13.
  */
 public abstract class GetGift {
-    public GetGift(@NonNull String activityId, @NonNull String userId, int type, int num, @Nullable String merchantId, @Nullable String pointCardId) {
+    public GetGift(@NonNull String userId, @NonNull String giftId, @Nullable String code) {
         Map<String, String> paramsMap = new HashMap<>();
-        paramsMap.put(Config.KEY_ACTIVITY_ID, activityId);
         paramsMap.put(Config.KEY_USER_ID, userId);
-        paramsMap.put(Config.KEY_ACTIVITY_TYPE, String.valueOf(type));
-        paramsMap.put(Config.KEY_ACTIVITY_NUM, String.valueOf(num));
-        paramsMap.put(Config.KEY_MERCHANT_UUID, merchantId);
-        paramsMap.put(Config.KEY_POINT_CARD_ID, pointCardId);
+        paramsMap.put(Config.KEY_GIFT_ID, giftId);
+        if (!TextUtils.isEmpty(code))
+            paramsMap.put(Config.KEY_GIFT_CODE, code);
 
         String url = Config.SERVER_URL + Config.ACTION_GET_GIFT;
 
@@ -31,12 +29,13 @@ public abstract class GetGift {
             @Override
             public void onSuccess(String result) {
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String giftImg = jsonObject.getString(Config.KEY_GIFT_IMG);
-                    String giftName = jsonObject.getString(Config.KEY_GIFT_NAME);
-                    GetGift.this.onSuccess(giftImg, giftName);
+                    JSONObject object = new JSONObject(result);
+                    String giftName = object.getString(Config.KEY_GIFT_NAME);
+                    String giftImg = object.getString(Config.KEY_GIFT_IMG);
+                    GetGift.this.onSuccess(giftName, giftImg);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    GetGift.this.onFail("解析错误：" + e.getMessage());
                 }
             }
 
@@ -47,7 +46,7 @@ public abstract class GetGift {
         };
     }
 
-    public abstract void onSuccess(String img, String giftName);
+    public abstract void onSuccess(String giftName, String giftImg);
 
     public abstract void onFail(String message);
 }

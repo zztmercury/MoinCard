@@ -4,6 +4,7 @@ import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
 import com.lovemoin.card.app.entity.ActivityType1;
 import com.lovemoin.card.app.entity.ActivityType3;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

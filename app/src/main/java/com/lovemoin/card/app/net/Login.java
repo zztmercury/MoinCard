@@ -1,8 +1,10 @@
 package com.lovemoin.card.app.net;
 
 import android.os.Build;
+
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.utils.CommonUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +17,8 @@ import java.util.Map;
 public abstract class Login {
     /**
      * 登陆
-     *  @param userTel  用户手机号
+     *
+     * @param userTel  用户手机号
      * @param password 用户密码
      */
     public Login(String userTel, String password, String versionName) {

@@ -10,9 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
-import com.lovemoin.card.app.activity.LoginActivity;
+import com.lovemoin.card.app.activity.EntranceActivity;
 import com.lovemoin.card.app.activity.UserModifyActivity;
 
 /**
@@ -23,6 +24,7 @@ public class MyFragment extends LazyFragment {
     private boolean isPrepared = false;
     private TextView textAccount;
     private Button btnExit;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class MyFragment extends LazyFragment {
             @Override
             public void onClick(View v) {
                 app.reset();
-                startActivity(new Intent(getContext(), LoginActivity.class));
+                startActivity(new Intent(getContext(), EntranceActivity.class));
                 getActivity().finish();
             }
         });

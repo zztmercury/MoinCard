@@ -3,14 +3,21 @@ package com.lovemoin.card.app.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.*;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.net.Register;
 import com.lovemoin.card.app.net.SendCode;
 import com.lovemoin.card.app.utils.CommonUtil;
@@ -25,7 +32,6 @@ public class RegisterActivity extends BaseActivity {
     private EditText editRePassword;
     private Button btnSendMsg;
     private Button btnReg;
-    private CheckBox checkAgreement;
     private TextView textLoginAgreement;
 
     private MoinCardApplication app;
@@ -40,20 +46,24 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
         initView();
         initData();
         initListener();
     }
 
     private void initView() {
-        editUserTel = (EditText) findViewById(R.id.editUserTel);
-        editCode = (EditText) findViewById(R.id.editCode);
-        editPassword = (EditText) findViewById(R.id.editPassword);
-        editRePassword = (EditText) findViewById(R.id.editRePassword);
+        editUserTel = (EditText) findViewById(R.id.edit_user_tel);
+        editCode = (EditText) findViewById(R.id.edit_code);
+        editPassword = (EditText) findViewById(R.id.edit_password);
+        editRePassword = (EditText) findViewById(R.id.edit_re_password);
         btnSendMsg = (Button) findViewById(R.id.btnSendMsg);
-        btnReg = (Button) findViewById(R.id.btnReg);
-        checkAgreement = (CheckBox) findViewById(R.id.checkAgreement);
-        textLoginAgreement = (TextView) findViewById(R.id.textLoginAgreement);
+        btnReg = (Button) findViewById(R.id.btn_register);
+        textLoginAgreement = (TextView) findViewById(R.id.text_login_agreement);
         textLoginAgreement.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
     }
 
@@ -124,19 +134,7 @@ public class RegisterActivity extends BaseActivity {
                     editRePassword.requestFocus();
                     return;
                 }
-                if (!checkAgreement.isChecked()) {
-                    new AlertDialog.Builder(RegisterActivity.this)
-                            .setTitle(R.string.hint)
-                            .setMessage(R.string.unchecked_agreement)
-                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                    return;
-                }
-                new Register(userTel, userPwd, app.getVersionName()) {
+                new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName()) {
                     @Override
                     public void onSuccess(String userTel, String id) {
                         Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
@@ -144,7 +142,7 @@ public class RegisterActivity extends BaseActivity {
                         app.cachedUserId(id);
                         app.cacheLoginStatus(true);
                         app.setUserFirstTime(true);
-                        startActivity(new Intent(RegisterActivity.this, GuideActivity.class));
+                        setResult(ResultCode.REGISTER_SUCCESS);
                         finish();
                     }
 
@@ -169,12 +167,17 @@ public class RegisterActivity extends BaseActivity {
                         }).show();
             }
         });
-
+        findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.db.CardInfo;
 
 /**
@@ -15,7 +17,7 @@ public class ConvertSuccessActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_convert_success);
-        setResult(EXCHANGE_SUCCESS);
+        setResult(ResultCode.EXCHANGE_SUCCESS);
         CardInfo cardInfo = app.getCurrentCard();
         ((TextView) findViewById(R.id.text_convert_object)).setText(cardInfo.getConvertObj());
         findViewById(R.id.layoutContainer).setOnClickListener(new View.OnClickListener() {

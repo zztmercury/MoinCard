@@ -9,17 +9,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.fragment.ActivityListFragment;
 import com.lovemoin.card.app.fragment.CardListFragment;
 import com.lovemoin.card.app.fragment.MyFragment;
 import com.lovemoin.card.app.net.CheckVersion;
 import com.lovemoin.card.app.net.FileDownloader;
+import com.lovemoin.card.app.net.HasNum1Act;
 import com.lovemoin.card.app.utils.DateUtil;
 import com.lovemoin.card.app.utils.DisplayUtil;
 
@@ -100,6 +108,22 @@ public class HomeActivity extends BaseActivity {
         });
 
         checkVersion();
+//        if (app.isUserFirstTime()) {
+        new HasNum1Act(app.getCachedUserId()) {
+            @Override
+            protected void onSuccess(String activityId) {
+                Intent i = new Intent(getApplicationContext(), GiftPackActivity.class);
+                i.putExtra(GiftPackActivity.TYPE, GiftPackActivity.TYPE_NEW_USER);
+                i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                startActivity(i);
+            }
+
+            @Override
+            protected void onFail(String message) {
+
+            }
+        };
+//        }
     }
 
 

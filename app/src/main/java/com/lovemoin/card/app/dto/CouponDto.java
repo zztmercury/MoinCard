@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.dto;
 
 import com.lovemoin.card.app.constant.Config;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

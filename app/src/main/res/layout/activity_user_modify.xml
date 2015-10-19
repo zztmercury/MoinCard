@@ -6,7 +6,8 @@
               android:layout_marginTop="@dimen/activity_vertical_margin"
               android:gravity="center_horizontal"
               android:showDividers="beginning|end|middle"
-              android:divider="@drawable/default_divider">
+              android:divider="@drawable/default_divider"
+              android:fitsSystemWindows="true">
 
 	<LinearLayout
 			android:layout_width="fill_parent"

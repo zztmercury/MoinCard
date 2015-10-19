@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_entrance"
+              android:gravity="center_horizontal"
+              android:fitsSystemWindows="true">
+
+	<ImageView
+			android:layout_width="160dp"
+			android:layout_height="65dp"
+			android:layout_marginTop="60dp"
+			android:src="@drawable/logo" />
+
+	<ImageView
+			android:layout_width="280dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="20dp"
+			android:src="@drawable/logo_text" />
+
+	<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+
+	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:layout_margin="30dp">
+
+		<Button
+				android:id="@+id/btn_register"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:minHeight="0dp"
+				android:paddingTop="8dp"
+				android:paddingBottom="8dp"
+				android:paddingLeft="32dp"
+				android:paddingRight="32dp"
+				android:background="@drawable/btn_orange_corner_selector"
+				android:textColor="@color/white"
+				android:textSize="22sp"
+				android:text="@string/register" />
+
+		<TextView
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1" />
+
+		<Button
+				android:id="@+id/btn_login"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:minHeight="0dp"
+				android:paddingTop="8dp"
+				android:paddingBottom="8dp"
+				android:paddingLeft="32dp"
+				android:paddingRight="32dp"
+				android:background="@drawable/bg_border_orange"
+				android:textColor="@color/white"
+				android:textSize="22sp"
+				android:text="@string/login" />
+
+	</LinearLayout>
+
+</LinearLayout>

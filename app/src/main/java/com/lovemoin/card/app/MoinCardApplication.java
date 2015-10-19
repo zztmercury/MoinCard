@@ -4,8 +4,14 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.constant.Config;
-import com.lovemoin.card.app.db.*;
+import com.lovemoin.card.app.db.ActivityInfoDao;
+import com.lovemoin.card.app.db.CardInfo;
+import com.lovemoin.card.app.db.CardInfoDao;
+import com.lovemoin.card.app.db.DaoMaster;
+import com.lovemoin.card.app.db.DaoSession;
+import com.lovemoin.card.app.db.GiftPackInfoDao;
 import com.lovemoin.card.app.net.LoadCardList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -31,6 +37,7 @@ public class MoinCardApplication extends Application {
 
     private CardInfoDao cardInfoDao;
     private ActivityInfoDao activityInfoDao;
+    private GiftPackInfoDao giftPackInfoDao;
 
     @Override
     public void onCreate() {
@@ -54,6 +61,7 @@ public class MoinCardApplication extends Application {
         DaoSession daoSession = daoMaster.newSession();
         cardInfoDao = daoSession.getCardInfoDao();
         activityInfoDao = daoSession.getActivityInfoDao();
+        giftPackInfoDao = daoSession.getGiftPackInfoDao();
     }
 
     public String getCachedUserId() {
@@ -129,6 +137,7 @@ public class MoinCardApplication extends Application {
         cacheLastSearchTime(0);
         cardInfoDao.deleteAll();
         activityInfoDao.deleteAll();
+        giftPackInfoDao.deleteAll();
         setUserFirstTime(false);
     }
 
@@ -138,6 +147,10 @@ public class MoinCardApplication extends Application {
 
     public ActivityInfoDao getActivityInfoDao() {
         return activityInfoDao;
+    }
+
+    public GiftPackInfoDao getGiftPackInfoDao() {
+        return giftPackInfoDao;
     }
 
     public void updateCardInfoFromServer(final boolean showToast) {
@@ -157,6 +170,24 @@ public class MoinCardApplication extends Application {
             }
         };
     }
+
+//    public void updateActivityInfoFromServer(final boolean showToast) {
+//        new LoadActivityList(LoadActivityList.TYPE_RELATED, getCachedUserId(), 0) {
+//            @Override
+//            public void onSuccess(List<ActivityInfo> activityInfoList) {
+//                activityInfoDao.deleteAll();
+//                activityInfoDao.insertInTx(activityInfoList);
+//                if (showToast)
+//                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onFail(String message) {
+//                if (showToast)
+//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+//            }
+//        };
+//    }
 
     public int getVersionCode() {
         try {

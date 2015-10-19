@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.utils.DisplayUtil;
 

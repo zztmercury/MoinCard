@@ -9,16 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.adapter.ActivityListAdapter;
 import com.lovemoin.card.app.db.ActivityInfo;
 import com.lovemoin.card.app.db.ActivityInfoDao;
 import com.lovemoin.card.app.net.LoadActivityList;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by zzt on 15-8-31.

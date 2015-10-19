@@ -14,6 +14,7 @@ public class MoinCardDaoGenerator extends DaoGenerator {
     private Entity activityInfo;
     private Entity imageInfo;
     private Entity storeInfo;
+    private Entity giftPackInfo;
 
     private Property pkCardInfo;
     private Property pkActivityInfo;
@@ -27,13 +28,14 @@ public class MoinCardDaoGenerator extends DaoGenerator {
 
 
     public MoinCardDaoGenerator() throws IOException {
-        schema = new Schema(3, "com.lovemoin.card.app.db");
+        schema = new Schema(5, "com.lovemoin.card.app.db");
         schema.enableKeepSectionsByDefault();
         initCardInfo();
         initMerchantInfo();
         initImageInfo();
         initStoreInfo();
         initActivityInfo();
+        initGiftPackInfo();
         initRelation();
     }
 
@@ -94,6 +96,7 @@ public class MoinCardDaoGenerator extends DaoGenerator {
         activityInfo.addBooleanProperty("isAttend");
         activityInfo.addBooleanProperty("isViewed");
         activityInfo.addIntProperty("type").notNull();
+        activityInfo.addIntProperty("num");
         fkActivityInfo = activityInfo.addStringProperty("merchantId").getProperty();
     }
 
@@ -115,6 +118,16 @@ public class MoinCardDaoGenerator extends DaoGenerator {
         storeInfo.addStringProperty("addr");
         storeInfo.addStringProperty("tel");
         fkStoreInfo = storeInfo.addStringProperty("merchantId").getProperty();
+    }
+
+    private void initGiftPackInfo() {
+        giftPackInfo = schema.addEntity("GiftPackInfo");
+        giftPackInfo.implementsSerializable();
+        giftPackInfo.addStringProperty("giftId").primaryKey();
+        giftPackInfo.addIntProperty("priority");
+        giftPackInfo.addStringProperty("comment");
+        giftPackInfo.addBooleanProperty("ignore");
+        giftPackInfo.addBooleanProperty("needCode");
     }
 
     private void initRelation() {
