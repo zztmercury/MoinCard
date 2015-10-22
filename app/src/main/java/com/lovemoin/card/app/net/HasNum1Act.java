@@ -13,7 +13,7 @@ public abstract class HasNum1Act {
         Map<String, String> paramsMap = new HashMap<>();
         paramsMap.put(Config.KEY_USER_ID, userId);
 
-        String url = Config.SERVER_URL + Config.ACTIOB_HAS_NUM_1_ACT;
+        String url = Config.SERVER_URL + Config.ACTION_HAS_NUM_1_ACT;
 
         new NetConnection(url, paramsMap) {
             @Override

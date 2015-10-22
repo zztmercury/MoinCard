@@ -11,7 +11,7 @@ public class Config {
      * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
      * 开发服务器 http://192.168.2.118:8080/moinbox/
      */
-    public static final String SERVER_URL = "http://182.92.3.209:8080/moinbox/";
+    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
 
     // 通信接口配置
@@ -39,7 +39,8 @@ public class Config {
     public static final String ACTION_GET_GIFT_FOR_NEW_USER_BY_CODE = "discountActionAjax/getGiftForNewUserByCode.action";
     public static final String ACTION_LOAD_GIFT_PACK_LIST = "discountActionAjax/getList.action";
     public static final String ACTION_GET_GIFT = "discountActionAjax/getGift.action";
-    public static final String ACTIOB_HAS_NUM_1_ACT = "activityActionAjax/activityInfo!hasNum1.action";
+    public static final String ACTION_HAS_NUM_1_ACT = "activityActionAjax/activityInfo!hasNum1.action";
+    public static final String ACTION_LOGIN_BY_IMEI = "cardUserActionAjax/allMethod!loginByIMEI.action";
 
     // 卡相关key
     public static final String KEY_CARD = "card";
@@ -147,4 +148,5 @@ public class Config {
     public static final String KEY_END_DATE = "endDate";
     public static final String KEY_CHECK_VALUE = "checkValue";
     public static final String KEY_VERSION = "version";
+    public static final String KEY_DEVICE_ID = "IMEI";
 }

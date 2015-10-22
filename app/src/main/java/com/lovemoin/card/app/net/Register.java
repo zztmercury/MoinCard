@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.net;
 
 import android.os.Build;
+import android.support.annotation.Nullable;
 
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.utils.CommonUtil;
@@ -17,11 +18,11 @@ import java.util.Map;
 public abstract class Register {
     /**
      * 注册
-     *
-     * @param userTel 用户手机号
+     *  @param userTel 用户手机号
      * @param userPwd 用户密码
+     * @param userId
      */
-    public Register(String userTel, String userPwd, String checkCode, String versionName) {
+    public Register(String userTel, String userPwd, String checkCode, String versionName, @Nullable String userId) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
         paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(userPwd));
@@ -29,6 +30,8 @@ public abstract class Register {
 //        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
         paramMap.put(Config.KEY_OS_VERSION, versionName);
         paramMap.put(Config.KEY_MODEL, Build.MODEL);
+        if (userId!=null)
+            paramMap.put(Config.KEY_USER_ID,userId);
 
         String url = Config.SERVER_URL + Config.ACTION_REGISTER;
 

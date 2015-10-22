@@ -133,7 +133,6 @@ public class MoinCardApplication extends Application {
         isExchange = false;
         cacheLoginStatus(false);
         cachedUserId(null);
-        cacheUserTel(null);
         cacheLastSearchTime(0);
         cardInfoDao.deleteAll();
         activityInfoDao.deleteAll();

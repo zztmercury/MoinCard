@@ -134,7 +134,7 @@ public class RegisterActivity extends BaseActivity {
                     editRePassword.requestFocus();
                     return;
                 }
-                new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName()) {
+                new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName(), null) {
                     @Override
                     public void onSuccess(String userTel, String id) {
                         Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
