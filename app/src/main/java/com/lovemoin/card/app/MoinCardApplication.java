@@ -12,6 +12,7 @@ import com.lovemoin.card.app.db.CardInfoDao;
 import com.lovemoin.card.app.db.DaoMaster;
 import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.db.GiftPackInfoDao;
+import com.lovemoin.card.app.entity.DeviceInfo;
 import com.lovemoin.card.app.net.LoadCardList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -31,10 +32,13 @@ public class MoinCardApplication extends Application {
     public static final String KEY_HAS_NEW_VERSION = "hasNewVersion";
     public static final String KEY_IS_FIRST_TIME_INSTALLED = "isFirstTimeInstalled";
     public static final String KEY_IS_USER_FIRST_TIME = "isUserFirstTime";
-
+    public static final int MODE_NFC = 0;
+    public static final int MODE_BLUETOOTH = 1;
+    public int stat = DeviceInfo.OPER_WAITE;
     private CardInfo currentCard;
     private boolean isExchange;
-
+    private int connectMode = MODE_BLUETOOTH;
+    private boolean promptNfc = true;
     private CardInfoDao cardInfoDao;
     private ActivityInfoDao activityInfoDao;
     private GiftPackInfoDao giftPackInfoDao;
@@ -51,6 +55,7 @@ public class MoinCardApplication extends Application {
                 .defaultDisplayImageOptions(options)
                 .build();
         ImageLoader.getInstance().init(configuration);
+        promptNfc = true;
         initDao();
     }
 
@@ -133,6 +138,7 @@ public class MoinCardApplication extends Application {
         isExchange = false;
         cacheLoginStatus(false);
         cachedUserId(null);
+        cacheUserTel(null);
         cacheLastSearchTime(0);
         cardInfoDao.deleteAll();
         activityInfoDao.deleteAll();
@@ -220,5 +226,21 @@ public class MoinCardApplication extends Application {
 
     public void setUserFirstTime(boolean isUserFirstTime) {
         getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putBoolean(KEY_IS_USER_FIRST_TIME, isUserFirstTime).commit();
+    }
+
+    public int getConnectMode() {
+        return connectMode;
+    }
+
+    public void setConnectMode(int connectMode) {
+        this.connectMode = connectMode;
+    }
+
+    public boolean isPromptNfc() {
+        return promptNfc;
+    }
+
+    public void setPromptNfc(boolean promptNfc) {
+        this.promptNfc = promptNfc;
     }
 }

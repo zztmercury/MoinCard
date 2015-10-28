@@ -36,7 +36,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zzt on 15-9-2.
@@ -61,7 +60,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
     private StepsView stepsView;
     private View cover;
     private TextView textGiftName;
-    private CircleImageView imgGift;
+    private ImageView imgGift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
         stepsView = (StepsView) findViewById(R.id.steps);
         cover = findViewById(R.id.layoutCover);
         textGiftName = (TextView) findViewById(R.id.textGiftName);
-        imgGift = (CircleImageView) findViewById(R.id.imgGift);
+        imgGift = (ImageView) findViewById(R.id.imgGift);
         findViewById(R.id.btnCloseCover).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +108,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
             public void onClick(View v) {
                 String couponName = textGiftName.getText().toString();
                 QueryBuilder<CardInfo> qb = app.getCardInfoDao().queryBuilder();
-                qb.where(CardInfoDao.Properties.CardName.eq(couponName), CardInfoDao.Properties.CardType.eq(CardInfo.TYPE_COUPON));
+                qb.where(CardInfoDao.Properties.CardName.eq(couponName));
                 CardInfo cardInfo = qb.unique();
                 app.setCurrentCard(cardInfo);
                 startActivity(new Intent(ActivityDetailType3Activity.this, MerchantDetailActivity.class));

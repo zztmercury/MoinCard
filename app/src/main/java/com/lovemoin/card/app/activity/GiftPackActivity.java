@@ -2,13 +2,17 @@ package com.lovemoin.card.app.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +33,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zzt on 15-10-13.
@@ -48,7 +51,7 @@ public class GiftPackActivity extends BaseActivity {
     private int type;
     private View cover;
     private TextView textGiftName;
-    private CircleImageView imgGift;
+    private ImageView imgGift;
 
     private ImageLoader imageLoader;
 
@@ -75,7 +78,7 @@ public class GiftPackActivity extends BaseActivity {
 
         cover = findViewById(R.id.layoutCover);
         textGiftName = (TextView) findViewById(R.id.textGiftName);
-        imgGift = (CircleImageView) findViewById(R.id.imgGift);
+        imgGift = (ImageView) findViewById(R.id.imgGift);
 
         if (type == TYPE_NEW_USER) {
             textGiftComment.setText(R.string.new_user_gift_comment);
@@ -126,7 +129,7 @@ public class GiftPackActivity extends BaseActivity {
             public void onClick(View v) {
                 String couponName = textGiftName.getText().toString();
                 QueryBuilder<CardInfo> qb = app.getCardInfoDao().queryBuilder();
-                qb.where(CardInfoDao.Properties.CardName.eq(couponName), CardInfoDao.Properties.CardType.eq(CardInfo.TYPE_COUPON));
+                qb.where(CardInfoDao.Properties.CardName.eq(couponName));
                 CardInfo cardInfo = qb.unique();
                 app.setCurrentCard(cardInfo);
                 startActivity(new Intent(GiftPackActivity.this, MerchantDetailActivity.class));
@@ -197,10 +200,18 @@ public class GiftPackActivity extends BaseActivity {
     private void getGift() {
         new GetGift(app.getCachedUserId(), giftPackInfo.getGiftId(), editCode.getText().toString()) {
             @Override
-            public void onSuccess(String giftName, String giftImg) {
+            public void onSuccess(String giftName, String giftImg, int pointAddNum) {
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
-                imageLoader.displayImage(Config.SERVER_URL + giftImg, imgGift);
+                if (pointAddNum < 0) {
+                    imageLoader.displayImage(Config.SERVER_URL + giftImg, imgGift);
+                } else {
+                    TextView textGiftHint = (TextView) findViewById(R.id.text_gift_hint);
+                    textGiftHint.setTextColor(Color.parseColor("#cc3333"));
+                    textGiftHint.setTextSize(30);
+                    textGiftHint.setText(String.format(getString(R.string.point_num_plus), pointAddNum));
+                    imgGift.setImageResource(R.drawable.rocket_point);
+                }
                 app.updateCardInfoFromServer(false);
                 app.getGiftPackInfoDao().delete(giftPackInfo);
             }
@@ -213,36 +224,77 @@ public class GiftPackActivity extends BaseActivity {
     }
 
     private void showPrizeSelectDialog(final String activityId) {
-        new GetRelateMerchantCoupon(activityId) {
-            private int selectedCouponIndex = 0;
+        if (type == TYPE_NEW_USER)
+            new GetRelateMerchantCoupon(activityId) {
+                private int selectedCouponIndex = 0;
 
-            @Override
-            public void onSuccess(final List<CouponDto> couponList) {
-                String[] couponNames = new String[couponList.size()];
-                for (int i = 0; i < couponList.size(); i++) {
-                    couponNames[i] = couponList.get(i).getCouponName();
+                @Override
+                public void onSuccess(final List<CouponDto> couponList) {
+                    String[] couponNames = new String[couponList.size()];
+                    for (int i = 0; i < couponList.size(); i++) {
+                        couponNames[i] = couponList.get(i).getCouponName();
+                    }
+                    new AlertDialog.Builder(GiftPackActivity.this)
+                            .setTitle(R.string.please_select_coupon)
+                            .setSingleChoiceItems(couponNames, selectedCouponIndex, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selectedCouponIndex = which;
+                                }
+                            })
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (!couponList.isEmpty())
+                                        getNewUserCoupon(couponList.get(selectedCouponIndex).getCouponId());
+                                }
+                            }).show();
                 }
-                new AlertDialog.Builder(GiftPackActivity.this)
-                        .setTitle(R.string.please_select_coupon)
-                        .setSingleChoiceItems(couponNames, selectedCouponIndex, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedCouponIndex = which;
-                            }
-                        })
+
+                @Override
+                public void onFail(String message) {
+                    Toast.makeText(GiftPackActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            };
+        else {
+            new AlertDialog.Builder(GiftPackActivity.this)
+                    .setMessage(R.string.hint_no_code)
+                    .setPositiveButton(R.string.known, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_gift_pack, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.action_give_up:
+                new AlertDialog.Builder(this)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (!couponList.isEmpty())
-                                    getNewUserCoupon(couponList.get(selectedCouponIndex).getCouponId());
-                            }
-                        }).show();
-            }
 
-            @Override
-            public void onFail(String message) {
-                Toast.makeText(GiftPackActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        };
+                            }
+                        });
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void giveUpGift() {
+
     }
 }

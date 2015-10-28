@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -128,6 +129,7 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
         GiftPackInfo giftPackInfo = qb.unique();
         if (giftPackInfo != null) {
             imgGiftPack.setVisibility(View.VISIBLE);
+            imgGiftPack.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.cycler_scale));
             final Intent intent = new Intent(getContext(), GiftPackActivity.class);
             intent.putExtra(Config.KEY_GIFT_PACK, giftPackInfo);
             imgGiftPack.setOnClickListener(new View.OnClickListener() {

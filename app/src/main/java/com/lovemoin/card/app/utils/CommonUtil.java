@@ -85,26 +85,50 @@ public class CommonUtil {
     }
 
     public static String ByteArrayToHexString(byte[] bytes) {
-        final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
-                '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        char[] hexChars = new char[bytes.length * 2];
-        int v;
-        for (int j = 0; j < bytes.length; j++) {
-            v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        //final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
+        //        '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        //char[] hexChars = new char[bytes.length * 2];
+        //int v;
+        //for (int j = 0; j < bytes.length; j++) {
+        //    v = bytes[j] & 0xFF;
+        //    hexChars[j * 2] = hexArray[v >>> 4];
+        //    hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        //}
+        //return new String(hexChars);
+        StringBuffer buf = new StringBuffer();
+        for (byte b :
+                bytes) {
+            String hex = Integer.toHexString(b & 0xff);
+            if (hex.length() == 1)
+                buf.append(0);
+            buf.append(hex);
         }
-        return new String(hexChars);
+        return buf.toString();
     }
 
     public static byte[] HexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
-                    .digit(s.charAt(i + 1), 16));
+        //int len = s.length();
+        //byte[] data = new byte[len / 2];
+        //for (int i = 0; i < len; i += 2) {
+        //    data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
+        //            .digit(s.charAt(i + 1), 16));
+        //}
+        //return data;
+        byte[] bytes = new byte[s.length() / 2];
+        for (int i = 0; i < s.length() / 2; i++) {
+            bytes[i] = Byte.valueOf(s.substring(i * 2, (i + 1) * 2), 16);
         }
-        return data;
+        return bytes;
+    }
+
+    public static byte xor(byte[] tempbuf, int len) {
+        // TODO Auto-generated method stub
+        int i;
+        byte result = 0;
+        for (i = 0; i < len; i++) {
+            result = (byte) (result ^ tempbuf[i]);
+        }
+        return result;
     }
 
     public static String padLeft(String s, int length) {

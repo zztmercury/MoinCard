@@ -32,7 +32,8 @@ public abstract class GetGift {
                     JSONObject object = new JSONObject(result);
                     String giftName = object.getString(Config.KEY_GIFT_NAME);
                     String giftImg = object.getString(Config.KEY_GIFT_IMG);
-                    GetGift.this.onSuccess(giftName, giftImg);
+                    int pointAddNum = object.getInt(Config.KEY_POINT_ADD_NUM);
+                    GetGift.this.onSuccess(giftName, giftImg, pointAddNum);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     GetGift.this.onFail("解析错误：" + e.getMessage());
@@ -46,7 +47,7 @@ public abstract class GetGift {
         };
     }
 
-    public abstract void onSuccess(String giftName, String giftImg);
+    public abstract void onSuccess(String giftName, String giftImg, int pointAddNum);
 
     public abstract void onFail(String message);
 }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,20 +32,6 @@ public class LoginActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-
-        if (nfcAdapter == null && app.isFirstTimeInstalled()) {
-            final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this).create();
-            dialog.show();
-            dialog.setContentView(R.layout.dialog_no_nfc);
-            Window window = dialog.getWindow();
-            window.findViewById(R.id.btn_I_know).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    app.setFirstTimeInstalled(false);
-                }
-            });
         }
 
         editUserTel = (EditText) findViewById(R.id.edit_user_tel);
@@ -78,6 +63,11 @@ public class LoginActivity extends BaseActivity {
                 register();
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
     }
 
     private void login() {
@@ -115,11 +105,6 @@ public class LoginActivity extends BaseActivity {
 //            return false;
 //        }
         return true;
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
     }
 
 }

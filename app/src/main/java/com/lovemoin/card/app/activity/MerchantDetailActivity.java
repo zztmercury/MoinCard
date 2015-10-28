@@ -1,6 +1,7 @@
 package com.lovemoin.card.app.activity;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -83,7 +83,7 @@ public class MerchantDetailActivity extends BaseActivity {
     /**
      * 商户名
      */
-    private TextView textMerchantName;
+    private TextView textMerchantBrand;
     /**
      * 商户简介
      */
@@ -121,6 +121,27 @@ public class MerchantDetailActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindCard();
+        if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON) && cardInfo.getCurrentPoint() == 0) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.hint_coupon_used_up)
+                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, int which) {
+                            deleteCard(dialog);
+                        }
+                    }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
     private void initView() {
         imgCard = (ImageView) findViewById(R.id.imgCard);
         imgCardCount = (ImageView) findViewById(R.id.imgCardCounter);
@@ -129,7 +150,7 @@ public class MerchantDetailActivity extends BaseActivity {
         textObject = (TextView) findViewById(R.id.textObject);
         textCardCounter = (TextView) findViewById(R.id.textCardCounter);
         imgMerchant = (ImageView) findViewById(R.id.imgMerchant);
-        textMerchantName = (TextView) findViewById(R.id.textMerchantName);
+        textMerchantBrand = (TextView) findViewById(R.id.textMerchantBrand);
         textMerchantBrief = (TextView) findViewById(R.id.textMerchantBrief);
         textMerchantDesc = (TextView) findViewById(R.id.textMerchantDesc);
         btnConvert = (Button) findViewById(R.id.btnExchange);
@@ -154,27 +175,6 @@ public class MerchantDetailActivity extends BaseActivity {
         listRecentActivity.setAdapter(mAdapter);
         bindCard();
         loadMerchantInfoFromServer();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bindCard();
-        if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON) && cardInfo.getCurrentPoint() == 0) {
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.hint_coupon_used_up)
-                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, int which) {
-                            deleteCard(dialog);
-                        }
-                    }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
-        }
     }
 
     private void loadActivities() {
@@ -244,19 +244,7 @@ public class MerchantDetailActivity extends BaseActivity {
         btnConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (nfcAdapter == null) {
-                    final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MerchantDetailActivity.this).create();
-                    dialog.show();
-                    dialog.setContentView(R.layout.dialog_no_nfc);
-                    Window window = dialog.getWindow();
-                    window.findViewById(R.id.btn_I_know).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            app.setFirstTimeInstalled(false);
-                        }
-                    });
-                } else if (!nfcAdapter.isEnabled()) {
+                if (app.getConnectMode() == MoinCardApplication.MODE_NFC && !nfcAdapter.isEnabled()) {
                     new AlertDialog.Builder(MerchantDetailActivity.this)
                             .setMessage(R.string.hint_enable_nfc)
                             .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -267,6 +255,9 @@ public class MerchantDetailActivity extends BaseActivity {
                                 }
                             })
                             .show();
+                } else if (app.getConnectMode() == MoinCardApplication.MODE_BLUETOOTH && !mBluetoothAdapter.isEnabled()) {
+                    Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivity(i);
                 } else {
                     app.setIsExchange(true);
                     pd.setMessage(getString(R.string.find_device_hint));
@@ -302,7 +293,9 @@ public class MerchantDetailActivity extends BaseActivity {
 
     private void bindData() {
         loader.displayImage(Config.SERVER_URL + merchantInfo.getMainImg(), imgMerchant);
-        textMerchantName.setText(merchantInfo.getMerchantName());
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(merchantInfo.getBrand());
+        textMerchantBrand.setText(merchantInfo.getBrand());
         textMerchantBrief.setText(merchantInfo.getBrief());
         textMerchantDesc.setText(merchantInfo.getDescription());
         layoutCardRecord.setOnClickListener(new View.OnClickListener() {
@@ -336,6 +329,12 @@ public class MerchantDetailActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_merchant_detail, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -360,12 +359,6 @@ public class MerchantDetailActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_merchant_detail, menu);
-        return true;
     }
 
     @Override

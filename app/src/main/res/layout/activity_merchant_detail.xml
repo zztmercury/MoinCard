@@ -8,34 +8,34 @@
 	<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:orientation="vertical"
-			android:background="@color/itembackcolor">
+			android:background="@color/itembackcolor"
+			android:orientation="vertical">
 
 		<FrameLayout
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:background="@color/white"
-				android:paddingTop="8dp"
 				android:paddingLeft="8dp"
-				android:paddingRight="8dp">
+				android:paddingRight="8dp"
+				android:paddingTop="8dp">
 
 			<include layout="@layout/layout_card_info" />
 		</FrameLayout>
 
 		<RelativeLayout
+			android:id="@+id/card_bar_layout"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:background="@color/white"
-				android:id="@+id/card_bar_layout"
 				android:padding="8dp">
 
 			<LinearLayout
 					android:id="@+id/layoutCardDetail"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:gravity="center_vertical"
+					android:layout_alignParentLeft="true"
 					android:layout_centerVertical="true"
-					android:layout_alignParentLeft="true">
+					android:gravity="center_vertical">
 
 				<ImageView
 						android:layout_width="30dp"
@@ -56,9 +56,9 @@
 					android:id="@+id/layoutCardRecord"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:gravity="center_horizontal"
+					android:layout_centerHorizontal="true"
 					android:layout_centerVertical="true"
-					android:layout_centerHorizontal="true">
+					android:gravity="center_horizontal">
 
 				<ImageView
 						android:layout_width="30dp"
@@ -79,14 +79,14 @@
 
 			<Button
 					android:id="@+id/btnExchange"
-					android:textColor="@drawable/btn_text_selector"
-					android:background="@drawable/btn_red_corner_selector"
 					android:layout_width="wrap_content"
 					android:layout_height="35dp"
+					android:layout_alignParentRight="true"
+					android:background="@drawable/btn_red_corner_selector"
 					android:gravity="center"
-					android:textSize="18sp"
 					android:text="@string/exchange"
-					android:layout_alignParentRight="true">
+					android:textColor="@drawable/btn_text_selector"
+					android:textSize="18sp">
 
 			</Button>
 		</RelativeLayout>
@@ -94,11 +94,11 @@
 		<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:background="#ffffff"
 				android:layout_marginTop="5dp"
-				android:showDividers="middle|beginning|end"
+				android:background="#ffffff"
 				android:divider="@drawable/default_divider"
-				android:orientation="vertical">
+				android:orientation="vertical"
+				android:showDividers="middle|beginning|end">
 
 			<LinearLayout
 					android:layout_width="fill_parent"
@@ -107,48 +107,48 @@
 					android:padding="10dp">
 
 				<ImageView
+					android:id="@+id/imgMerchant"
 						android:layout_width="120dp"
 						android:layout_height="90dp"
 						android:contentDescription="@string/merchant_img"
-						android:id="@+id/imgMerchant"
 						android:scaleType="centerCrop" />
 
 				<LinearLayout
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:paddingLeft="15dp"
-						android:orientation="vertical">
+						android:orientation="vertical"
+						android:paddingLeft="15dp">
 
 					<TextView
+						android:id="@+id/textMerchantBrand"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
-							android:textSize="18sp"
-							android:textColor="@color/black"
 							android:singleLine="true"
-							android:id="@+id/textMerchantName" />
+						android:textColor="@color/black"
+						android:textSize="18sp"/>
 
 					<TextView
+						android:id="@+id/textMerchantBrief"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:layout_marginTop="10dp"
-							android:textSize="16sp"
 							android:textColor="@color/secondary_text"
-							android:id="@+id/textMerchantBrief" />
+						android:textSize="16sp"/>
 
 				</LinearLayout>
 			</LinearLayout>
 
 			<LinearLayout
+				android:id="@+id/layoutAllStores"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal"
 					android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingBottom="5dp"
 					android:paddingLeft="15dp"
 					android:paddingRight="15dp"
-					android:paddingTop="5dp"
-					android:paddingBottom="5dp"
-					android:id="@+id/layoutAllStores">
+				android:paddingTop="5dp">
 
 				<TextView
 						android:layout_width="wrap_content"
@@ -168,15 +168,15 @@
 			</LinearLayout>
 
 			<LinearLayout
+				android:id="@+id/layoutActivityCalendar"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal"
 					android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingBottom="5dp"
 					android:paddingLeft="15dp"
 					android:paddingRight="15dp"
 					android:paddingTop="5dp"
-					android:paddingBottom="5dp"
-					android:id="@+id/layoutActivityCalendar"
 					android:visibility="gone">
 
 				<TextView
@@ -197,12 +197,12 @@
 			</LinearLayout>
 
 			<android.support.v7.widget.RecyclerView
+				android:id="@+id/listRecentActivity"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
-					android:orientation="horizontal"
+				android:divider="@drawable/default_divider"
 					android:gravity="center_vertical"
-					android:id="@+id/listRecentActivity"
-					android:divider="@drawable/default_divider">
+				android:orientation="horizontal">
 			</android.support.v7.widget.RecyclerView>
 		</LinearLayout>
 
@@ -210,14 +210,14 @@
 		<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:orientation="vertical"
+				android:layout_marginBottom="5dp"
+				android:layout_marginTop="5dp"
 				android:background="@color/white"
+				android:orientation="vertical"
+				android:paddingBottom="8dp"
 				android:paddingLeft="15dp"
 				android:paddingRight="15dp"
-				android:layout_marginTop="5dp"
-				android:layout_marginBottom="5dp"
-				android:paddingTop="8dp"
-				android:paddingBottom="8dp">
+				android:paddingTop="8dp">
 
 			<TextView
 					android:layout_width="wrap_content"
@@ -226,12 +226,12 @@
 					android:textSize="18sp" />
 
 			<TextView
+				android:id="@+id/textMerchantDesc"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
-					android:id="@+id/textMerchantDesc"
-					android:textColor="@color/secondary_text"
 					android:layout_marginTop="8dp"
 					android:scrollbars="vertical"
+				android:textColor="@color/secondary_text"
 					android:textSize="16sp" />
 		</LinearLayout>
 

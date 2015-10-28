@@ -140,6 +140,7 @@ public class Config {
     public static final String KEY_GIFT_COMMENT = "comment";
     public static final String KEY_GIFT_IGNORE = "ignore";
     public static final String KEY_NEED_CODE = "needCode";
+    public static final String KEY_POINT_ADD_NUM = "pointAddNum";
 
     // 通用key
     public static final String KEY_ID = "id";
