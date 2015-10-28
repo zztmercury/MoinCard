@@ -5,15 +5,7 @@ package com.lovemoin.card.app.constant;
  */
 public class Config {
     // 服务器通信配置
-    /**
-     * 服务器地址<br/>
-     * 测试服务器 http://182.92.3.209:8080/moinbox/<br/>
-     * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
-     * 开发服务器 http://192.168.2.118:8080/moinbox/
-     */
-    public static final String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
     public static final String CHARSET = "UTF-8";
-
     // 通信接口配置
     public static final String ACTION_LOGIN = "cardUserActionAjax/allMethod!loginCardUser.action";
     public static final String ACTION_LOAD_CARD_LIST = "cardUserActionAjax/allMethod!queryCardUserRefPointCard.action";
@@ -41,7 +33,6 @@ public class Config {
     public static final String ACTION_GET_GIFT = "discountActionAjax/getGift.action";
     public static final String ACTION_HAS_NUM_1_ACT = "activityActionAjax/activityInfo!hasNum1.action";
     public static final String ACTION_LOGIN_BY_IMEI = "cardUserActionAjax/allMethod!loginByIMEI.action";
-
     // 卡相关key
     public static final String KEY_CARD = "card";
     public static final String KEY_CARD_CODE = "cardId";
@@ -66,22 +57,17 @@ public class Config {
     public static final String KEY_MERCHANT_MAIN_IMAGE = "mainImg";
     public static final String KEY_MERCHANT_BRIEF = "brief";
     public static final String KEY_MERCHANT_DESCRIPTION = "desc";
-
-
     // 门店相关key
     public static final String KEY_STORE_ID = "id";
     public static final String KEY_STORE_NAME = "name";
     public static final String KEY_STORE_ADDR = "addr";
     public static final String KEY_STORE_TEL = "tel";
-
     // 商户图片相关key
     public static final String KEY_MERCHANT_IMG_URL = "url";
     public static final String KEY_MERCHANT_IMG_HEIGHT = "height";
     public static final String KEY_MERCHANT_IMG_WIDTH = "width";
     public static final String KEY_MERCHANT_IMG_DESCRIPTION = "desc";
     public static final String KEY_MERCHANT_IMG_COLOR = "color";
-
-
     // 用户相关key
     public static final String KEY_USER_TEL = "userTel";
     public static final String KEY_USER_PASSWORD = "userPwd";
@@ -92,12 +78,10 @@ public class Config {
     public static final String KEY_OS_VERSION = "OSVersion";
     public static final String KEY_MODEL = "model";
     public static final String KEY_CHECK_CODE = "checkCode";
-
     // 服务器返回结果key
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_PARAM = "param";
-
     // 活动相关key
     public static final String KEY_ACTIVITY = "activity";
     public static final String KEY_ACTIVITY_ID = "activityId";
@@ -121,17 +105,13 @@ public class Config {
     public static final String KEY_ACTIVITY_PROGRESS = "progress";
     public static final String KEY_ACTIVITY_MEMBER_COUNT = "memberCount";
     public static final String KEY_ACTIVITY_LEVEL = "level";
-
     public static final String KEY_LAST_SEARCH_TIME = "lastSearchTime";
-
     public static final String KEY_GIFT_IMG = "giftImg";
     public static final String KEY_GIFT_NAME = "giftName";
-
     // 记录相关key
     public static final String KEY_OPERATE_DATE = "operateDate";
     public static final String KEY_OPERATE_TYPE = "operateType";
     public static final String KEY_OPERATE_POINT = "point";
-
     // 礼包key
     public static final String KEY_GIFT_PACK = "gift_pack";
     public static final String KEY_GIFT_CODE = "code";
@@ -141,7 +121,6 @@ public class Config {
     public static final String KEY_GIFT_IGNORE = "ignore";
     public static final String KEY_NEED_CODE = "needCode";
     public static final String KEY_POINT_ADD_NUM = "pointAddNum";
-
     // 通用key
     public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
@@ -150,4 +129,11 @@ public class Config {
     public static final String KEY_CHECK_VALUE = "checkValue";
     public static final String KEY_VERSION = "version";
     public static final String KEY_DEVICE_ID = "IMEI";
+    /**
+     * 服务器地址<br/>
+     * 测试服务器 http://182.92.3.209:8080/moinbox/<br/>
+     * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
+     * 开发服务器 http://192.168.2.118:8080/moinbox/
+     */
+    public static String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
 }
