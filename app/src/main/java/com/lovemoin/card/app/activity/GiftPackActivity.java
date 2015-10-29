@@ -203,7 +203,7 @@ public class GiftPackActivity extends BaseActivity {
             public void onSuccess(String giftName, String giftImg, int pointAddNum) {
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
-                if (pointAddNum < 0) {
+                if (pointAddNum == 0) {
                     imageLoader.displayImage(Config.SERVER_URL + giftImg, imgGift);
                 } else {
                     TextView textGiftHint = (TextView) findViewById(R.id.text_gift_hint);

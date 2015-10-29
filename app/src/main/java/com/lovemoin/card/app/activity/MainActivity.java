@@ -28,6 +28,11 @@ public class MainActivity extends Activity {
 
 //        startActivity(new Intent(this,ActivityCalendarActivity.class));
 //        finish();
+        enterApp();
+
+    }
+
+    private void enterApp() {
         if (app.isLogin() && app.getCachedUserId() != null) {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
@@ -42,12 +47,14 @@ public class MainActivity extends Activity {
                 public void onSuccess(String userId) {
                     app.cachedUserId(userId);
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
                 }
 
                 @Override
                 public void onFail(String message) {
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, EntranceActivity.class));
+                    finish();
                 }
             };
         }

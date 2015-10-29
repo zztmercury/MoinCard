@@ -94,6 +94,8 @@ public class BaseActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 app.setPromptNfc(false);
                                 app.setConnectMode(MoinCardApplication.MODE_BLUETOOTH);
+                                mBluetoothAdapter.enable();
+                                leScan();
                                 dialog.dismiss();
                             }
                         })
@@ -173,7 +175,7 @@ public class BaseActivity extends AppCompatActivity {
             public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
                 if ("MO-IN BOX".equals(device.getName())) {
                     pd.setMessage(getString(R.string.connecting_device));
-                    if (rssi >= -75 && mBluetoothGatt == null) {
+                    if (rssi >= -70 && mBluetoothGatt == null) {
                         pd.show();
                         mBluetoothGatt = device.connectGatt(getApplicationContext(), false, new BluetoothGattCallback() {
                             @Override
@@ -312,7 +314,7 @@ public class BaseActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                    } else if (rssi >= -75 && mBluetoothGatt != null) {
+                    } else if (rssi >= -70 && mBluetoothGatt != null) {
                         mBluetoothGatt.connect();
                         pd.show();
                     }
