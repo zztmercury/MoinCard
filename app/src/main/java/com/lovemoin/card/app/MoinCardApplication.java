@@ -86,7 +86,7 @@ public class MoinCardApplication extends Application {
     }
 
     public boolean isLogin() {
-        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_LOGIN_STATUS, false);
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getBoolean(KEY_LOGIN_STATUS, true);
     }
 
     public void cacheLoginStatus(boolean loginStatus) {

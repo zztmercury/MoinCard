@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
+import com.lovemoin.card.app.activity.CompleteUserInfoActivity;
 import com.lovemoin.card.app.activity.EntranceActivity;
 import com.lovemoin.card.app.activity.UserModifyActivity;
 
@@ -23,6 +25,7 @@ public class MyFragment extends LazyFragment {
     private MoinCardApplication app;
     private boolean isPrepared = false;
     private TextView textAccount;
+    private TextView textHint;
     private Button btnExit;
 
     @Nullable
@@ -31,13 +34,27 @@ public class MyFragment extends LazyFragment {
         View rootView = inflater.inflate(R.layout.fragment_my, container, false);
         app = (MoinCardApplication) getActivity().getApplication();
         textAccount = (TextView) rootView.findViewById(R.id.textAccount);
+        textHint = (TextView) rootView.findViewById(R.id.text_hint_modify_user);
         btnExit = (Button) rootView.findViewById(R.id.btnExit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.reset();
-                startActivity(new Intent(getContext(), EntranceActivity.class));
-                getActivity().finish();
+                if (TextUtils.isEmpty(app.getCachedUserTel())) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.hint_exit_visitor_account)
+                            .setPositiveButton(R.string.complete_now, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(getContext(), CompleteUserInfoActivity.class));
+                                }
+                            })
+                            .setNegativeButton(R.string.exit_visitor_account, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    exit();
+                                }
+                            }).show();
+                } else exit();
             }
         });
         rootView.findViewById(R.id.layoutHelp).setOnClickListener(new View.OnClickListener() {
@@ -56,10 +73,13 @@ public class MyFragment extends LazyFragment {
         rootView.findViewById(R.id.layoutModifyUser).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), UserModifyActivity.class));
+                if (TextUtils.isEmpty(app.getCachedUserTel())) {
+                    startActivity(new Intent(getContext(), CompleteUserInfoActivity.class));
+                } else {
+                    startActivity(new Intent(getContext(), UserModifyActivity.class));
+                }
             }
         });
-        textAccount.setText(app.getCachedUserTel());
         isPrepared = true;
         return rootView;
     }
@@ -67,7 +87,19 @@ public class MyFragment extends LazyFragment {
     @Override
     protected void lazyLoad() {
         if (isPrepared && isVisible) {
-
+            if (TextUtils.isEmpty(app.getCachedUserTel())) {
+                textAccount.setText(R.string.visitor);
+                textHint.setText(R.string.complete_user_info);
+            } else {
+                textAccount.setText(app.getCachedUserTel());
+                textHint.setText(R.string.change_pwd);
+            }
         }
+    }
+
+    private void exit() {
+        app.reset();
+        startActivity(new Intent(getContext(), EntranceActivity.class));
+        getActivity().finish();
     }
 }

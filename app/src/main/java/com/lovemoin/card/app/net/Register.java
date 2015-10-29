@@ -17,12 +17,13 @@ import java.util.Map;
  */
 public abstract class Register {
     /**
-     * 注册
-     *  @param userTel 用户手机号
+     * 注册及补全帐号密码
+     *
+     * @param userTel 用户手机号
      * @param userPwd 用户密码
-     * @param userId
+     * @param userId 补全信息时需要
      */
-    public Register(String userTel, String userPwd, String checkCode, String versionName, @Nullable String userId) {
+    public Register(String userTel, String userPwd, String checkCode, String versionName, @Nullable final String userId) {
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put(Config.KEY_USER_TEL, userTel);
         paramMap.put(Config.KEY_USER_PASSWORD, CommonUtil.MD5(userPwd));
@@ -30,8 +31,8 @@ public abstract class Register {
 //        paramMap.put(Config.KEY_OS_VERSION, "Android " + Build.VERSION.RELEASE);
         paramMap.put(Config.KEY_OS_VERSION, versionName);
         paramMap.put(Config.KEY_MODEL, Build.MODEL);
-        if (userId!=null)
-            paramMap.put(Config.KEY_USER_ID,userId);
+        if (userId != null)
+            paramMap.put(Config.KEY_USER_ID, userId);
 
         String url = Config.SERVER_URL + Config.ACTION_REGISTER;
 
@@ -40,7 +41,12 @@ public abstract class Register {
             public void onSuccess(String result) {
                 try {
                     JSONObject object = new JSONObject(result);
-                    Register.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString("id"));
+                    // 补全和登录时userId参数名不同
+                    if (userId != null) {
+                        Register.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString(Config.KEY_USER_ID));
+                    } else {
+                        Register.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString(Config.KEY_ID));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Register.this.onFail("解析错误：" + e.getMessage());

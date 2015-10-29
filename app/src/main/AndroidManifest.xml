@@ -154,6 +154,12 @@
 				  android:screenOrientation="portrait">
 
 		</activity>
+		<activity
+			android:name=".activity.CompleteUserInfoActivity"
+			android:label="@string/complete_user_info"
+			android:screenOrientation="portrait">
+
+		</activity>
 	</application>
 
 </manifest>

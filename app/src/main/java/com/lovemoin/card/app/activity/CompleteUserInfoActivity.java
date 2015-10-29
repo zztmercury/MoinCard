@@ -3,21 +3,20 @@ package com.lovemoin.card.app.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
-import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.net.Register;
 import com.lovemoin.card.app.net.SendCode;
 import com.lovemoin.card.app.utils.CommonUtil;
@@ -25,7 +24,7 @@ import com.lovemoin.card.app.utils.CommonUtil;
 /**
  * Created by zzt on 15-8-31.
  */
-public class RegisterActivity extends BaseActivity {
+public class CompleteUserInfoActivity extends BaseActivity {
     private EditText editUserTel;
     private EditText editCode;
     private EditText editPassword;
@@ -33,6 +32,7 @@ public class RegisterActivity extends BaseActivity {
     private Button btnSendMsg;
     private Button btnReg;
     private TextView textLoginAgreement;
+    private CheckBox checkAgreement;
 
     private MoinCardApplication app;
 
@@ -45,10 +45,10 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_complete_user_info);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         initView();
@@ -70,6 +70,7 @@ public class RegisterActivity extends BaseActivity {
         btnReg = (Button) findViewById(R.id.btn_register);
         textLoginAgreement = (TextView) findViewById(R.id.text_login_agreement);
         textLoginAgreement.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
+        checkAgreement = (CheckBox) findViewById(R.id.check_agreement);
     }
 
     private void initData() {
@@ -89,13 +90,6 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initListener() {
-        findViewById(R.id.img_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), EntranceActivity.class));
-                finish();
-            }
-        });
         btnSendMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +102,7 @@ public class RegisterActivity extends BaseActivity {
                         @Override
                         public void onSuccess(String checkCode) {
                             btnSendMsg.setEnabled(false);
-                            RegisterActivity.this.checkCode = checkCode;
+                            CompleteUserInfoActivity.this.checkCode = checkCode;
                             timer.start();
                         }
 
@@ -146,15 +140,24 @@ public class RegisterActivity extends BaseActivity {
                     editRePassword.requestFocus();
                     return;
                 }
-                new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName(), null) {
+                if (!checkAgreement.isChecked()) {
+                    new AlertDialog.Builder(CompleteUserInfoActivity.this)
+                            .setTitle(R.string.hint)
+                            .setMessage(R.string.unchecked_agreement)
+                            .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                    return;
+                }
+                new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName(), app.getCachedUserId()) {
                     @Override
                     public void onSuccess(String userTel, String id) {
                         Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
                         app.cacheUserTel(userTel);
                         app.cachedUserId(id);
-                        app.cacheLoginStatus(true);
-                        app.setUserFirstTime(true);
-                        setResult(ResultCode.REGISTER_SUCCESS);
                         finish();
                     }
 
@@ -168,7 +171,7 @@ public class RegisterActivity extends BaseActivity {
         textLoginAgreement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(RegisterActivity.this)
+                new AlertDialog.Builder(CompleteUserInfoActivity.this)
                         .setTitle(R.string.service_agreement)
                         .setMessage(R.string.agreement_content)
                         .setPositiveButton(R.string.known, new DialogInterface.OnClickListener() {
@@ -179,17 +182,20 @@ public class RegisterActivity extends BaseActivity {
                         }).show();
             }
         });
-        findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                finish();
-            }
-        });
     }
 
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
