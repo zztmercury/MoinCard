@@ -50,6 +50,13 @@ public class LoginActivity extends BaseActivity {
                         }).show();
             }
         });
+        findViewById(R.id.img_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), EntranceActivity.class));
+                finish();
+            }
+        });
 
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override

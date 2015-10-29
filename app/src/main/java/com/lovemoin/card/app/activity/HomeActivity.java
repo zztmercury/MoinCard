@@ -124,8 +124,16 @@ public class HomeActivity extends BaseActivity {
             }
         };
 //        }
+
+        app.setFirstTimeInstalled(false);
     }
 
+    @Override
+    protected void onResume() {
+        ((MoinCardApplication) getApplication()).setIsExchange(false);
+        mViewPager.setCurrentItem(getIntent().getIntExtra(KEY_SECTION, mViewPager.getCurrentItem()));
+        super.onResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,13 +171,6 @@ public class HomeActivity extends BaseActivity {
             drawableTop.setBounds(0, 0, DisplayUtil.dp2Px(this, width), DisplayUtil.dp2Px(this, height));
             radioButton.setCompoundDrawables(null, drawableTop, null, null);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        ((MoinCardApplication) getApplication()).setIsExchange(false);
-        mViewPager.setCurrentItem(getIntent().getIntExtra(KEY_SECTION, mViewPager.getCurrentItem()));
-        super.onResume();
     }
 
     @Override

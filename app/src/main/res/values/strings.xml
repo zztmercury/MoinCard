@@ -147,5 +147,10 @@
 	<string name="hint_no_code">请关注微信公众号“魔印积点”，并发送“礼包”可获得详细信息。</string>
 	<string name="point_num_plus">积点数量：+%d</string>
 	<string name="give_up">放弃</string>
+	<string name="visitor">游客</string>
+	<string name="complete_user_info">补全帐号信息</string>
+	<string name="hint_exit_visitor_account">您正在使用游客模式，直接退出将丢失已获得的卡券，建议您补全帐号信息后再退出</string>
+	<string name="exit_visitor_account">坚持退出</string>
+	<string name="complete_now">立刻补全</string>
 
 </resources>
