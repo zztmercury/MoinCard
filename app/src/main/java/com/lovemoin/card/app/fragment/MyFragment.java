@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,6 +35,7 @@ public class MyFragment extends LazyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my, container, false);
+        setHasOptionsMenu(true);
         app = (MoinCardApplication) getActivity().getApplication();
         textAccount = (TextView) rootView.findViewById(R.id.textAccount);
         textHint = (TextView) rootView.findViewById(R.id.text_hint_modify_user);
@@ -82,6 +86,27 @@ public class MyFragment extends LazyFragment {
         });
         isPrepared = true;
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_fragment_my, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_about_app:
+                new AlertDialog.Builder(getContext())
+                        .setTitle(R.string.about)
+                        .setMessage(String.format(getString(R.string.text_about_app_message), app.getVersionName()))
+                        .setPositiveButton(R.string.known, null)
+                        .show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

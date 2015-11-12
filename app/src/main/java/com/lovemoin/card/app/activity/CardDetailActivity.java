@@ -44,7 +44,7 @@ public class CardDetailActivity extends BaseActivity {
     private void initData() {
         ImageLoader loader = ImageLoader.getInstance();
         CardInfo cardInfo = ((MoinCardApplication) getApplication()).getCurrentCard();
-        loader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), imgCardDetail, new ImageLoadingListener() {
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + cardInfo.getCardImg(), imgCardDetail, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

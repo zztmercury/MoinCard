@@ -7,32 +7,32 @@ public class Config {
     // 服务器通信配置
     public static final String CHARSET = "UTF-8";
     // 通信接口配置
-    public static final String ACTION_LOGIN = "cardUserActionAjax/allMethod!loginCardUser.action";
-    public static final String ACTION_LOAD_CARD_LIST = "cardUserActionAjax/allMethod!queryCardUserRefPointCard.action";
-    public static final String ACTION_REGISTER = "cardUserActionAjax/allMethod!registCardUser.action";
-    public static final String ACTION_LOAD_ACTIVITY_LIST = "activityActionAjax/activityInfo!findByUser.action";
-    public static final String ACTION_ATTEND_ACTIVITY = "activityActionAjax/activityInfo!attend.action";
-    public static final String ACTION_LOAD_MERCHANT_INFO = "merchantActionAjax/merchantInfo!findMerchant.action";
-    public static final String ACTION_LOAD_ACTIVITY_DETAIL = "activityActionAjax/activityInfo!detail.action";
-    public static final String ACTION_GET_PRIZE = "activityActionAjax/activityInfo!getThePrize.action";
-    public static final String ACTION_GET_RELATE_MERCHANT_COUPON = "activityActionAjax/activityInfo!getMerchantAndPointCard.action";
-    public static final String ACTION_LOAD_CARD_RECORD = "cardUserHisActionAjax/ajax!queryCardHisListByAjax.action";
-    public static final String ACTION_LOAD_STORE_LIST = "merchantStoreActionAjax/merchantStoreInfo!findStore.action";
-    public static final String ACTION_LOAD_MERCHANT_IMAGE_SET = "merchantActionAjax/merchantInfo!findImgList.action";
-    public static final String ACTION_CREATE_CARD = "cardUserActionAjax/allMethod!createCard2CardUser.action";
-    public static final String ACTION_GET_POINT = "cardAction/decipheringMessage.action";
-    public static final String ACTION_SIGN_IN = "cardAction/decipheringMessageOfSignIn.action";
-    public static final String ACTION_QUICK_EXCHANGE = "cardAction/quickExchange.action";
-    public static final String ACTION_SEND_CODE = "cardUserActionAjax/allMethod!sendMobileVerificationCode.action";
-    public static final String ACTION_DELETE_CARD = "cardUserActionAjax/allMethod!deleteCardUserRefCard.action";
-    public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHANT = "activityActionAjax/activityInfo!findByUserAndMerchantId.action";
-    public static final String ACTION_MODIFY_USER = "cardUserActionAjax/allMethod!modifyCardUserPwd.action";
-    public static final String ACTION_CHECK_VERSION = "cardUserActionAjax/allMethod!checkVersionAjax.action";
-    public static final String ACTION_GET_GIFT_FOR_NEW_USER_BY_CODE = "discountActionAjax/getGiftForNewUserByCode.action";
-    public static final String ACTION_LOAD_GIFT_PACK_LIST = "discountActionAjax/getList.action";
-    public static final String ACTION_GET_GIFT = "discountActionAjax/getGift.action";
-    public static final String ACTION_HAS_NUM_1_ACT = "activityActionAjax/activityInfo!hasNum1.action";
-    public static final String ACTION_LOGIN_BY_IMEI = "cardUserActionAjax/allMethod!loginByIMEI.action";
+    public static final String ACTION_LOGIN = "/moinbox/cardUserActionAjax/allMethod!loginCardUser.action";
+    public static final String ACTION_LOAD_CARD_LIST = "/moinbox/cardUserActionAjax/allMethod!queryCardUserRefPointCard.action";
+    public static final String ACTION_REGISTER = "/moinbox/cardUserActionAjax/allMethod!registCardUser.action";
+    public static final String ACTION_LOAD_ACTIVITY_LIST = "/moinbox/activityActionAjax/activityInfo!findByUser.action";
+    public static final String ACTION_ATTEND_ACTIVITY = "/moinbox/activityActionAjax/activityInfo!attend.action";
+    public static final String ACTION_LOAD_MERCHANT_INFO = "/moinbox/merchantActionAjax/merchantInfo!findMerchant.action";
+    public static final String ACTION_LOAD_ACTIVITY_DETAIL = "/moinbox/activityActionAjax/activityInfo!detail.action";
+    public static final String ACTION_GET_PRIZE = "/moinbox/activityActionAjax/activityInfo!getThePrize.action";
+    public static final String ACTION_GET_RELATE_MERCHANT_COUPON = "/moinbox/activityActionAjax/activityInfo!getMerchantAndPointCard.action";
+    public static final String ACTION_LOAD_CARD_RECORD = "/moinbox/cardUserHisActionAjax/ajax!queryCardHisListByAjax.action";
+    public static final String ACTION_LOAD_STORE_LIST = "/moinbox/merchantStoreActionAjax/merchantStoreInfo!findStore.action";
+    public static final String ACTION_LOAD_MERCHANT_IMAGE_SET = "/moinbox/merchantActionAjax/merchantInfo!findImgList.action";
+    public static final String ACTION_CREATE_CARD = "/moinbox/cardUserActionAjax/allMethod!createCard2CardUser.action";
+    public static final String ACTION_GET_POINT = "/moinbox/cardAction/decipheringMessage.action";
+    public static final String ACTION_SIGN_IN = "/moinbox/cardAction/decipheringMessageOfSignIn.action";
+    public static final String ACTION_QUICK_EXCHANGE = "/moinbox/cardAction/quickExchange.action";
+    public static final String ACTION_SEND_CODE = "/moinbox/cardUserActionAjax/allMethod!sendMobileVerificationCode.action";
+    public static final String ACTION_DELETE_CARD = "/moinbox/cardUserActionAjax/allMethod!deleteCardUserRefCard.action";
+    public static final String ACTION_LOAD_ACTIVITY_LIST_BY_MERCHANT = "/moinbox/activityActionAjax/activityInfo!findByUserAndMerchantId.action";
+    public static final String ACTION_MODIFY_USER = "/moinbox/cardUserActionAjax/allMethod!modifyCardUserPwd.action";
+    public static final String ACTION_CHECK_VERSION = "/moinbox/cardUserActionAjax/allMethod!checkVersionAjax.action";
+    public static final String ACTION_GET_GIFT_FOR_NEW_USER_BY_CODE = "/moinbox/discountActionAjax/getGiftForNewUserByCode.action";
+    public static final String ACTION_LOAD_GIFT_PACK_LIST = "/moinbox/discountActionAjax/getList.action";
+    public static final String ACTION_GET_GIFT = "/moinbox/discountActionAjax/getGift.action";
+    public static final String ACTION_HAS_NUM_1_ACT = "/moinbox/activityActionAjax/activityInfo!hasNum1.action";
+    public static final String ACTION_LOGIN_BY_IMEI = "/moinbox/cardUserActionAjax/allMethod!loginByIMEI.action";
     // 卡相关key
     public static final String KEY_CARD = "card";
     public static final String KEY_CARD_CODE = "cardId";
@@ -131,9 +131,9 @@ public class Config {
     public static final String KEY_DEVICE_ID = "IMEI";
     /**
      * 服务器地址<br/>
-     * 测试服务器 http://182.92.3.209:8080/moinbox/<br/>
-     * 生产服务器 http://121.40.152.116:8008/moinbox <br/>
-     * 开发服务器 http://192.168.2.118:8080/moinbox/
+     * 测试服务器 http://182.92.3.209:8080<br/>
+     * 生产服务器 http://www.lovemoin.com<br/>
+     * 开发服务器 http://192.168.2.118:8080
      */
-    public static String SERVER_URL = "http://192.168.2.118:8080/moinbox/";
+    public static String SERVER_URL = "http://www.lovemoin.com";
 }

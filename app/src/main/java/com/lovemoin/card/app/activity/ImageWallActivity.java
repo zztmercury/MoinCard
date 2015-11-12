@@ -47,7 +47,7 @@ public class ImageWallActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(ImageWallActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(ImageWallActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }

@@ -91,7 +91,7 @@ public class LoginActivity extends BaseActivity {
 
                 @Override
                 public void onFail(String message) {
-                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
             };
         }

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import com.lovemoin.card.app.R;
@@ -28,6 +30,25 @@ public class FileDownloader {
     private long maxSize;
     private FileUtil fileUtil;
     private String apkName;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (Thread.currentThread().isInterrupted()) {
+                switch (msg.what) {
+                    case 0:
+                        Toast.makeText(context, "无法获取文件大小", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     public FileDownloader(Context context) {
         this.context = context;
@@ -39,6 +60,9 @@ public class FileDownloader {
         pd.setMessage(context.getString(R.string.hint_download_upgrade_file));
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(true);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setProgressNumberFormat("%1d kb/%2d kb");
+        pd.show();
         final AsyncTask task = new AsyncTask<String, Long, File>() {
             @Override
             protected File doInBackground(String... params) {
@@ -55,7 +79,7 @@ public class FileDownloader {
                 fileUtil.deleteHisFiles(path);
                 fileUtil.createSDDir(path);
                 try {
-                    resultFile = fileUtil.createSDFile(path);
+                    resultFile = fileUtil.createSDFile(path + "/" + targetName);
                     output = new FileOutputStream(resultFile);
                     byte[] buf = new byte[fileUtil.FILESIZE];
                     int length;
@@ -65,7 +89,6 @@ public class FileDownloader {
                         publishProgress(downloadedSize);
                     }
                     output.flush();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -79,7 +102,15 @@ public class FileDownloader {
                     }
                 }
 
-                return null;
+                return resultFile;
+            }
+
+            @Override
+            protected void onPostExecute(File file) {
+                super.onPostExecute(file);
+                pd.dismiss();
+                Toast.makeText(context, R.string.download_finished, Toast.LENGTH_SHORT).show();
+                openFile(file);
             }
 
             @Override
@@ -93,15 +124,8 @@ public class FileDownloader {
             @Override
             protected void onCancelled() {
                 super.onCancelled();
-                Toast.makeText(context, R.string.download_canceled, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.download_canceled, Toast.LENGTH_SHORT).show();
                 fileUtil.deleteHisFiles(path);
-            }
-
-            @Override
-            protected void onPostExecute(File file) {
-                super.onPostExecute(file);
-                Toast.makeText(context, R.string.download_finished, Toast.LENGTH_LONG).show();
-                openFile(file);
             }
         }.execute(Config.SERVER_URL + sourceName, path, targetName);
         pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -109,7 +133,7 @@ public class FileDownloader {
             public void onCancel(DialogInterface dialog) {
                 dialog.dismiss();
                 task.cancel(true);
-                Toast.makeText(context, R.string.download_canceled, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.download_canceled, Toast.LENGTH_SHORT).show();
                 fileUtil.deleteHisFiles(path);
             }
         });
@@ -124,8 +148,12 @@ public class FileDownloader {
             urlConn.connect();
             inputStream = urlConn.getInputStream();
             this.maxSize = urlConn.getContentLength();
-            if (this.maxSize <= 0)
-                Toast.makeText(context, "无法获取文件大小", Toast.LENGTH_LONG).show();
+            if (this.maxSize <= 0) {
+                Message msg = new Message();
+                msg.what = 0;
+                handler.sendMessage(msg);
+                //Toast.makeText(context, "无法获取文件大小", Toast.LENGTH_SHORT).show();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,6 +162,8 @@ public class FileDownloader {
     }
 
     private void openFile(File file) {
+        if (file == null)
+            return;
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(android.content.Intent.ACTION_VIEW);

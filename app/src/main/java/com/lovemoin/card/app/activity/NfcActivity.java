@@ -56,9 +56,9 @@ public class NfcActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (MoinCardApplication) getApplication();
-        if (app.getCachedUserId() == null || app.getCachedUserTel() == null) {
+        if (app.getCachedUserId() == null) {
             app.reset();
-            Toast.makeText(getApplicationContext(), R.string.error_login_before_convert, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.error_login_before_convert, Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -69,6 +69,26 @@ public class NfcActivity extends Activity {
         readTag();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter != null)
+            mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
+                    mTechLists);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        readTag();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAdapter != null)
+            mAdapter.disableForegroundDispatch(this);
+    }
 
     private void nfcForegroundDispatch() {
 
@@ -90,27 +110,6 @@ public class NfcActivity extends Activity {
                 new String[]{MifareClassic.class.getName()},
                 new String[]{NfcA.class.getName()}};// 允许扫描的标签类型
 
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        readTag();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mAdapter != null)
-            mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
-                    mTechLists);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mAdapter != null)
-            mAdapter.disableForegroundDispatch(this);
     }
 
     private void readTag() {
@@ -206,7 +205,7 @@ public class NfcActivity extends Activity {
                                 app.setIsExchange(false);
                                 app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() - app.getCurrentCard().getConvertPoint());
                                 cardInfoDao.insertOrReplace(app.getCurrentCard());
-                                Toast.makeText(NfcActivity.this, "兑换成功", Toast.LENGTH_LONG).show();
+                                Toast.makeText(NfcActivity.this, "兑换成功", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(NfcActivity.this, ConvertSuccessActivity.class);
                                 startActivity(i);
                                 finish();
@@ -214,7 +213,7 @@ public class NfcActivity extends Activity {
 
                             @Override
                             public void onFail(String message) {
-                                Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
+                                Toast.makeText(NfcActivity.this, message, Toast.LENGTH_SHORT).show();
                                 pd.dismiss();
                                 finish();
                             }
@@ -226,12 +225,12 @@ public class NfcActivity extends Activity {
                     finish();
                 }
             } else {
-                Toast.makeText(this, R.string.card_not_satisfy, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.card_not_satisfy, Toast.LENGTH_SHORT).show();
                 pd.dismiss();
                 finish();
             }
         } else {
-            Toast.makeText(this, R.string.please_press_card_first, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.please_press_card_first, Toast.LENGTH_SHORT).show();
             pd.dismiss();
             finish();
         }
@@ -304,7 +303,7 @@ public class NfcActivity extends Activity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(NfcActivity.this, message, Toast.LENGTH_SHORT).show();
                 pd.dismiss();
                 finish();
             }
@@ -338,7 +337,7 @@ public class NfcActivity extends Activity {
                     @Override
                     public void onFail(String message) {
                         pd.dismiss();
-                        Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NfcActivity.this, message, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 };
@@ -378,7 +377,7 @@ public class NfcActivity extends Activity {
                     @Override
                     public void onFail(String message) {
                         pd.dismiss();
-                        Toast.makeText(NfcActivity.this, message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NfcActivity.this, message, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 };

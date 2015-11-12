@@ -1,165 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-	package="com.lovemoin.card.app"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+    package="com.lovemoin.card.app"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<uses-permission android:name="android.permission.BLUETOOTH"/>
-	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<uses-permission android:name="android.permission.NFC" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-	<application
-		android:name=".MoinCardApplication"
-			android:allowBackup="true"
-			android:icon="@mipmap/ic_launcher"
-			android:label="@string/app_name"
-		android:theme="@style/AppTheme">
-		<meta-data
-				android:name="android.nfc.disable_beam_default"
-				android:value="true" />
+    <application
+        android:name=".MoinCardApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.nfc.disable_beam_default"
+            android:value="true"/>
 
-		<activity
-				android:name=".activity.MainActivity"
-				android:label="@string/app_name"
-				android:launchMode="singleTask"
-				android:screenOrientation="portrait"
-				android:theme="@android:style/Theme.NoDisplay">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.NfcActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+            </intent-filter>
 
-		</activity>
-		<activity
-				android:name=".activity.NfcActivity"
-				android:theme="@android:style/Theme.NoDisplay">
-			<intent-filter>
-				<action android:name="android.nfc.action.TECH_DISCOVERED" />
-			</intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/filter_nfc"/>
 
-			<meta-data
-					android:name="android.nfc.action.TECH_DISCOVERED"
-					android:resource="@xml/filter_nfc" />
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
 
-			<intent-filter>
-				<action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/login"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/register"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+        <activity
+            android:name=".activity.ActivityDetailType1Activity"
+            android:label="活动详情"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.ActivityDetailType3Activity"
+            android:label="活动详情"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.MerchantDetailActivity"
+            android:label="商户信息"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.CardDetailActivity"
+            android:label="积点卡详情"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.CardRecordListActivity"
+            android:label="积点卡使用记录"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.StoreListActivity"
+            android:label="门店信息"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.ImageWallActivity"
+            android:label="商户图片"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.CardSelectorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.ConvertSuccessActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        </activity>
+        <activity
+            android:name=".activity.UserModifyActivity"
+            android:label="@string/modify_user"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".activity.ActivityCalendarActivity">
+        </activity>
+        <activity
+            android:name=".activity.EntranceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activity.GiftPackActivity"
+            android:label="@string/moin_gift_pack"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.CompleteUserInfoActivity"
+            android:label="@string/complete_user_info"
+            android:screenOrientation="portrait">
+        </activity>
 
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity
-				android:name=".activity.HomeActivity"
-				android:launchMode="singleTask"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.LoginActivity"
-				android:label="@string/login"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-				android:windowSoftInputMode="adjustResize|stateHidden">
-
-		</activity>
-		<activity
-				android:name=".activity.RegisterActivity"
-				android:label="@string/register"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-				android:windowSoftInputMode="adjustResize|stateHidden">
-
-		</activity>
-		<activity
-				android:name=".activity.ActivityDetailType1Activity"
-				android:label="活动详情"
-				android:screenOrientation="portrait">
-
-		</activity>
-
-		<activity
-				android:name=".activity.ActivityDetailType3Activity"
-				android:label="活动详情"
-				android:screenOrientation="portrait">
-
-		</activity>
-
-		<activity
-				android:name=".activity.MerchantDetailActivity"
-				android:label="商户信息"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.CardDetailActivity"
-				android:label="积点卡详情"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.CardRecordListActivity"
-				android:label="积点卡使用记录"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.StoreListActivity"
-				android:label="门店信息"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.ImageWallActivity"
-				android:label="商户图片"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-				android:name=".activity.CardSelectorActivity"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.NoActionBar">
-
-		</activity>
-		<activity
-				android:name=".activity.ConvertSuccessActivity"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.NoActionBar">
-
-		</activity>
-		<activity
-				android:name=".activity.GuideActivity"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
-		</activity>
-		<activity
-				android:name=".activity.UserModifyActivity"
-				android:label="@string/modify_user"
-				android:screenOrientation="portrait">
-
-		</activity>
-		<activity android:name=".activity.ActivityCalendarActivity">
-
-		</activity>
-		<activity
-				android:name=".activity.EntranceActivity"
-				android:screenOrientation="portrait"
-				android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-		</activity>
-		<activity android:name=".activity.GiftPackActivity"
-				  android:label="@string/moin_gift_pack"
-				  android:screenOrientation="portrait">
-
-		</activity>
-		<activity
-			android:name=".activity.CompleteUserInfoActivity"
-			android:label="@string/complete_user_info"
-			android:screenOrientation="portrait">
-
-		</activity>
-	</application>
+        <service
+            android:name=".BleService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+    </application>
 
 </manifest>

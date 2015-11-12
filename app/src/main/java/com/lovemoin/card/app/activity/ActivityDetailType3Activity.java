@@ -140,13 +140,13 @@ public class ActivityDetailType3Activity extends BaseActivity {
             @Override
             public void onFail(String message) {
                 pd.dismiss();
-                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     private void bindDataToViews(final ActivityType3 activityInfo) {
-        imageLoader.displayImage(Config.SERVER_URL + activityInfo.getImg(), imgMain, new ImageLoadingListener() {
+        imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + "/" + activityInfo.getImg(), imgMain, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -196,7 +196,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
                         new AttendActivity(activityInfo.getActivityId(), userId, activityInfo.getMerchantIdList().get(0), activityInfo.getType(), activityInfo.getNum()) {
                             @Override
                             public void onSuccess() {
-                                Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActivityDetailType3Activity.this, R.string.attend_success, Toast.LENGTH_SHORT).show();
                                 pd.dismiss();
 //                            btnReact.setText(R.string.attended);
 //                            btnReact.setEnabled(false);
@@ -206,7 +206,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
 
                             @Override
                             public void onFail(String message) {
-                                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_SHORT).show();
                                 pd.dismiss();
                             }
                         };
@@ -284,7 +284,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -299,7 +299,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
                 pd.dismiss();
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
-                imageLoader.displayImage(Config.SERVER_URL + img, imgGift);
+                imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + img, imgGift);
                 app.updateCardInfoFromServer(false);
                 loadDetail();
             }
@@ -307,7 +307,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
             @Override
             public void onFail(String message) {
                 pd.dismiss();
-                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityDetailType3Activity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -317,7 +317,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -329,7 +329,7 @@ public class ActivityDetailType3Activity extends BaseActivity {
         } else if (cover.getVisibility() != View.GONE) {
             cover.setVisibility(View.GONE);
         } else {
-            finish();
+            startActivity(new Intent(this, HomeActivity.class));
         }
     }
 }

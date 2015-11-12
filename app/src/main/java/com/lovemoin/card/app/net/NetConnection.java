@@ -41,7 +41,7 @@ public abstract class NetConnection {
                     }
                     paramStr.deleteCharAt(paramStr.length() - 1);
 
-                    Log.d("NetConnection", url + "?" + paramStr.toString());
+                    Log.i("NetConnection", url + "?" + paramStr.toString());
 
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     connection.setConnectTimeout(4000);
@@ -71,11 +71,12 @@ public abstract class NetConnection {
                     }
 
                 } catch (IOException e) {
-                    String message = e.getMessage();
-                    if (message == null) {
-                        message = "无法连接应用服务器。";
-                    }
-                    response.setMessage(message);
+                    //String message = e.getMessage();
+                    //if (message == null) {
+                    //    message = "无法连接应用服务器。";
+                    //}
+                    //response.setMessage(message);
+                    response.setMessage("网络异常，请检查您的网络连接情况");
                     response.setSuccess(false);
                     response.setParam("");
                     e.printStackTrace();

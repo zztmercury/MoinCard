@@ -1,5 +1,6 @@
 package com.lovemoin.card.app.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -81,13 +82,13 @@ public class ActivityDetailType1Activity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     private void bindDataToViews(final ActivityType1 activityInfo) {
-        loader.displayImage(Config.SERVER_URL + activityInfo.getImg(), imgMain, new ImageLoadingListener() {
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + activityInfo.getImg(), imgMain, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -129,8 +130,15 @@ public class ActivityDetailType1Activity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, HomeActivity.class));
     }
 }

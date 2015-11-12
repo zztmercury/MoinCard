@@ -17,6 +17,8 @@ import android.nfc.NfcManager;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +41,6 @@ import com.lovemoin.card.app.utils.CommonUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import de.greenrobot.dao.query.QueryBuilder;
 
@@ -47,8 +48,14 @@ import de.greenrobot.dao.query.QueryBuilder;
  * Created by zzt on 15-9-22.
  */
 public class BaseActivity extends AppCompatActivity {
+    public static final String KEY_MESSAGE = "message";
     private static final String SERVICE_UUID = "0000fff0-0000-1000-8000-00805f9b34fb";
     private static final String CHARACTERISTIC_UUID = "0000fff6-0000-1000-8000-00805f9b34fb";
+    private static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
+    private static final int UPDATE_PROGRESS_DIALOG = 0;
+    private static final int CONNECT_GATT = 1;
+    private static final int DISCONNECT_GATT = 2;
+    private static final int RECONNECT_GATT = 3;
     protected MoinCardApplication app;
     protected ProgressDialog pd;
     protected NfcAdapter nfcAdapter;
@@ -56,9 +63,47 @@ public class BaseActivity extends AppCompatActivity {
     private PendingIntent mPendingIntent;
     private IntentFilter[] mFilters;
     private String[][] mTechLists;
+    private BluetoothDevice mBluetoothDevice;
     private BluetoothGatt mBluetoothGatt;
+    private BluetoothGattCallback mBluetoothGattCallback;
     private BluetoothGattCharacteristic mGattCharacteristic;
     private BluetoothAdapter.LeScanCallback mLeScanCallback;
+    public Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_PROGRESS_DIALOG:
+                    Bundle data = msg.getData();
+                    String message = data.getString(KEY_MESSAGE);
+                    pd.setMessage(message);
+                    break;
+                case CONNECT_GATT:
+                    mBluetoothGatt = mBluetoothDevice.connectGatt(getApplicationContext(), false, mBluetoothGattCallback);
+                    break;
+                case DISCONNECT_GATT:
+                    if (mBluetoothGatt != null) {
+                        mBluetoothGatt.disconnect();
+                        mBluetoothGatt.close();
+                        mBluetoothGatt = null;
+                        app.stat = DeviceInfo.OPER_WAITE;
+                    }
+                    break;
+                case RECONNECT_GATT:
+                    if (mBluetoothGatt.connect()) {
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                        if (mGattCharacteristic != null) {
+                            mBluetoothGatt.setCharacteristicNotification(mGattCharacteristic, true);
+                            writeByBluetooth(Command.COMMAND_DEVICE_STAT);
+                        } else {
+                            mBluetoothGatt.discoverServices();
+                        }
+                    }
+                    break;
+            }
+            return false;
+        }
+    });
+    private DeviceInfo deviceInfo;
 
     private static void delay(int ms) {
         try {
@@ -86,6 +131,7 @@ public class BaseActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+                                onResume();
                                 dialog.dismiss();
                             }
                         })
@@ -95,7 +141,8 @@ public class BaseActivity extends AppCompatActivity {
                                 app.setPromptNfc(false);
                                 app.setConnectMode(MoinCardApplication.MODE_BLUETOOTH);
                                 mBluetoothAdapter.enable();
-                                leScan();
+                                onResume();
+                                //startLeScan();
                                 dialog.dismiss();
                             }
                         })
@@ -111,7 +158,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
             private String revStr = "";
-            private DeviceInfo deviceInfo;
 
             private void operPlus() {
                 CardInfo cardInfo = findPointCardByMerchantId(deviceInfo.getMerchantCode());
@@ -138,7 +184,7 @@ public class BaseActivity extends AppCompatActivity {
                     createCard(deviceInfo.getMerchantCode(), CardInfo.TYPE_SIGN, true);
                 } else {
                     app.setCurrentCard(cardInfo);
-                    String commandStr = Command.COMMAND_DEVICE_SIGN_IN + app.getCurrentCard().getCardCode();
+                    String commandStr = Command.SHORT_COMMAND_DEVICE_SIGN_IN + app.getCurrentCard().getCardCode().substring(12);
                     writeByBluetooth(commandStr);
                 }
             }
@@ -150,23 +196,21 @@ public class BaseActivity extends AppCompatActivity {
                         app.getCardInfoDao().insert(cardInfo);
                         if (isPlus && cardType.equals(CardInfo.TYPE_POINT)) {
                             app.setCurrentCard(cardInfo);
-                            writeByBluetooth(Command.COMMAND_DEVICE_PLUS + app.getCurrentCard().getCardCode());
+                            writeByBluetooth(Command.SHORT_COMMAND_DEVICE_PLUS + app.getCurrentCard().getCardCode().substring(12));
                         } else if (isPlus && cardType.equals(CardInfo.TYPE_SIGN)) {
                             app.setCurrentCard(cardInfo);
-                            writeByBluetooth(Command.COMMAND_DEVICE_PLUS + app.getCurrentCard().getCardCode());
+                            writeByBluetooth(Command.SHORT_COMMAND_DEVICE_SIGN_IN + app.getCurrentCard().getCardCode().substring(12));
                         } else {
                             pd.dismiss();
                             app.setCurrentCard(cardInfo);
                             startActivity(new Intent(BaseActivity.this, MerchantDetailActivity.class));
-                            finish();
                         }
                     }
 
                     @Override
                     public void onFail(String message) {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         pd.dismiss();
-                        finish();
                     }
                 };
             }
@@ -174,19 +218,33 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
                 if ("MO-IN BOX".equals(device.getName())) {
-                    pd.setMessage(getString(R.string.connecting_device));
+                    //pd.setMessage(getString(R.string.connecting_device));
+                    Message msg = new Message();
+                    Bundle data = new Bundle();
+                    if (rssi >= -70) {
+                        data.putString(KEY_MESSAGE, getString(R.string.connecting_device));
+                        msg.setData(data);
+                        handler.sendMessage(msg);
+                    }
                     if (rssi >= -70 && mBluetoothGatt == null) {
-                        pd.show();
-                        mBluetoothGatt = device.connectGatt(getApplicationContext(), false, new BluetoothGattCallback() {
+                        mBluetoothDevice = device;
+                        msg = new Message();
+                        data.putString(KEY_MESSAGE, getString(R.string.getting_device_service));
+                        msg.setData(data);
+                        handler.sendMessage(msg);
+                        mBluetoothGattCallback = new BluetoothGattCallback() {
                             @Override
                             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                                 super.onConnectionStateChange(gatt, status, newState);
                                 if (newState == BluetoothAdapter.STATE_CONNECTED) {
                                     deviceInfo = null;
-                                    revStr = "";
                                     gatt.discoverServices();
                                 }
+                                if (newState == BluetoothAdapter.STATE_DISCONNECTED) {
+                                    gatt.disconnect();
+                                }
                             }
+
 
                             @Override
                             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
@@ -196,21 +254,32 @@ public class BaseActivity extends AppCompatActivity {
                                         if (gattService.getUuid().toString().equals(SERVICE_UUID)) {
                                             for (BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
                                                 if (gattCharacteristic.getUuid().toString().equals(CHARACTERISTIC_UUID)) {
-                                                    mBluetoothAdapter.stopLeScan(null);
+                                                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
                                                     gatt.setCharacteristicNotification(gattCharacteristic, true);
+                                                    //BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptor(UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
+                                                    //descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                                                    //mBluetoothGatt.writeDescriptor(descriptor);
+
                                                     mGattCharacteristic = gattCharacteristic;
                                                     writeByBluetooth(Command.COMMAND_DEVICE_STAT);
-
+                                                    Bundle bundle = new Bundle();
+                                                    Message msg = new Message();
+                                                    msg.what = UPDATE_PROGRESS_DIALOG;
+                                                    bundle.putString(KEY_MESSAGE, getString(R.string.loading_device_info));
+                                                    msg.setData(bundle);
+                                                    handler.sendMessage(msg);
                                                 }
                                             }
                                         }
                                     }
-                                }
+                                } else gatt.discoverServices();
                             }
 
                             @Override
                             public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                                 super.onCharacteristicChanged(gatt, characteristic);
+
                                 byte[] data = characteristic.getValue();
                                 String hexStr = CommonUtil.ByteArrayToHexString(data);
                                 revStr += hexStr.substring(2, hexStr.length() - 2);
@@ -220,77 +289,105 @@ public class BaseActivity extends AppCompatActivity {
                                         switch (app.stat) {
                                             case DeviceInfo.OPER_WAITE:
                                                 deviceInfo = new DeviceInfo(revStr);
-                                                revStr = "";
                                                 app.stat = deviceInfo.getOper();
+                                                Bundle bundle = new Bundle();
+                                                Message msg = new Message();
+                                                msg.what = UPDATE_PROGRESS_DIALOG;
                                                 switch (app.stat) {
                                                     case DeviceInfo.OPER_WAITE:
                                                         writeByBluetooth(Command.COMMAND_DEVICE_STAT);
+                                                        bundle.putString(KEY_MESSAGE, getString(R.string.loading_device_info));
                                                         break;
                                                     case DeviceInfo.OPER_PLUS:
+                                                        bundle.putString(KEY_MESSAGE, getString(R.string.getting_point));
                                                         operPlus();
                                                         break;
                                                     case DeviceInfo.OPER_CONVERT:
+                                                        bundle.putString(KEY_MESSAGE, getString(R.string.converting));
                                                         operConvert();
                                                         //writeByBluetooth(Command.COMMAND_DEVICE_CONVERT);
                                                         break;
                                                     case DeviceInfo.OPER_SIGN:
+                                                        bundle.putString(KEY_MESSAGE, getString(R.string.signing));
                                                         operSign();
                                                         break;
                                                 }
+                                                msg.setData(bundle);
+                                                handler.sendMessage(msg);
                                                 break;
                                             case DeviceInfo.OPER_PLUS:
                                                 new GetPoint(revStr, app.getCachedUserId()) {
                                                     @Override
                                                     public void onSuccess() {
                                                         app.stat = DeviceInfo.OPER_WAITE;
-                                                        pd.dismiss();
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
                                                         Intent i = new Intent(BaseActivity.this, CardSelectorActivity.class);
                                                         List<CardInfo> cardList = new ArrayList<>();
                                                         cardList.add(app.getCurrentCard());
                                                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                                                         i.putExtra(CardSelectorActivity.COUNT, deviceInfo.getPoint());
                                                         startActivity(i);
-                                                        finish();
                                                     }
 
                                                     @Override
                                                     public void onFail(String message) {
-                                                        pd.dismiss();
-                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                                        finish();
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        app.stat = DeviceInfo.OPER_WAITE;
+                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                                     }
                                                 };
+                                                mBluetoothGatt.close();
                                                 break;
                                             case DeviceInfo.OPER_CONVERT:
                                                 new QuickExchange(revStr, app.getCachedUserId()) {
 
                                                     @Override
                                                     public void onSuccess() {
-                                                        app.setIsExchange(false);
                                                         app.stat = DeviceInfo.OPER_WAITE;
-                                                        pd.dismiss();
                                                         app.setIsExchange(false);
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
                                                         app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() - app.getCurrentCard().getConvertPoint());
                                                         app.getCardInfoDao().insertOrReplace(app.getCurrentCard());
-                                                        Toast.makeText(getApplicationContext(), "兑换成功", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(getApplicationContext(), "兑换成功", Toast.LENGTH_SHORT).show();
                                                         Intent i = new Intent(BaseActivity.this, ConvertSuccessActivity.class);
                                                         startActivity(i);
-                                                        finish();
                                                     }
 
                                                     @Override
                                                     public void onFail(String message) {
-                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                                        pd.dismiss();
-                                                        finish();
+                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                                        app.stat = DeviceInfo.OPER_WAITE;
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
                                                     }
                                                 };
+                                                mBluetoothGatt.close();
                                                 break;
                                             case DeviceInfo.OPER_SIGN:
                                                 new SignIn(revStr, app.getCachedUserId()) {
                                                     @Override
                                                     public void onSuccess() {
-                                                        pd.dismiss();
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        app.stat = DeviceInfo.OPER_WAITE;
                                                         Intent i = new Intent(BaseActivity.this, CardSelectorActivity.class);
                                                         List<CardInfo> cardList = new ArrayList<>();
                                                         app.getCurrentCard().setCurrentPoint(app.getCurrentCard().getCurrentPoint() + 1);
@@ -298,24 +395,38 @@ public class BaseActivity extends AppCompatActivity {
                                                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                                                         i.putExtra(CardSelectorActivity.COUNT, -2);
                                                         startActivity(i);
-                                                        finish();
                                                     }
 
                                                     @Override
                                                     public void onFail(String message) {
-                                                        pd.dismiss();
-                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                                        finish();
+                                                        app.stat = DeviceInfo.OPER_WAITE;
+                                                        try {
+                                                            pd.dismiss();
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                                     }
                                                 };
+                                                mBluetoothGatt.close();
                                                 break;
                                         }
+                                        revStr = "";
+                                    } else {
+                                        revStr = "";
                                     }
                                 }
                             }
-                        });
+                        };
+                        msg = new Message();
+                        msg.what = CONNECT_GATT;
+                        handler.sendMessage(msg);
+                        //mBluetoothGatt = device.connectGatt(getApplicationContext(), false, mBluetoothGattCallback);
                     } else if (rssi >= -70 && mBluetoothGatt != null) {
-                        mBluetoothGatt.connect();
+                        msg = new Message();
+                        msg.what = RECONNECT_GATT;
+                        handler.sendMessage(msg);
+
                         pd.show();
                     }
                 }
@@ -323,12 +434,23 @@ public class BaseActivity extends AppCompatActivity {
         };
     }
 
-    private void leScan() {
-        UUID[] uuids = {UUID.fromString(SERVICE_UUID)};
-        mBluetoothAdapter.startLeScan(uuids, mLeScanCallback);
+    public void startLeScan() {
+        //UUID[] uuids = {UUID.fromString(SERVICE_UUID)};
+        //mBluetoothAdapter.startLeScan(uuids, mLeScanCallback);
+        mBluetoothAdapter.startLeScan(mLeScanCallback);
+        Log.d("BaseActivity", "startLeScan");
+    }
+
+    public void disconnectBle() {
+        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        Message msg = new Message();
+        msg.what = DISCONNECT_GATT;
+        handler.sendMessage(msg);
+        Log.d("BaseActivity", "disconnectBle");
     }
 
     private void writeByBluetooth(String s) {
+        Log.d("BaseActivity", "write ble");
         int sendlen = s.length() / 2;
         int sendoffset = 0;
         byte[] sendbuffer = CommonUtil.HexStringToByteArray(s);
@@ -444,15 +566,21 @@ public class BaseActivity extends AppCompatActivity {
             nfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
             if (nfcAdapter.isEnabled())
                 app.setConnectMode(MoinCardApplication.MODE_NFC);
+        } else {
+            app.setConnectMode(MoinCardApplication.MODE_BLUETOOTH);
         }
 
         switch (app.getConnectMode()) {
             case MoinCardApplication.MODE_BLUETOOTH:
-                leScan();
+                //startLeScan();
                 break;
             case MoinCardApplication.MODE_NFC:
 
                 break;
         }
+    }
+
+    public ProgressDialog getProgressDialog() {
+        return pd;
     }
 }

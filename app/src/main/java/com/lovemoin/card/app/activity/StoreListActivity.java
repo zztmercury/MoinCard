@@ -53,7 +53,7 @@ public class StoreListActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(StoreListActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(StoreListActivity.this, message, Toast.LENGTH_SHORT).show();
                 textStoreCount.setText(String.format(getString(R.string.stores_in_all), 0));
             }
         };

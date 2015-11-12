@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	android:id="@+id/ex_ok_line"
+	xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:id="@+id/ex_ok_line"
-              android:orientation="vertical"
-              android:fitsSystemWindows="true">
+	android:fitsSystemWindows="true"
+	android:orientation="vertical">
 
 	<ImageView
+		android:id="@+id/imgGuide"
 			android:layout_width="match_parent"
-			android:gravity="center"
 			android:layout_height="match_parent"
-			android:id="@+id/imgGuide"
+		android:gravity="center"
 			android:scaleType="fitXY"
-			android:src="@drawable/help_guide" />
+		android:src="@drawable/help_nfc_guide"/>
 
 </LinearLayout>

@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
@@ -56,7 +55,7 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
                 android.R.color.holo_red_light);
         layoutSwipe.setOnRefreshListener(this);
 
-        onRefresh();
+        loadActivityListFromDB();
 
         isPrepared = true;
         return rootView;
@@ -65,7 +64,13 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
     @Override
     protected void lazyLoad() {
         if (isPrepared && isVisible)
-            loadActivityListFromDB();
+            loadActivityListFromServer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadActivityListFromServer();
     }
 
     private void loadActivityListFromDB() {
@@ -105,7 +110,7 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
             @Override
             public void onFail(String message) {
                 layoutSwipe.setRefreshing(false);
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -114,4 +119,5 @@ public class ActivityListFragment extends LazyFragment implements SwipeRefreshLa
     public void onRefresh() {
         loadActivityListFromServer();
     }
+
 }

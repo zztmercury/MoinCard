@@ -116,7 +116,8 @@ public class CommonUtil {
         //return data;
         byte[] bytes = new byte[s.length() / 2];
         for (int i = 0; i < s.length() / 2; i++) {
-            bytes[i] = Byte.valueOf(s.substring(i * 2, (i + 1) * 2), 16);
+            int j = Integer.valueOf(s.substring(i * 2, (i + 1) * 2), 16);
+            bytes[i] = (byte) (j & 0xff);
         }
         return bytes;
     }

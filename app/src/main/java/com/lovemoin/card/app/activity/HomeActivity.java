@@ -65,6 +65,7 @@ public class HomeActivity extends BaseActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -80,7 +81,8 @@ public class HomeActivity extends BaseActivity {
                         mNavigationGroup.check(R.id.navItemMy);
                         break;
                 }
-                getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(position));
+                if (getSupportActionBar() != null)
+                    getSupportActionBar().setTitle(mSectionsPagerAdapter.getPageTitle(position));
             }
         });
 
@@ -126,6 +128,12 @@ public class HomeActivity extends BaseActivity {
 //        }
 
         app.setFirstTimeInstalled(false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getIntent().putExtra(KEY_SECTION, mViewPager.getCurrentItem());
     }
 
     @Override

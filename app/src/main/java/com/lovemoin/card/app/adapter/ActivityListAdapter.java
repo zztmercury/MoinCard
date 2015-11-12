@@ -63,7 +63,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
         final ActivityInfo activityInfo = mActivityInfoList.get(position);
         holder.textName.setText(activityInfo.getName());
         holder.textBrief.setText(activityInfo.getBrief());
-        imageLoader.displayImage(Config.SERVER_URL + activityInfo.getBriefImg(), holder.imgMin, new ImageLoadingListener() {
+        imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + activityInfo.getBriefImg(), holder.imgMin, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

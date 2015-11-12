@@ -92,7 +92,7 @@ public class CardViewFragment extends Fragment {
     }
 
     private void bindData() {
-        loader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), imgCard, new ImageLoadingListener() {
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + cardInfo.getCardImg(), imgCard, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

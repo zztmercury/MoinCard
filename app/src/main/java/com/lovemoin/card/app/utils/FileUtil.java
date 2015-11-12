@@ -68,11 +68,12 @@ public class FileUtil {
         File dir = new File(SDPATH + dirName);
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles();
-            for (File file : files) {
-                if (file.getName().startsWith("FindPro")) {
-                    file.delete();
+            if (files != null)
+                for (File file : files) {
+                    if (file.getName().startsWith("FindPro")) {
+                        file.delete();
+                    }
                 }
-            }
         }
     }
 

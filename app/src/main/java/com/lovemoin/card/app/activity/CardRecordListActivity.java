@@ -56,7 +56,7 @@ public class CardRecordListActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(CardRecordListActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(CardRecordListActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }

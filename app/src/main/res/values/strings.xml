@@ -58,7 +58,7 @@
 	<string name="phone">联系电话</string>
 	<string name="activity_calendar">活动日历</string>
 	<string name="device_do_not_support_nfc">设备不支持Nfc\n无法正常使用积点及兑换功能</string>
-	<string name="find_device_hint">请将手机靠近魔印设备</string>
+	<string name="find_device_hint">请将手机靠近魔印盒子</string>
 	<string name="please_press_card_first">请先点击兑换</string>
 	<string name="card_not_satisfy">这是别家的积点卡，本店不受理噢</string>
 	<string name="get_point_success">领取积点成功</string>
@@ -117,7 +117,7 @@
 	<string name="hint_coupon_used_up">兑换次数已用尽，是否删除？</string>
 	<string name="sign_card_detail">签到卡详情</string>
 	<string name="hint_found_new_version">有新版本更新，是否立即下载体验？</string>
-	<string name="hint_download_upgrade_file">正在下载更新文件，请稍等...</string>
+	<string name="hint_download_upgrade_file">正在下载更新文件，请稍等…</string>
 	<string name="download_canceled">下载已取消</string>
 	<string name="download_finished">下载完成</string>
 	<string name="hint_no_nfc_device">哎呀，您的手机不支持NFC</string>
@@ -126,7 +126,7 @@
 	<string name="I_know">我知道了</string>
 	<string name="about_to_begin">即将开始</string>
 	<string name="activity_end">活动已结束</string>
-	<string name="click_to_get_point">点击星星\n获取积点</string>
+	<string name="click_star_to_get_point">点击星星\n获取积点</string>
 	<string name="hint_enable_nfc">请启用NFC功能以获取更好的体验</string>
 	<string name="forget_password">忘记密码?</string>
 	<string name="to_register">切换至注册</string>
@@ -152,5 +152,19 @@
 	<string name="hint_exit_visitor_account">您正在使用游客模式，直接退出将丢失已获得的卡券，建议您补全帐号信息后再退出</string>
 	<string name="exit_visitor_account">坚持退出</string>
 	<string name="complete_now">立刻补全</string>
+	<string name="scanning_device">扫描设备中</string>
+	<string name="stop">停止</string>
+	<string name="one_more_point_to_convert">再积一点即可兑换</string>
+	<string name="click_to_convert">点击“兑换”，再将手机贴近魔印盒子</string>
+	<string name="click_to_get_point">点击后靠近魔印盒子以获取积点</string>
+	<string name="hint_card_overdue">卡券已过期，是否删除？</string>
+	<string name="hint_visitor_account_convert">您正在使用游客模式，更换设备或切换用户后将丢失已获得的卡券，为了保障您的财产安全，请在兑换前补全账号信息</string>
+	<string name="getting_point">正在获取积点</string>
+	<string name="converting">正在兑换</string>
+	<string name="signing">正在签到</string>
+	<string name="loading_device_info">正在或区设备信息</string>
+	<string name="getting_device_service">正在获取设备服务</string>
+	<string name="about">关于</string>
+	<string name="text_about_app_message">魔印积点卡 V%s \n魔印信息科技有限公司 出品</string>
 
 </resources>

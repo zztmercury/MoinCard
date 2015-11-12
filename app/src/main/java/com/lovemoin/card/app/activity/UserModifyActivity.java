@@ -54,14 +54,14 @@ public class UserModifyActivity extends BaseActivity {
                 @Override
                 public void onSuccess() {
                     pd.dismiss();
-                    Toast.makeText(getApplicationContext(), R.string.hint_modify_user_success, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.hint_modify_user_success, Toast.LENGTH_SHORT).show();
                     finish();
                 }
 
                 @Override
                 public void onFail(String message) {
                     pd.dismiss();
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             };
         }

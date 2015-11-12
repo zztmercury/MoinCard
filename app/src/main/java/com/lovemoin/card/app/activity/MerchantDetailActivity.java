@@ -5,11 +5,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.lovemoin.card.app.db.MerchantInfo;
 import com.lovemoin.card.app.net.DeleteCard;
 import com.lovemoin.card.app.net.LoadActivityByMerchant;
 import com.lovemoin.card.app.net.LoadMerchantInfo;
+import com.lovemoin.card.app.utils.DateUtil;
 import com.lovemoin.card.app.widget.DividerItemDecoration;
 import com.lovemoin.card.app.widget.LinearLayoutManagerForScrollView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,12 +40,16 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 /**
  * Created by zzt on 15-9-2.
  *
  * @author zzt
  */
 public class MerchantDetailActivity extends BaseActivity {
+    private static final String SHOWCASE_ONE_MORE_POINT = "oneMorePoint";
+    private static final String SHOWCASE_CONVERT = "convert";
     /**
      * 卡片信息
      */
@@ -51,7 +58,6 @@ public class MerchantDetailActivity extends BaseActivity {
      * 商户信息
      */
     private MerchantInfo merchantInfo;
-
     /**
      * 卡图
      */
@@ -99,15 +105,11 @@ public class MerchantDetailActivity extends BaseActivity {
     private TextView textCardDetail;
     private TextView textCardRecord;
     private View layoutCardDetail;
-
     private View layoutCardRecord;
     private View layoutAllStores;
     private RecyclerView listRecentActivity;
-
     private ImageLoader loader;
-
     private boolean canConvert;
-
     private MoinCardApplication app;
     private CardInfoDao cardInfoDao;
     private ActivityNameListAdapter mAdapter;
@@ -125,6 +127,7 @@ public class MerchantDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         bindCard();
+        pd.dismiss();
         if (cardInfo.getCardType().equals(CardInfo.TYPE_COUPON) && cardInfo.getCurrentPoint() == 0) {
             new AlertDialog.Builder(this)
                     .setMessage(R.string.hint_coupon_used_up)
@@ -133,12 +136,22 @@ public class MerchantDetailActivity extends BaseActivity {
                         public void onClick(final DialogInterface dialog, int which) {
                             deleteCard(dialog);
                         }
-                    }).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
+                    })
+                    .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        } else if (DateUtil.dateDifference(System.currentTimeMillis(), cardInfo.getEndDate().getTime()) < 0) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.hint_card_overdue)
+                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteCard(dialog);
+                        }
+                    }).show();
         }
     }
 
@@ -187,13 +200,13 @@ public class MerchantDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     private void bindCard() {
-        loader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), imgCard, new ImageLoadingListener() {
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + cardInfo.getCardImg(), imgCard, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
@@ -244,6 +257,23 @@ public class MerchantDetailActivity extends BaseActivity {
         btnConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (TextUtils.isEmpty(app.getCachedUserTel())) {
+                    new AlertDialog.Builder(MerchantDetailActivity.this)
+                            .setMessage(R.string.hint_visitor_account_convert)
+                            .setPositiveButton(R.string.complete_now, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(MerchantDetailActivity.this, CompleteUserInfoActivity.class));
+                                }
+                            })
+                            .setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                    return;
+                }
                 if (app.getConnectMode() == MoinCardApplication.MODE_NFC && !nfcAdapter.isEnabled()) {
                     new AlertDialog.Builder(MerchantDetailActivity.this)
                             .setMessage(R.string.hint_enable_nfc)
@@ -255,24 +285,60 @@ public class MerchantDetailActivity extends BaseActivity {
                                 }
                             })
                             .show();
-                } else if (app.getConnectMode() == MoinCardApplication.MODE_BLUETOOTH && !mBluetoothAdapter.isEnabled()) {
-                    Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    startActivity(i);
                 } else {
-                    app.setIsExchange(true);
-                    pd.setMessage(getString(R.string.find_device_hint));
-                    pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            dialog.dismiss();
-                            app.setIsExchange(false);
-                        }
-                    });
-                    pd.show();
+                    if (app.getConnectMode() == MoinCardApplication.MODE_BLUETOOTH && !mBluetoothAdapter.isEnabled()) {
+                        Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivity(i);
+                    } else {
+                        app.setIsExchange(true);
+                        pd.setMessage(getString(R.string.find_device_hint));
+                        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                dialog.dismiss();
+                                app.setIsExchange(false);
+                            }
+                        });
+                        pd.show();
+                    }
+                    startLeScan();
                 }
             }
         });
-
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                disconnectBle();
+            }
+        });
+        pd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                disconnectBle();
+            }
+        });
+        pd.setCanceledOnTouchOutside(false);
+        if (currentPoint + 1 == convertPoint)
+            new MaterialShowcaseView.Builder(this)
+                    .setDelay(500)
+                    .setTarget((View) textCurrentPoint.getParent())
+                    .singleUse(SHOWCASE_ONE_MORE_POINT)
+                    .setContentText(R.string.one_more_point_to_convert)
+                    .setUseAutoRadius(true)
+                    .setMaskColour(Color.parseColor("#cc000000"))
+                    .setDismissOnTouch(true)
+                    .show();
+        if (btnConvert.isEnabled()) {
+            new MaterialShowcaseView.Builder(this)
+                    .setDelay(500)
+                    .setTarget(btnConvert)
+                    .singleUse(SHOWCASE_CONVERT)
+                    .setContentText(R.string.click_to_convert)
+                    .setUseAutoRadius(true)
+                    .setMaskColour(Color.parseColor("#cc000000"))
+                    .setDismissOnTouch(true)
+                    .show();
+        }
     }
 
     private void loadMerchantInfoFromServer() {
@@ -286,13 +352,13 @@ public class MerchantDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(MerchantDetailActivity.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(MerchantDetailActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     private void bindData() {
-        loader.displayImage(Config.SERVER_URL + merchantInfo.getMainImg(), imgMerchant);
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + merchantInfo.getMainImg(), imgMerchant);
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(merchantInfo.getBrand());
         textMerchantBrand.setText(merchantInfo.getBrand());
@@ -378,7 +444,7 @@ public class MerchantDetailActivity extends BaseActivity {
         new DeleteCard(cardInfo.getCardCode().substring(cardInfo.getCardCode().length() - 16)) {
             @Override
             public void onSuccess() {
-                Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_SHORT).show();
                 cardInfoDao.delete(app.getCurrentCard());
                 dialog.dismiss();
                 onBackPressed();
@@ -386,7 +452,7 @@ public class MerchantDetailActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }

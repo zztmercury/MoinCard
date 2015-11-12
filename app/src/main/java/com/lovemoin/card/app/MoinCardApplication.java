@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.lovemoin.card.app.constant.Config;
+import com.lovemoin.card.app.db.ActivityInfo;
 import com.lovemoin.card.app.db.ActivityInfoDao;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
@@ -13,13 +14,15 @@ import com.lovemoin.card.app.db.DaoMaster;
 import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.db.GiftPackInfoDao;
 import com.lovemoin.card.app.entity.DeviceInfo;
+import com.lovemoin.card.app.net.LoadActivityList;
 import com.lovemoin.card.app.net.LoadCardList;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.List;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by zzt on 15-8-24.
@@ -49,7 +52,6 @@ public class MoinCardApplication extends Application {
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true)
                 .cacheInMemory(true)
-                .displayer(new FadeInBitmapDisplayer(500))
                 .build();
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(options)
@@ -144,6 +146,7 @@ public class MoinCardApplication extends Application {
         activityInfoDao.deleteAll();
         giftPackInfoDao.deleteAll();
         setUserFirstTime(false);
+        MaterialShowcaseView.resetAll(getApplicationContext());
     }
 
     public CardInfoDao getCardInfoDao() {
@@ -165,34 +168,34 @@ public class MoinCardApplication extends Application {
                 cardInfoDao.deleteAll();
                 cardInfoDao.insertInTx(cardInfoList);
                 if (showToast)
-                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected void onFail(String message) {
                 if (showToast)
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
 
-//    public void updateActivityInfoFromServer(final boolean showToast) {
-//        new LoadActivityList(LoadActivityList.TYPE_RELATED, getCachedUserId(), 0) {
-//            @Override
-//            public void onSuccess(List<ActivityInfo> activityInfoList) {
-//                activityInfoDao.deleteAll();
-//                activityInfoDao.insertInTx(activityInfoList);
-//                if (showToast)
-//                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onFail(String message) {
-//                if (showToast)
-//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//            }
-//        };
-//    }
+    public void updateActivityInfoFromServer(final boolean showToast) {
+        new LoadActivityList(LoadActivityList.TYPE_RELATED, getCachedUserId(), 0) {
+            @Override
+            public void onSuccess(List<ActivityInfo> activityInfoList) {
+                activityInfoDao.deleteAll();
+                activityInfoDao.insertInTx(activityInfoList);
+                if (showToast)
+                    Toast.makeText(getApplicationContext(), R.string.update_point_card_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFail(String message) {
+                if (showToast)
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
 
     public int getVersionCode() {
         try {

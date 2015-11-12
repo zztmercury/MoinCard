@@ -62,7 +62,7 @@ public class ImageWallAdapter extends RecyclerView.Adapter<ImageWallAdapter.View
         layoutParams.height = imageInfo.getHeight();
         layoutParams.width = imageInfo.getWidth();
         holder.img.setLayoutParams(layoutParams);
-        loader.displayImage(Config.SERVER_URL + imageInfo.getUrl(), holder.img, new ImageLoadingListener() {
+        loader.displayImage(Config.SERVER_URL + "/moinbox/" + imageInfo.getUrl(), holder.img, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 view.setBackgroundColor(imageInfo.getColor());

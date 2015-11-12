@@ -64,7 +64,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         final CardInfo cardInfo = mCardInfoList.get(position);
         holder.textPointProcess.setText(String.format("%d/%d", cardInfo.getCurrentPoint(), cardInfo.getConvertPoint()));
 
-        imageLoader.displayImage(Config.SERVER_URL + cardInfo.getCardImg(), holder.imgCard,
+        imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + cardInfo.getCardImg(), holder.imgCard,
                 new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {

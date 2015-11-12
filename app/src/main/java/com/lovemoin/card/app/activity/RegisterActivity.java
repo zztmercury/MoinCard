@@ -114,7 +114,7 @@ public class RegisterActivity extends BaseActivity {
 
                         @Override
                         public void onFail(String message) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
                     };
                 }
@@ -124,7 +124,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!editUserTel.getText().toString().trim().equals(userTel)) {
-                    Toast.makeText(getApplicationContext(), R.string.user_tel_has_been_changed_please_get_code_again, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.user_tel_has_been_changed_please_get_code_again, Toast.LENGTH_SHORT).show();
                     checkCode = null;
                     timer.cancel();
                     timer.onFinish();
@@ -149,7 +149,7 @@ public class RegisterActivity extends BaseActivity {
                 new Register(userTel, userPwd, editCode.getText().toString(), app.getVersionName(), null) {
                     @Override
                     public void onSuccess(String userTel, String id) {
-                        Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.reg_success, Toast.LENGTH_SHORT).show();
                         app.cacheUserTel(userTel);
                         app.cachedUserId(id);
                         app.cacheLoginStatus(true);
@@ -160,7 +160,7 @@ public class RegisterActivity extends BaseActivity {
 
                     @Override
                     public void onFail(String message) {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 };
             }

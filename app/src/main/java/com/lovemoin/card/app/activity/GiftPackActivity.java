@@ -130,7 +130,8 @@ public class GiftPackActivity extends BaseActivity {
                 String couponName = textGiftName.getText().toString();
                 QueryBuilder<CardInfo> qb = app.getCardInfoDao().queryBuilder();
                 qb.where(CardInfoDao.Properties.CardName.eq(couponName));
-                CardInfo cardInfo = qb.unique();
+                qb.orderDesc(CardInfoDao.Properties.CreateDate);
+                CardInfo cardInfo = qb.list().get(0);
                 app.setCurrentCard(cardInfo);
                 startActivity(new Intent(GiftPackActivity.this, MerchantDetailActivity.class));
                 finish();
@@ -170,7 +171,7 @@ public class GiftPackActivity extends BaseActivity {
 
                 @Override
                 public void onFail(String message) {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             };
         } else {
@@ -186,13 +187,13 @@ public class GiftPackActivity extends BaseActivity {
                 pd.dismiss();
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
-                imageLoader.displayImage(Config.SERVER_URL + giftImg, imgGift);
+                imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + giftImg, imgGift);
                 app.updateCardInfoFromServer(false);
             }
 
             @Override
             public void onFail(String message) {
-
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -204,7 +205,7 @@ public class GiftPackActivity extends BaseActivity {
                 cover.setVisibility(View.VISIBLE);
                 textGiftName.setText(giftName);
                 if (pointAddNum == 0) {
-                    imageLoader.displayImage(Config.SERVER_URL + giftImg, imgGift);
+                    imageLoader.displayImage(Config.SERVER_URL + "/moinbox/" + giftImg, imgGift);
                 } else {
                     TextView textGiftHint = (TextView) findViewById(R.id.text_gift_hint);
                     textGiftHint.setTextColor(Color.parseColor("#cc3333"));
@@ -218,7 +219,7 @@ public class GiftPackActivity extends BaseActivity {
 
             @Override
             public void onFail(String message) {
-
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -253,7 +254,7 @@ public class GiftPackActivity extends BaseActivity {
 
                 @Override
                 public void onFail(String message) {
-                    Toast.makeText(GiftPackActivity.this, message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(GiftPackActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
             };
         else {
@@ -270,7 +271,7 @@ public class GiftPackActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_gift_pack, menu);
+        //getMenuInflater().inflate(R.menu.menu_gift_pack, menu);
         return true;
     }
 

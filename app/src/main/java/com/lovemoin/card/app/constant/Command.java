@@ -13,6 +13,7 @@ public class Command {
     public static final String COMMAND_DEVICE_CONVERT = "0055000012";
     public static final String SHORT_COMMAND_DEVICE_CONVERT = "005501000C";
     public static final String COMMAND_DEVICE_SIGN_IN = "0071000010";
+    public static final String SHORT_COMMAND_DEVICE_SIGN_IN = "007101000A";
 
     public static String SUCCEED_END_STR = "9000";
 }
