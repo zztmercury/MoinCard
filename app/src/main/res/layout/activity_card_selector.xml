@@ -1,55 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-	android:id="@+id/rootView"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/bg_card_selector"
-	android:fitsSystemWindows="true"
-	android:gravity="center_horizontal"
-	android:orientation="vertical">
+    android:id="@+id/rootView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_card_selector"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-	<android.support.v4.view.ViewPager
-			android:id="@+id/pager"
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/card_height"
-			android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp"
-			android:layout_marginTop="80dp"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/card_height"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="80dp"/>
 
-	<com.lovemoin.card.app.widget.PlusStarDrawView
-			android:id="@+id/starView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
+    <com.lovemoin.card.app.widget.PlusStarDrawView
+        android:id="@+id/starView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
-	<LinearLayout
-			android:id="@+id/layoutClickHint"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical"
-			android:orientation="horizontal"
-			android:visibility="gone">
-		<ImageView
-				android:layout_width="72dp"
-				android:layout_height="80dp"
-				android:src="@drawable/click_hint" />
-		<Button
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:background="@drawable/bg_border_white_dash"
-				android:padding="5dp"
-				android:text="@string/click_star_to_get_point"
-				android:textColor="@color/white"/>
+    <LinearLayout
+        android:id="@+id/layoutClickHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-	</LinearLayout>
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="80dp"
+            android:src="@drawable/click_hint"/>
 
-	<TextView
-		android:id="@+id/textHint"
-		style="@style/TextStyleConvert"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="20dp"
-			android:gravity="center_horizontal"
-		android:textStyle="bold"
-			android:visibility="gone" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border_white_dash"
+            android:padding="5dp"
+            android:text="@string/click_star_to_get_point"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textHint"
+        style="@style/TextStyleConvert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <include
+        android:id="@+id/layout_share_activity_of_merchant"
+        layout="@layout/layout_activity_of_merchant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
 </LinearLayout>
