@@ -81,9 +81,11 @@ public class LoginActivity extends BaseActivity {
         if (checkValue()) {
             new Login(editUserTel.getText().toString(), editPassword.getText().toString(), app.getVersionName()) {
                 @Override
-                public void onSuccess(String userTel, String userId) {
+                public void onSuccess(String userTel, String userId, String userImg, String userName) {
                     app.cacheUserTel(userTel);
                     app.cachedUserId(userId);
+                    app.cacheUserImg(userImg);
+                    app.cacheUsername(userName);
                     app.cacheLoginStatus(true);
                     setResult(ResultCode.LOGIN_SUCCESS);
                     finish();

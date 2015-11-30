@@ -3,6 +3,7 @@ package com.lovemoin.card.app;
 import android.app.Application;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.lovemoin.card.app.constant.Config;
@@ -13,6 +14,7 @@ import com.lovemoin.card.app.db.CardInfoDao;
 import com.lovemoin.card.app.db.DaoMaster;
 import com.lovemoin.card.app.db.DaoSession;
 import com.lovemoin.card.app.db.GiftPackInfoDao;
+import com.lovemoin.card.app.db.IgnoredAdInfoDao;
 import com.lovemoin.card.app.entity.DeviceInfo;
 import com.lovemoin.card.app.net.LoadActivityList;
 import com.lovemoin.card.app.net.LoadCardList;
@@ -38,6 +40,7 @@ public class MoinCardApplication extends Application {
     public static final int MODE_NFC = 0;
     public static final int MODE_BLUETOOTH = 1;
     public int stat = DeviceInfo.OPER_WAITE;
+
     private CardInfo currentCard;
     private boolean isExchange;
     private int connectMode = MODE_BLUETOOTH;
@@ -45,6 +48,18 @@ public class MoinCardApplication extends Application {
     private CardInfoDao cardInfoDao;
     private ActivityInfoDao activityInfoDao;
     private GiftPackInfoDao giftPackInfoDao;
+    private IgnoredAdInfoDao ignoredInfoDao;
+
+    private String currentActivityId;
+    private boolean showAd = true;
+
+    public boolean isShowAd() {
+        return showAd;
+    }
+
+    public void setShowAd(boolean showAd) {
+        this.showAd = showAd;
+    }
 
     @Override
     public void onCreate() {
@@ -69,6 +84,7 @@ public class MoinCardApplication extends Application {
         cardInfoDao = daoSession.getCardInfoDao();
         activityInfoDao = daoSession.getActivityInfoDao();
         giftPackInfoDao = daoSession.getGiftPackInfoDao();
+        ignoredInfoDao = daoSession.getIgnoredAdInfoDao();
     }
 
     public String getCachedUserId() {
@@ -85,6 +101,25 @@ public class MoinCardApplication extends Application {
 
     public void cacheUserTel(String userTel) {
         getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putString(Config.KEY_USER_TEL, userTel).commit();
+    }
+
+    public String getCachedUserImg() {
+        return getSharedPreferences(APP_NAME, MODE_PRIVATE).getString(Config.KEY_USER_IMG, null);
+    }
+
+    public void cacheUserImg(String userImg) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putString(Config.KEY_USER_IMG, userImg).commit();
+    }
+
+    public String getCachedUsername() {
+        String username = getSharedPreferences(APP_NAME, MODE_PRIVATE).getString(Config.KEY_USERNAME, null);
+        if (TextUtils.isEmpty(username))
+            return getCachedUserTel();
+        else return username;
+    }
+
+    public void cacheUsername(String username) {
+        getSharedPreferences(APP_NAME, MODE_PRIVATE).edit().putString(Config.KEY_USERNAME, username).commit();
     }
 
     public boolean isLogin() {
@@ -141,6 +176,8 @@ public class MoinCardApplication extends Application {
         cacheLoginStatus(false);
         cachedUserId(null);
         cacheUserTel(null);
+        cacheUsername(null);
+        cacheUserImg(null);
         cacheLastSearchTime(0);
         cardInfoDao.deleteAll();
         activityInfoDao.deleteAll();
@@ -245,5 +282,17 @@ public class MoinCardApplication extends Application {
 
     public void setPromptNfc(boolean promptNfc) {
         this.promptNfc = promptNfc;
+    }
+
+    public IgnoredAdInfoDao getIgnoredInfoDao() {
+        return ignoredInfoDao;
+    }
+
+    public String getCurrentActivityId() {
+        return currentActivityId;
+    }
+
+    public void setCurrentActivityId(String currentActivityId) {
+        this.currentActivityId = currentActivityId;
     }
 }

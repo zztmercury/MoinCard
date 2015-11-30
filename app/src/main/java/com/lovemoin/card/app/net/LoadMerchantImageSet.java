@@ -25,16 +25,22 @@ public abstract class LoadMerchantImageSet {
             @Override
             public void onSuccess(String result) {
                 List<ImageInfo> imageList = new ArrayList<>();
+                JSONArray array;
                 try {
-                    JSONArray array = new JSONArray(result);
-                    for (int i = 0; i < array.length(); i++) {
-                        imageList.add(new ImageInfo(array.getJSONObject(i)));
-                    }
+                    array = new JSONArray(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     LoadMerchantImageSet.this.onFail("解析失败：" + e.getMessage());
+                    return;
                 }
 
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        imageList.add(new ImageInfo(array.getJSONObject(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 LoadMerchantImageSet.this.onSuccess(imageList);
             }
 

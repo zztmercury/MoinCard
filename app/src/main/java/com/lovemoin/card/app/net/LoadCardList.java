@@ -27,17 +27,24 @@ public abstract class LoadCardList {
         new NetConnection(url, paramMap) {
             @Override
             public void onSuccess(String result) {
+                JSONArray array;
+                List<CardInfo> cardInfoList = new ArrayList<>();
                 try {
-                    JSONArray array = new JSONArray(result);
-                    List<CardInfo> cardInfoList = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        cardInfoList.add(new CardInfo(array.getJSONObject(i)));
-                    }
-                    LoadCardList.this.onSuccess(cardInfoList);
+                    array = new JSONArray(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     LoadCardList.this.onFail("解析错误：" + e.getMessage());
+                    return;
                 }
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        cardInfoList.add(new CardInfo(array.getJSONObject(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                LoadCardList.this.onSuccess(cardInfoList);
+
             }
 
             @Override

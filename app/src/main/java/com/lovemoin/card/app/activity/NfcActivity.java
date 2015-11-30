@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Command;
+import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
@@ -199,7 +200,7 @@ public class NfcActivity extends Activity {
                         checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
                         new QuickExchange(checkValue, app.getCachedUserId()) {
                             @Override
-                            public void onSuccess() {
+                            public void onSuccess(String activityId, String shareUrl, String title) {
                                 setResult(ResultCode.EXCHANGE_SUCCESS);
                                 pd.dismiss();
                                 app.setIsExchange(false);
@@ -207,6 +208,9 @@ public class NfcActivity extends Activity {
                                 cardInfoDao.insertOrReplace(app.getCurrentCard());
                                 Toast.makeText(NfcActivity.this, "兑换成功", Toast.LENGTH_SHORT).show();
                                 Intent i = new Intent(NfcActivity.this, ConvertSuccessActivity.class);
+                                i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                                i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                                i.putExtra(Config.KEY_TITLE, title);
                                 startActivity(i);
                                 finish();
                             }
@@ -323,13 +327,16 @@ public class NfcActivity extends Activity {
                 checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
                 new GetPoint(checkValue, app.getCachedUserId()) {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(String activityId, String shareUrl, String title) {
                         pd.dismiss();
                         Intent i = new Intent(NfcActivity.this, CardSelectorActivity.class);
                         List<CardInfo> cardList = new ArrayList<>();
                         cardList.add(app.getCurrentCard());
                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                         i.putExtra(CardSelectorActivity.COUNT, deviceInfo.getPoint());
+                        i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                        i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                        i.putExtra(Config.KEY_TITLE, title);
                         startActivity(i);
                         finish();
                     }
@@ -362,7 +369,7 @@ public class NfcActivity extends Activity {
                 checkValue = checkValue.substring(0, checkValue.lastIndexOf(Command.SUCCEED_END_STR));
                 new SignIn(checkValue, app.getCachedUserId()) {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(String activityId, String shareUrl, String title) {
                         pd.dismiss();
                         Intent i = new Intent(NfcActivity.this, CardSelectorActivity.class);
                         List<CardInfo> cardList = new ArrayList<>();
@@ -370,6 +377,9 @@ public class NfcActivity extends Activity {
                         cardList.add(app.getCurrentCard());
                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                         i.putExtra(CardSelectorActivity.COUNT, -2);
+                        i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                        i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                        i.putExtra(Config.KEY_TITLE, title);
                         startActivity(i);
                         finish();
                     }

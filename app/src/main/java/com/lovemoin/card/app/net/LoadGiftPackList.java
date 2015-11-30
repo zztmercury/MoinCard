@@ -24,17 +24,24 @@ public abstract class LoadGiftPackList {
         new NetConnection(url, paramsMap) {
             @Override
             public void onSuccess(String result) {
+                JSONArray array;
+                List<GiftPackInfo> giftPackList = new ArrayList<>();
                 try {
-                    JSONArray array = new JSONArray(result);
-                    List<GiftPackInfo> giftPackList = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        giftPackList.add(new GiftPackInfo(array.getJSONObject(i)));
-                    }
-                    LoadGiftPackList.this.onSuccess(giftPackList);
+                    array = new JSONArray(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     LoadGiftPackList.this.onFail("解析失败：" + e.getMessage());
+                    return;
                 }
+
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        giftPackList.add(new GiftPackInfo(array.getJSONObject(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                LoadGiftPackList.this.onSuccess(giftPackList);
             }
 
             @Override

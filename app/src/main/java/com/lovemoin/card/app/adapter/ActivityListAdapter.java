@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.activity.ActivityDetailType1Activity;
 import com.lovemoin.card.app.activity.ActivityDetailType3Activity;
+import com.lovemoin.card.app.activity.ActivityDetailType4Activity;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -101,6 +102,9 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
                         return;
                     case 3:
                         intent = new Intent(context, ActivityDetailType3Activity.class);
+                        break;
+                    case 4:
+                        intent = new Intent(context, ActivityDetailType4Activity.class);
                         break;
                     default:
                         return;

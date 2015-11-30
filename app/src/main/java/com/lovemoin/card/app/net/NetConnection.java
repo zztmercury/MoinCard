@@ -36,10 +36,12 @@ public abstract class NetConnection {
                 try {
                     // 配置POST参数
                     StringBuffer paramStr = new StringBuffer();
-                    for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-                        paramStr.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                    if (!paramMap.isEmpty()) {
+                        for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                            paramStr.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                        }
+                        paramStr.deleteCharAt(paramStr.length() - 1);
                     }
-                    paramStr.deleteCharAt(paramStr.length() - 1);
 
                     Log.i("NetConnection", url + "?" + paramStr.toString());
 

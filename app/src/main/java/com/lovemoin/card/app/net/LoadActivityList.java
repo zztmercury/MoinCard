@@ -41,21 +41,23 @@ public abstract class LoadActivityList {
         new NetConnection(url, paramsMap) {
             @Override
             public void onSuccess(String result) {
+                JSONArray array;
+                List<ActivityInfo> activityInfoList = new ArrayList<>();
                 try {
-                    JSONArray array = new JSONArray(result);
-                    List<ActivityInfo> activityInfoList = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        try {
-                            activityInfoList.add(new ActivityInfo(array.getJSONObject(i)));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    LoadActivityList.this.onSuccess(activityInfoList);
+                    array = new JSONArray(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     LoadActivityList.this.onFail("解析错误：" + e.getMessage());
+                    return;
                 }
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        activityInfoList.add(new ActivityInfo(array.getJSONObject(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                LoadActivityList.this.onSuccess(activityInfoList);
             }
 
             @Override

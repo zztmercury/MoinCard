@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.lovemoin.card.app.MoinCardApplication;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.constant.Command;
+import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.constant.ResultCode;
 import com.lovemoin.card.app.db.CardInfo;
 import com.lovemoin.card.app.db.CardInfoDao;
@@ -117,6 +118,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pd = new ProgressDialog(this);
         app = (MoinCardApplication) getApplication();
         NfcManager nfcManager = (NfcManager) getSystemService(NFC_SERVICE);
@@ -151,7 +153,7 @@ public class BaseActivity extends AppCompatActivity {
             nfcForegroundDispatch();
         } else {
             app.setConnectMode(MoinCardApplication.MODE_BLUETOOTH);
-            if (!mBluetoothAdapter.isEnabled()) {
+            if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
                 Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivity(i);
             }
@@ -256,12 +258,19 @@ public class BaseActivity extends AppCompatActivity {
                                                 if (gattCharacteristic.getUuid().toString().equals(CHARACTERISTIC_UUID)) {
                                                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
 
-                                                    gatt.setCharacteristicNotification(gattCharacteristic, true);
-                                                    //BluetoothGattDescriptor descriptor = gattCharacteristic.getDescriptor(UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
-                                                    //descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                                                    //mBluetoothGatt.writeDescriptor(descriptor);
-
                                                     mGattCharacteristic = gattCharacteristic;
+                                                    mBluetoothGatt.setCharacteristicNotification(mGattCharacteristic, true);
+
+                                                    //List<BluetoothGattDescriptor> descriptors = mGattCharacteristic.getDescriptors();
+                                                    //for (BluetoothGattDescriptor descriptor:descriptors) {
+                                                    //    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                                                    //    mBluetoothGatt.writeDescriptor(descriptor);
+                                                    //}
+
+                                                    //BluetoothGattDescriptor descriptor = mGattCharacteristic.getDescriptor(UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
+                                                    //descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                                                    //System.out.println(mBluetoothGatt.writeDescriptor(descriptor));
+
                                                     writeByBluetooth(Command.COMMAND_DEVICE_STAT);
                                                     Bundle bundle = new Bundle();
                                                     Message msg = new Message();
@@ -318,7 +327,7 @@ public class BaseActivity extends AppCompatActivity {
                                             case DeviceInfo.OPER_PLUS:
                                                 new GetPoint(revStr, app.getCachedUserId()) {
                                                     @Override
-                                                    public void onSuccess() {
+                                                    public void onSuccess(String activityId, String shareUrl, String title) {
                                                         app.stat = DeviceInfo.OPER_WAITE;
                                                         try {
                                                             pd.dismiss();
@@ -330,6 +339,9 @@ public class BaseActivity extends AppCompatActivity {
                                                         cardList.add(app.getCurrentCard());
                                                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                                                         i.putExtra(CardSelectorActivity.COUNT, deviceInfo.getPoint());
+                                                        i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                                                        i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                                                        i.putExtra(Config.KEY_TITLE, title);
                                                         startActivity(i);
                                                     }
 
@@ -350,7 +362,7 @@ public class BaseActivity extends AppCompatActivity {
                                                 new QuickExchange(revStr, app.getCachedUserId()) {
 
                                                     @Override
-                                                    public void onSuccess() {
+                                                    public void onSuccess(String activityId, String shareUrl, String title) {
                                                         app.stat = DeviceInfo.OPER_WAITE;
                                                         app.setIsExchange(false);
                                                         try {
@@ -362,6 +374,9 @@ public class BaseActivity extends AppCompatActivity {
                                                         app.getCardInfoDao().insertOrReplace(app.getCurrentCard());
                                                         Toast.makeText(getApplicationContext(), "兑换成功", Toast.LENGTH_SHORT).show();
                                                         Intent i = new Intent(BaseActivity.this, ConvertSuccessActivity.class);
+                                                        i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                                                        i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                                                        i.putExtra(Config.KEY_TITLE, title);
                                                         startActivity(i);
                                                     }
 
@@ -381,7 +396,7 @@ public class BaseActivity extends AppCompatActivity {
                                             case DeviceInfo.OPER_SIGN:
                                                 new SignIn(revStr, app.getCachedUserId()) {
                                                     @Override
-                                                    public void onSuccess() {
+                                                    public void onSuccess(String activityId, String shareUrl, String title) {
                                                         try {
                                                             pd.dismiss();
                                                         } catch (Exception e) {
@@ -394,6 +409,9 @@ public class BaseActivity extends AppCompatActivity {
                                                         cardList.add(app.getCurrentCard());
                                                         i.putExtra(CardSelectorActivity.CARD_LIST, (Serializable) cardList);
                                                         i.putExtra(CardSelectorActivity.COUNT, -2);
+                                                        i.putExtra(Config.KEY_ACTIVITY_ID, activityId);
+                                                        i.putExtra(Config.KEY_SHARE_URL, shareUrl);
+                                                        i.putExtra(Config.KEY_TITLE, title);
                                                         startActivity(i);
                                                     }
 
@@ -451,18 +469,21 @@ public class BaseActivity extends AppCompatActivity {
 
     private void writeByBluetooth(String s) {
         Log.d("BaseActivity", "write ble");
-        int sendlen = s.length() / 2;
-        int sendoffset = 0;
+        //if (s.startsWith("0051")) {
+        //    s = "005100001000000000000000000000000000000000";
+        //}
+        byte sendlen = (byte) (s.length() / 2);
+        byte sendoffset = 0;
         byte[] sendbuffer = CommonUtil.HexStringToByteArray(s);
         while (sendlen > 0) {
-            delay(300);
+            delay(500);
             if (sendlen > 17) {
                 byte[] tempbuffer = new byte[19];
                 tempbuffer[0] = 0X40;
                 System.arraycopy(sendbuffer, sendoffset, tempbuffer, 1, 17);
 
                 tempbuffer[18] = CommonUtil.xor(tempbuffer, 18);
-                sendlen = sendlen - 17;
+                sendlen = (byte) (sendlen - 17);
                 sendoffset = (byte) (sendoffset + 17);
                 mGattCharacteristic.setValue(tempbuffer);
                 mBluetoothGatt.writeCharacteristic(mGattCharacteristic);
@@ -534,7 +555,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
         switch (app.getConnectMode()) {
             case MoinCardApplication.MODE_BLUETOOTH:
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                if (mBluetoothAdapter != null)
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                break;
         }
         if (nfcAdapter != null)
             nfcAdapter.disableForegroundDispatch(this);

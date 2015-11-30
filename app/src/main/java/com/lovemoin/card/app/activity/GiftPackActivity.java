@@ -220,6 +220,9 @@ public class GiftPackActivity extends BaseActivity {
             @Override
             public void onFail(String message) {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                if (message.contains(getString(R.string.overdue))) {
+                    finish();
+                }
             }
         };
     }

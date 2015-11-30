@@ -158,13 +158,21 @@
 	<string name="click_to_convert">点击“兑换”，再将手机贴近魔印盒子</string>
 	<string name="click_to_get_point">点击后靠近魔印盒子以获取积点</string>
 	<string name="hint_card_overdue">卡券已过期，是否删除？</string>
-	<string name="hint_visitor_account_convert">您正在使用游客模式，更换设备或切换用户后将丢失已获得的卡券，为了保障您的财产安全，请在兑换前补全账号信息</string>
+	<string name="hint_visitor_account_convert">您尚未绑定手机号，为了给您提供更好的服务，请在兑换前补全账号信息</string>
 	<string name="getting_point">正在获取积点</string>
 	<string name="converting">正在兑换</string>
 	<string name="signing">正在签到</string>
-	<string name="loading_device_info">正在或区设备信息</string>
+	<string name="loading_device_info">正在获取设备信息</string>
 	<string name="getting_device_service">正在获取设备服务</string>
 	<string name="about">关于</string>
 	<string name="text_about_app_message">魔印积点卡 V%s \n魔印信息科技有限公司 出品</string>
+	<string name="other_login_method">其他登录方式</string>
+	<string name="overdue">过期</string>
+	<string name="share">分享</string>
+	<string name="share_to_we_chat_friend">分享给微信好友</string>
+	<string name="share_to_we_chat_timeline">分享到朋友圈</string>
+	<string name="hint_merchant_activity">本商户还有其他活动</string>
+	<string name="share_to_friend">点击右上角分享给好友</string>
+	<string name="share_to">分享到</string>
 
 </resources>

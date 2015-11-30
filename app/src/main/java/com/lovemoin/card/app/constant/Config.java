@@ -33,6 +33,10 @@ public class Config {
     public static final String ACTION_GET_GIFT = "/moinbox/discountActionAjax/getGift.action";
     public static final String ACTION_HAS_NUM_1_ACT = "/moinbox/activityActionAjax/activityInfo!hasNum1.action";
     public static final String ACTION_LOGIN_BY_IMEI = "/moinbox/cardUserActionAjax/allMethod!loginByIMEI.action";
+    public static final String ACTION_LOGIN_BY_WE_CHAT = "/moinbox/cardUserActionAjax/allMethod!loginByWechat.action";
+    public static final String ACTION_GET_HELP = "/moinbox/messageActionAjax/getHelp.action";
+    public static final String ACTIOB_LOAD_AD_LIST = "/moinbox/activityActionAjax/getAdListAjax.action";
+    public static final String ACTION_SEND_SHARE_LOG = "/moinbox/weChantActionAjax/shareResponseAjax.action";
     // 卡相关key
     public static final String KEY_CARD = "card";
     public static final String KEY_CARD_CODE = "cardId";
@@ -78,6 +82,8 @@ public class Config {
     public static final String KEY_OS_VERSION = "OSVersion";
     public static final String KEY_MODEL = "model";
     public static final String KEY_CHECK_CODE = "checkCode";
+    public static final String KEY_USER_IMG = "userImg";
+    public static final String KEY_USERNAME = "userName";
     // 服务器返回结果key
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_MESSAGE = "message";
@@ -108,6 +114,7 @@ public class Config {
     public static final String KEY_LAST_SEARCH_TIME = "lastSearchTime";
     public static final String KEY_GIFT_IMG = "giftImg";
     public static final String KEY_GIFT_NAME = "giftName";
+    public static final String KEY_SHARE_URL = "shareUrl";
     // 记录相关key
     public static final String KEY_OPERATE_DATE = "operateDate";
     public static final String KEY_OPERATE_TYPE = "operateType";
@@ -129,6 +136,15 @@ public class Config {
     public static final String KEY_CHECK_VALUE = "checkValue";
     public static final String KEY_VERSION = "version";
     public static final String KEY_DEVICE_ID = "IMEI";
+    public static final String KEY_CODE = "code";
+    public static final String KEY_URL = "url";
+    public static final String KEY_START_TIME = "startTime";
+    public static final String KEY_END_TIME = "endTime";
+    public static final String KEY_TITLE = "title";
+
+    // 微信配置
+    public static final String WE_CHAT_APP_ID = "wxb15c815e08b65acc";
+
     /**
      * 服务器地址<br/>
      * 测试服务器 http://182.92.3.209:8080<br/>
@@ -136,4 +152,5 @@ public class Config {
      * 开发服务器 http://192.168.2.118:8080
      */
     public static String SERVER_URL = "http://www.lovemoin.com";
+
 }

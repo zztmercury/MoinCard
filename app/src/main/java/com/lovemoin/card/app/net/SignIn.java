@@ -2,6 +2,9 @@ package com.lovemoin.card.app.net;
 
 import com.lovemoin.card.app.constant.Config;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +22,34 @@ public abstract class SignIn {
         new NetConnection(url, paramsMap) {
             @Override
             public void onSuccess(String result) {
-                SignIn.this.onSuccess();
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(result);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String activityId = null;
+                String shareUrl = null;
+                String title = null;
+                if (object != null) {
+                    try {
+                        activityId = object.getString(Config.KEY_ACTIVITY_ID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        shareUrl = object.getString(Config.KEY_SHARE_URL);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        title = object.getString(Config.KEY_TITLE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                SignIn.this.onSuccess(activityId, shareUrl, title);
             }
 
             @Override
@@ -29,7 +59,7 @@ public abstract class SignIn {
         };
     }
 
-    public abstract void onSuccess();
+    public abstract void onSuccess(String activityId, String shareUrl, String title);
 
     public abstract void onFail(String message);
 }

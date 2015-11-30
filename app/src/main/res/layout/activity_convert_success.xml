@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/layoutContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:background="#323232"
               android:layout_height="match_parent"
-              android:id="@+id/layoutContainer"
-              android:orientation="vertical"
-              android:fitsSystemWindows="true">
+    android:background="#323232"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-	<ImageView
-			android:layout_width="match_parent"
-			android:gravity="center"
-			android:layout_height="200dp"
-			android:layout_marginTop="60dp"
-			android:id="@+id/exchang_ok_img"
-			android:src="@drawable/exchang_ok" />
+    <ImageView
+        android:id="@+id/exchang_ok_img"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:src="@drawable/exchang_ok"/>
 
-	<TextView
-			android:layout_width="match_parent"
-			android:gravity="center"
-			android:layout_height="wrap_content"
-			android:textSize="23sp"
-			android:textStyle="bold"
-			android:layout_marginTop="25dp"
-			android:textColor="@color/yellow"
-			android:text="@string/msg_ex_succeed" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="@string/msg_ex_succeed"
+        android:textColor="@color/yellow"
+        android:textSize="23sp"
+        android:textStyle="bold"/>
 
-	<TextView
-			android:gravity="center"
-			android:textColor="@color/yellow"
-			android:layout_marginTop="25dp"
-			android:textStyle="bold"
-			android:textSize="15sp"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/msg_ex_succeed_desc" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="@string/msg_ex_succeed_desc"
+        android:textColor="@color/yellow"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
 
-	<TextView
-			android:id="@+id/text_convert_object"
-			android:gravity="center"
-			android:textColor="@color/activity_text"
-			android:layout_marginTop="25dp"
-			android:textStyle="bold"
-			android:textSize="20sp"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/text_convert_object"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:textColor="@color/activity_text"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <include
+        android:id="@+id/layout_share_activity_of_merchant"
+        layout="@layout/layout_activity_of_merchant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
 
 </LinearLayout>

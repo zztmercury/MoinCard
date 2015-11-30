@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by zzt on 15-9-21.
  */
-public class ActivityDetailType1Activity extends BaseActivity {
+public class ActivityDetailType1Activity extends BaseActivityDetailActivity {
     private static final String DATE_PATTERN = "yyyy年M月d日hh:mm";
 
     private ImageView imgMain;
@@ -38,7 +37,6 @@ public class ActivityDetailType1Activity extends BaseActivity {
     private TextView textDetail;
     private View container;
 
-    private ActivityInfo activityInfo;
     private String userId;
     private ImageLoader loader;
 
@@ -126,15 +124,6 @@ public class ActivityDetailType1Activity extends BaseActivity {
         textDetail.setText(activityInfo.getDetail());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {

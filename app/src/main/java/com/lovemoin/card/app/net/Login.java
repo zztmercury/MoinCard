@@ -36,7 +36,10 @@ public abstract class Login {
             public void onSuccess(String result) {
                 try {
                     JSONObject object = new JSONObject(result);
-                    Login.this.onSuccess(object.getString(Config.KEY_USER_TEL), object.getString(Config.KEY_ID));
+                    Login.this.onSuccess(object.getString(Config.KEY_USER_TEL),
+                            object.getString(Config.KEY_ID),
+                            object.getString(Config.KEY_USER_IMG),
+                            object.getString(Config.KEY_USERNAME));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Login.this.onFail("解析错误：" + e.getMessage());
@@ -50,7 +53,7 @@ public abstract class Login {
         };
     }
 
-    public abstract void onSuccess(String userTel, String userId);
+    public abstract void onSuccess(String userTel, String userId, String userImg, String userName);
 
     public abstract void onFail(String message);
 }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.graphics.Palette;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,9 +39,8 @@ import de.greenrobot.dao.query.QueryBuilder;
 /**
  * Created by zzt on 15-9-2.
  */
-public class ActivityDetailType3Activity extends BaseActivity {
+public class ActivityDetailType3Activity extends BaseActivityDetailActivity {
     private static final String DATE_PATTERN = "yyyy年M月d日hh:mm";
-    private ActivityInfo activityInfo;
     private String userId;
     private ImageLoader imageLoader;
     private MoinCardApplication app;
@@ -312,15 +310,6 @@ public class ActivityDetailType3Activity extends BaseActivity {
         };
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.lovemoin.card.app.R;
 import com.lovemoin.card.app.activity.ActivityDetailType1Activity;
 import com.lovemoin.card.app.activity.ActivityDetailType3Activity;
+import com.lovemoin.card.app.activity.ActivityDetailType4Activity;
 import com.lovemoin.card.app.constant.Config;
 import com.lovemoin.card.app.db.ActivityInfo;
 
@@ -71,6 +72,9 @@ public class ActivityNameListAdapter extends RecyclerView.Adapter<ActivityNameLi
                         break;
                     case 3:
                         i.setClass(context, ActivityDetailType3Activity.class);
+                        break;
+                    case 4:
+                        i.setClass(context, ActivityDetailType4Activity.class);
                         break;
                 }
                 context.startActivity(i);
