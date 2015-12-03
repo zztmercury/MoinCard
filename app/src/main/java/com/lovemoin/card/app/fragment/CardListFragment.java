@@ -103,6 +103,8 @@ public class CardListFragment extends LazyFragment implements SwipeRefreshLayout
         btnClose = (ImageView) rootView.findViewById(R.id.btn_close);
         mAdPagerAdapter = new AdPagerAdapter(getChildFragmentManager());
 
+        btnClose.setColorFilter(getResources().getColor(android.R.color.tertiary_text_light));
+
         mListCard.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new CardListAdapter(getContext());
 
