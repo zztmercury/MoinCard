@@ -17,8 +17,8 @@ android {
         applicationId "com.lovemoin.card.app"
         minSdkVersion 18
         targetSdkVersion 23
-        versionName '1.0.3.3'
-        versionCode 9
+        versionName '1.0.3.4'
+        versionCode 10
     }
     buildTypes {
         release {
